@@ -34,7 +34,7 @@ namespace DevDash.Controllers
             this._response = new APIResponse();
         }
         [HttpGet(Name = "GetTenants")]
-        //[Authorize]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<APIResponse>> GetTenants([FromQuery] string? search, int pageSize = 0, int pageNumber = 1)
         {
@@ -147,7 +147,11 @@ namespace DevDash.Controllers
                 UserTenant userTenant = _mapper.Map<UserTenant>(userTenantDTO);
                 await _dbUserTenant.JoinAsync(userTenant);
 
-                _response.Result = tenantDTO;
+                _response.Result = new
+                {
+                    id=tenant.Id,
+                    tenant= tenantDTO
+                };
                 _response.StatusCode = HttpStatusCode.Created;
                 return CreatedAtRoute("GetTenant", new { tenantId = tenant.Id }, _response);
             }

@@ -61,7 +61,12 @@ namespace DevDash
             CreateMap<ChangePasswordDTO,User>().ReverseMap();
             CreateMap<ResetPasswordDTO,User>().ReverseMap();
             CreateMap<UpdateProfileDTO,User>().ReverseMap();
-            
+
+            //dashboard
+            CreateMap<Project, ProjectDashBoardDTO>().ReverseMap();
+            CreateMap<Issue, IssueDashBoardDTO>().ReverseMap();
+
+
 
         }
     }

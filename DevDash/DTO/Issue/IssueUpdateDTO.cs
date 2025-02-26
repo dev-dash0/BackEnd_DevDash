@@ -1,6 +1,7 @@
 ﻿using DevDash.DTO.Comment;
 using DevDash.DTO.User;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace DevDash.DTO.Issue
 {
@@ -14,10 +15,11 @@ namespace DevDash.DTO.Issue
 
         [MaxLength(255)]
         public string? Description { get; set; }
-        public bool IsBacklog { get; set; } = true;
-        public DateOnly? StartDate { get; set; }
-        public DateOnly? Deadline { get; set; }
-        public DateOnly? DeliveredDate { get; set; }
+        [JsonIgnore]
+        public bool IsBacklog { get; set; }
+        public DateTime? StartDate { get; set; }
+        public DateTime? Deadline { get; set; }
+        public DateTime? DeliveredDate { get; set; }
         public DateTime? LastUpdate { get; set; }
 
         [MaxLength(20)]
@@ -36,9 +38,5 @@ namespace DevDash.DTO.Issue
         [RegularExpression("BackLog|to do|In Progress|Reviewing|Completed|Canceled|Postponed")]
         public required string Status { get; set; }
         public int? SprintId { get; set; }
-
-        public ICollection<UserDTO>? AssignedUsers { get; set; }
-        //public ICollection<CommentDTO>? Comments { get; set; }
-
     }
 }

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
+using System.Security.Claims;
 
 namespace DevDash.Controllers
 {
@@ -18,47 +19,63 @@ namespace DevDash.Controllers
         private readonly IProjectRepository _dbProject;
         private readonly ISprintRepository _dbSprint;
         private readonly ITenantRepository _dbTenant;
+        private readonly IUserProjectRepository _dbUserProject;
+        private readonly IIssueAssignUserRepository _dbIssueAssignUser;
         private readonly IMapper _mapper;
         private APIResponse _response;
 
         public IssueController(IIssueRepository dbissue, IProjectRepository dbProject, ISprintRepository dbSprint,
-            ITenantRepository dbTenant, IMapper mapper)
+            ITenantRepository dbTenant, IUserProjectRepository dbUserProjec, IIssueAssignUserRepository dbIssueAssignUser, IMapper mapper)
         {
             _dbissue = dbissue;
             _dbTenant = dbTenant;
             _dbProject = dbProject;
             _dbSprint = dbSprint;
+            _dbUserProject = dbUserProjec;
+            _dbIssueAssignUser = dbIssueAssignUser;
             _mapper = mapper;
             this._response = new APIResponse();
         }
 
-        [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<APIResponse>> GetIssues([FromQuery] int? SprintId
-            , [FromQuery] string? search, int pageSize = 0, int pageNumber = 1)
+        [HttpGet("backlog")]
+        public async Task<ActionResult<APIResponse>> GetBacklogIssues([FromQuery] int projectId, [FromQuery] string? search, int pageSize = 0, int pageNumber = 1)
         {
             try
             {
-                var sprint = await _dbSprint.GetAsync(s => s.Id == SprintId);
+                var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+                if (string.IsNullOrEmpty(userId)) return Unauthorized(new { message = "Invalid token" });
+
+                var userProject = await _dbUserProject.GetAsync(up => up.UserId == int.Parse(userId) && up.ProjectId == projectId);
+                if (userProject == null) return Forbid();
+
                 IEnumerable<Issue> Issues = new List<Issue>();
-                if (SprintId != null)
+
+                if (userProject.Role == "Admin" || userProject.Role == "Project Manager")
                 {
                     Issues = await _dbissue.GetAllAsync(
-                        filter: i => i.SprintId == SprintId && i.IsBacklog == false && (string.IsNullOrEmpty(search) || i.Labels.ToLower().Contains(search.ToLower())),
-                        includeProperties: "Sprint",
+                        filter: i => i.ProjectId == projectId && i.SprintId == null && i.IsBacklog &&
+                                     (string.IsNullOrEmpty(search) || i.Labels.ToLower().Contains(search.ToLower())),
+                        includeProperties: "",
+                        pageSize: pageSize,
+                        pageNumber: pageNumber
+                    );
+                }
+                else if (userProject.Role == "Developer")
+                {
+                    Issues = await _dbissue.GetAllAsync(
+                        filter: i => i.ProjectId == projectId && i.SprintId == null && i.IsBacklog &&
+                                     i.IssueAssignedUsers.Any(iau => iau.UserId == int.Parse(userId)) &&
+                                     (string.IsNullOrEmpty(search) || i.Labels.ToLower().Contains(search.ToLower())),
+                        includeProperties: "",
                         pageSize: pageSize,
                         pageNumber: pageNumber
                     );
                 }
                 else
                 {
-                    Issues = await _dbissue.GetAllAsync(
-                        filter: i => i.IsBacklog && i.ProjectId == sprint.ProjectId && (string.IsNullOrEmpty(search) || i.Labels.ToLower().Contains(search.ToLower())),
-                        includeProperties: "Sprint",
-                        pageSize: pageSize,
-                        pageNumber: pageNumber
-                    );
+                    return Forbid();
                 }
+
                 _response.Result = _mapper.Map<List<IssueDTO>>(Issues);
                 _response.StatusCode = HttpStatusCode.OK;
                 return Ok(_response);
@@ -66,108 +83,159 @@ namespace DevDash.Controllers
             catch (Exception ex)
             {
                 _response.IsSuccess = false;
-                _response.ErrorMessages
-                     = new List<string>() { ex.ToString() };
+                _response.ErrorMessages = new List<string>() { ex.ToString() };
             }
             return _response;
-
         }
-
-        [HttpGet("{id:int}", Name = "GetIssue")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<APIResponse>> GetIssue(int id)
+        [HttpGet("sprint")]
+        public async Task<ActionResult<APIResponse>> GetSprintIssues([FromQuery] int sprintId, [FromQuery] string? search, int pageSize = 0, int pageNumber = 1)
         {
             try
             {
-                if (id == 0)
+                var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+                if (string.IsNullOrEmpty(userId)) return Unauthorized(new { message = "Invalid token" });
+
+                var userProject = await _dbUserProject.GetAsync(up => up.UserId == int.Parse(userId) && up.Project.Sprints.Any(s => s.Id == sprintId));
+                if (userProject == null) return Forbid();
+
+                IEnumerable<Issue> Issues = new List<Issue>();
+
+                if (userProject.Role == "Admin" || userProject.Role == "Project Manager")
                 {
-                    _response.StatusCode = HttpStatusCode.BadRequest;
-                    return BadRequest(_response);
+                    Issues = await _dbissue.GetAllAsync(
+                        filter: i => i.SprintId == sprintId &&
+                                     (string.IsNullOrEmpty(search) || i.Labels.ToLower().Contains(search.ToLower())),
+                        includeProperties: "",
+                        pageSize: pageSize,
+                        pageNumber: pageNumber
+                    );
                 }
-                var model = await _dbissue.GetAsync(u => u.Id == id);
-                if (model == null)
+                else if (userProject.Role == "Developer")
                 {
-                    _response.StatusCode = HttpStatusCode.NotFound;
-                    return NotFound(_response);
+                    Issues = await _dbissue.GetAllAsync(
+                        filter: i => i.SprintId == sprintId &&
+                                     i.IssueAssignedUsers.Any(iau => iau.UserId == int.Parse(userId)) &&
+                                     (string.IsNullOrEmpty(search) || i.Labels.ToLower().Contains(search.ToLower())),
+                        includeProperties: "",
+                        pageSize: pageSize,
+                        pageNumber: pageNumber
+                    );
                 }
-                _response.Result = _mapper.Map<IssueDTO>(model);
+                else
+                {
+                    return Forbid();
+                }
+
+                _response.Result = _mapper.Map<List<IssueDTO>>(Issues);
                 _response.StatusCode = HttpStatusCode.OK;
                 return Ok(_response);
             }
             catch (Exception ex)
             {
                 _response.IsSuccess = false;
-                _response.ErrorMessages
-                     = new List<string>() { ex.ToString() };
+                _response.ErrorMessages = new List<string>() { ex.ToString() };
             }
             return _response;
         }
 
-        [HttpPost]
-        [ProducesResponseType(StatusCodes.Status201Created)]
+
+        [HttpGet("{id:int}", Name = "GetIssue")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<APIResponse>> CreateIssue([FromBody] IssueCreataDTO createDTO)
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<APIResponse>> GetIssue(int id)
         {
             try
             {
-
-                if (createDTO == null)
+                if (id <= 0)
                 {
-                    return BadRequest("IssueCreateDTO cannot be null");
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    _response.ErrorMessages = new List<string> { "Invalid Issue ID" };
+                    return BadRequest(_response);
                 }
 
+                var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+                if (string.IsNullOrEmpty(userId)) return Unauthorized(new { message = "Invalid token" });
 
-                Project project = await _dbProject.GetAsync(P => P.Id == createDTO.ProjectId);
-                if (project == null)
+                int userIdInt = int.Parse(userId);
+
+                var issue = await _dbissue.GetAsync(
+                    i => i.Id == id,
+                    includeProperties: "IssueAssignedUsers,Project"
+                );
+
+                if (issue == null)
                 {
-                    ModelState.AddModelError("ErrorMessages", "Project ID is Invalid!");
-                    return BadRequest(ModelState);
+                    _response.StatusCode = HttpStatusCode.NotFound;
+                    _response.ErrorMessages = new List<string> { "Issue not found" };
+                    return NotFound(_response);
                 }
 
-                if (project.TenantId != createDTO.TenantId)
-                {
-                    ModelState.AddModelError("ErrorMessages", "Tenant ID does not match the project's Tenant ID!");
-                    return BadRequest(ModelState);
-                }
+                var userProject = await _dbUserProject.GetAsync(up => up.UserId == userIdInt && up.ProjectId == issue.ProjectId);
+                if (userProject == null) return Forbid();
 
+                if (userProject.Role != "Admin" && userProject.Role != "Project Manager")
+                {
+                    bool isAssignedToUser = issue.IssueAssignedUsers.Any(iau => iau.UserId == userIdInt);
 
-                Tenant tenant = await _dbTenant.GetAsync(T => T.Id == project.TenantId);
-                if (tenant == null)
-                {
-                    ModelState.AddModelError("ErrorMessages", "Tenant ID is Invalid!");
-                    return BadRequest(ModelState);
-                }
-                if (createDTO.SprintId != null)
-                {
-                    Sprint sprint = await _dbSprint.GetAsync(S => S.Id == createDTO.SprintId && S.ProjectId == project.Id);
-                    if (sprint == null)
+                    if (!isAssignedToUser)
                     {
-                        ModelState.AddModelError("ErrorMessages", "Sprint ID is Invalid!");
-                        return BadRequest(ModelState);
+                        return Forbid();
                     }
                 }
-                if (createDTO.SprintId != null && createDTO.IsBacklog == true)
-                {
-                    ModelState.AddModelError("ErrorMessages", "IsBacklog should be false when sprintId not Null");
-                    return BadRequest(ModelState);
-                }
-                if (createDTO.SprintId == null && createDTO.IsBacklog == false)
-                {
-                    ModelState.AddModelError("ErrorMessages", "IsBacklog should be True when sprintId equal Null");
-                    return BadRequest(ModelState);
-                }
-
-                Issue issue = _mapper.Map<Issue>(createDTO);
-                issue.CreationDate = DateTime.UtcNow;
-
-
-                await _dbissue.CreateAsync(issue);
-
 
                 _response.Result = _mapper.Map<IssueDTO>(issue);
+                _response.StatusCode = HttpStatusCode.OK;
+                return Ok(_response);
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.ErrorMessages = new List<string> { ex.ToString() };
+                return StatusCode(StatusCodes.Status500InternalServerError, _response);
+            }
+        }
+
+
+        [HttpPost("backlog")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<APIResponse>> CreateBacklogIssue([FromQuery] int projectId, [FromBody] IssueCreataDTO createDTO)
+        {
+            try
+            {
+                if (createDTO == null)
+                    return BadRequest(new { message = "IssueCreateDTO cannot be null" });
+
+                var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+                if (string.IsNullOrEmpty(userId))
+                    return Unauthorized(new { message = "Invalid token" });
+
+                var userProject = await _dbUserProject.GetAsync(up => up.UserId == int.Parse(userId) && up.ProjectId == projectId);
+                if (userProject == null || (userProject.Role != "Admin" && userProject.Role != "Project Manager"))
+                    return Unauthorized(new { message = "You do not have permission to create an issue in this project" });
+
+                Project project = await _dbProject.GetAsync(p => p.Id == projectId);
+                if (project == null)
+                    return BadRequest(new { message = "Project ID is Invalid!" });
+
+                createDTO.IsBacklog = true;
+                createDTO.ProjectId = projectId;
+                createDTO.CreatedById = int.Parse(userId);
+                createDTO.CreationDate = DateTime.UtcNow;
+                createDTO.TenantId = project.TenantId;
+
+                Issue issue  = _mapper.Map<Issue>(createDTO);
+                await _dbissue.CreateAsync(issue);
+               var IssueDTO= _mapper.Map<IssueDTO>(issue);
+                _response.Result = new
+                {
+                    id=issue.Id,
+                    issue= IssueDTO
+                };
                 _response.StatusCode = HttpStatusCode.Created;
 
                 return CreatedAtRoute("GetIssue", new { id = issue.Id }, _response);
@@ -175,117 +243,205 @@ namespace DevDash.Controllers
             catch (Exception ex)
             {
                 _response.IsSuccess = false;
-                _response.ErrorMessages = new List<string>() { ex.Message };
-                return StatusCode((int)HttpStatusCode.InternalServerError, _response);
+                _response.ErrorMessages = new List<string> { ex.Message };
+                return StatusCode(StatusCodes.Status500InternalServerError, _response);
             }
         }
 
 
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [HttpPost("sprint")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<APIResponse>> CreateSprintIssue([FromQuery] int sprintId, [FromBody] IssueCreataDTO createDTO)
+        {
+            try
+            {
+                if (createDTO == null)
+                    return BadRequest(new { message = "IssueCreateDTO cannot be null" });
+
+                var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+                if (string.IsNullOrEmpty(userId))
+                    return Unauthorized(new { message = "Invalid token" });
+
+                var sprint = await _dbSprint.GetAsync(s => s.Id == sprintId);
+                if (sprint == null)
+                    return BadRequest(new { message = "Sprint ID is Invalid!" });
+
+                var userProject = await _dbUserProject.GetAsync(up => up.UserId == int.Parse(userId) && up.ProjectId == sprint.ProjectId);
+                if (userProject == null || (userProject.Role != "Admin" && userProject.Role != "Project Manager"))
+                    return Unauthorized(new { message = "You do not have permission to create an issue in this project" });
+
+                createDTO.IsBacklog = false;
+                createDTO.ProjectId = sprint.ProjectId;
+                createDTO.CreatedById = int.Parse(userId);
+                createDTO.CreationDate = DateTime.UtcNow;
+                createDTO.TenantId = sprint.TenantId;
+                createDTO.SprintId = sprintId;
+
+                Issue issue = _mapper.Map<Issue>(createDTO);
+                await _dbissue.CreateAsync(issue);
+                var IssueDTO = _mapper.Map<IssueDTO>(issue);
+                _response.Result = new
+                {
+                    id=issue.Id,
+                    issue = IssueDTO
+                };
+                _response.StatusCode = HttpStatusCode.Created;
+
+                return CreatedAtRoute("GetIssue", new { id = issue.Id }, _response);
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.ErrorMessages = new List<string> { ex.Message };
+                return StatusCode(StatusCodes.Status500InternalServerError, _response);
+            }
+        }
+
+
+
+
         [HttpDelete("{id:int}", Name = "DeleteIssue")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<APIResponse>> DeleteIssue(int id)
         {
             try
             {
                 if (id == 0)
-                {
-                    return BadRequest();
-                }
-                var issue = await _dbissue.GetAsync(u => u.Id == id);
+                    return BadRequest(new { message = "Invalid issue ID" });
+
+                var issue = await _dbissue.GetAsync(i => i.Id == id);
                 if (issue == null)
-                {
-                    return NotFound();
-                }
+                    return NotFound(new { message = "Issue not found" });
+
+                var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+                if (string.IsNullOrEmpty(userId))
+                    return Unauthorized(new { message = "Invalid token" });
+
+                var userProject = await _dbUserProject.GetAsync(up => up.UserId == int.Parse(userId) && up.ProjectId == issue.ProjectId);
+                if (userProject == null || (userProject.Role != "Admin" && userProject.Role != "Project Manager"))
+                    return Unauthorized(new { message = "You do not have permission to delete this issue" });
+
                 await _dbissue.RemoveAsync(issue);
+
                 _response.StatusCode = HttpStatusCode.NoContent;
                 _response.IsSuccess = true;
-                return Ok(_response);
+                return NoContent();
             }
             catch (Exception ex)
             {
                 _response.IsSuccess = false;
-                _response.ErrorMessages
-                     = new List<string>() { ex.ToString() };
+                _response.ErrorMessages = new List<string> { ex.Message };
+                return StatusCode(StatusCodes.Status500InternalServerError, _response);
             }
-            return _response;
         }
 
 
 
         [HttpPut("{id:int}", Name = "UpdateIssue")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<APIResponse>> UpdateIssue(int id, [FromBody] IssueUpdateDTO updateDTO)
         {
             try
             {
                 if (updateDTO == null || id != updateDTO.Id)
                 {
-                    return BadRequest();
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    _response.ErrorMessages = new List<string> { "Invalid issue ID or data" };
+                    return BadRequest(_response);
                 }
-                var issue = await _dbissue.GetAsync(u => u.Id == updateDTO.Id);
+
+                var issue = await _dbissue.GetAsync(i => i.Id == updateDTO.Id);
                 if (issue == null)
                 {
-                    ModelState.AddModelError("ErrorMessages", "Issue ID is Invalid!");
-                    return BadRequest(ModelState);
+                    _response.StatusCode = HttpStatusCode.NotFound;
+                    _response.ErrorMessages = new List<string> { "Issue not found" };
+                    return NotFound(_response);
                 }
-                if (updateDTO.SprintId != null && updateDTO.IsBacklog == true)
-                {
-                    ModelState.AddModelError("ErrorMessages", "IsBacklog should be false when sprintId not Null");
-                    return BadRequest(ModelState);
-                }
-                if (updateDTO.SprintId == null && updateDTO.IsBacklog == false)
-                {
-                    ModelState.AddModelError("ErrorMessages", "IsBacklog should be True when sprintId equal Null");
-                    return BadRequest(ModelState);
-                }
-                _mapper.Map(updateDTO, issue);
 
+                var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+                if (string.IsNullOrEmpty(userId))
+                {
+                    _response.StatusCode = HttpStatusCode.Unauthorized;
+                    _response.ErrorMessages = new List<string> { "Invalid token" };
+                    return Unauthorized(_response);
+                }
+
+                var userProject = await _dbUserProject.GetAsync(up => up.UserId == int.Parse(userId) && up.ProjectId == issue.ProjectId);
+                bool hasPermission = userProject != null && (userProject.Role == "Admin" || userProject.Role == "Project Manager");
+
+                if (!hasPermission)
+                {
+                    _response.StatusCode = HttpStatusCode.Forbidden;
+                    _response.ErrorMessages = new List<string> { "You do not have permission to update this issue" };
+                    return Unauthorized();
+                }
+
+                if (updateDTO.SprintId != 0) updateDTO.IsBacklog = false;
+                else
+                {
+                    updateDTO.IsBacklog = true;
+                    updateDTO.SprintId = null;
+                }
+
+                _mapper.Map(updateDTO, issue);
                 await _dbissue.UpdateAsync(issue);
+
                 _response.StatusCode = HttpStatusCode.NoContent;
                 _response.IsSuccess = true;
-                return Ok(_response);
+                return NoContent();
             }
             catch (Exception ex)
             {
                 _response.IsSuccess = false;
-                _response.ErrorMessages
-                     = new List<string>() { ex.ToString() };
+                _response.StatusCode = HttpStatusCode.InternalServerError;
+                _response.ErrorMessages = new List<string> { ex.Message };
+                return StatusCode(StatusCodes.Status500InternalServerError, _response);
             }
-            return _response;
         }
-        [HttpPatch("{id:int}", Name = "PinIssue")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> PinIssue(int id, JsonPatchDocument<IssueUpdateDTO> patchDTO)
-        {
-            if (patchDTO == null || id == 0)
-            {
-                return BadRequest();
-            }
 
-            var issue = await _dbissue.GetAsync(u => u.Id == id, tracked: false);
 
-            if (issue == null)
-            {
-                return NotFound();
-            }
 
-            IssueUpdateDTO issueDTO = _mapper.Map<IssueUpdateDTO>(issue);
+        //[HttpPatch("{id:int}", Name = "PinIssue")]
+        //[ProducesResponseType(StatusCodes.Status204NoContent)]
+        //[ProducesResponseType(StatusCodes.Status400BadRequest)]
+        //public async Task<IActionResult> PinIssue(int id, JsonPatchDocument<IssueUpdateDTO> patchDTO)
+        //{
+        //    if (patchDTO == null || id == 0)
+        //    {
+        //        return BadRequest();
+        //    }
 
-            patchDTO.ApplyTo(issueDTO, ModelState);
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+        //    var issue = await _dbissue.GetAsync(u => u.Id == id, tracked: false);
 
-            _mapper.Map(issueDTO, issue);
+        //    if (issue == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            await _dbissue.UpdateAsync(issue);
+        //    IssueUpdateDTO issueDTO = _mapper.Map<IssueUpdateDTO>(issue);
 
-            return NoContent();
-        }
+        //    patchDTO.ApplyTo(issueDTO, ModelState);
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return BadRequest(ModelState);
+        //    }
+
+        //    _mapper.Map(issueDTO, issue);
+
+        //    await _dbissue.UpdateAsync(issue);
+
+        //    return NoContent();
+        //}
     }
 }

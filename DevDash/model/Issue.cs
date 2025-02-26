@@ -26,11 +26,11 @@ namespace DevDash.model
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime CreationDate { get; set; }
 
-        public DateOnly? StartDate { get; set; }
+        public DateTime? StartDate { get; set; }
 
-        public DateOnly? Deadline { get; set; }
+        public DateTime? Deadline { get; set; }
 
-        public DateOnly? DeliveredDate { get; set; }
+        public DateTime? DeliveredDate { get; set; }
 
         public DateTime? LastUpdate { get; set; }
 

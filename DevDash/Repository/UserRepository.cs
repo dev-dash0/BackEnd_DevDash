@@ -43,7 +43,6 @@ namespace DevDash.Repository
             {
                 return new TokenDTO { AccessToken = "" };
             }
-
             var jwtTokenId = $"JTI{Guid.NewGuid()}";
             var accessToken = await GetAccessToken(user, jwtTokenId);
             var refreshToken = await CreateNewRefreshToken(user.Id, jwtTokenId);
@@ -53,6 +52,7 @@ namespace DevDash.Repository
 
         public async Task<UserDTO> Register(RegisterDTO registerDTO)
         {
+
             User user = new()
             {
                 FirstName = registerDTO.FirstName,
@@ -63,14 +63,18 @@ namespace DevDash.Repository
                 Birthday = registerDTO.Birthday,
             };
 
+
             var result = await _userManager.CreateAsync(user, registerDTO.Password);
             if (result.Succeeded)
             {
                 var userToReturn = await _db.Users.FirstOrDefaultAsync(u => u.Email == registerDTO.Email);
                 return _mapper.Map<UserDTO>(userToReturn);
             }
-
-            return new UserDTO();
+            else
+            {
+                return null;
+            }
+            
         }
 
         private async Task<string> GetAccessToken(User user, string jwtTokenId)
@@ -81,7 +85,6 @@ namespace DevDash.Repository
                 throw new ArgumentException("Secret key is not provided.");
             }
             var key = Encoding.ASCII.GetBytes(secretKey);
-
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new Claim[]

@@ -14,11 +14,11 @@ namespace DevDash.DTO.Issue
 
         [MaxLength(255)]
         public string? Description { get; set; }
-        public bool IsBacklog { get; set; } = true;
+        public bool IsBacklog { get; set; } 
         public DateTime? CreationDate { get; set; } 
-        public DateOnly? StartDate { get; set; }
-        public DateOnly? Deadline { get; set; }
-        public DateOnly? DeliveredDate { get; set; }
+        public DateTime? StartDate { get; set; }
+        public DateTime? Deadline { get; set; }
+        public DateTime? DeliveredDate { get; set; }
         public DateTime? LastUpdate { get; set; }
 
         [MaxLength(20)]
@@ -42,7 +42,6 @@ namespace DevDash.DTO.Issue
         public int? SprintId { get; set; }
 
         public ICollection<UserDTO>? AssignedUsers { get; set; }
-        //public ICollection<CommentDTO>? Comments { get; set; }
 
     }
 }

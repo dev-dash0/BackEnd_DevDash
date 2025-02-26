@@ -180,7 +180,11 @@ namespace DevDash.Controllers
                 Sprint sprint = _mapper.Map<Sprint>(sprintDTO);
                 await _dbSprint.CreateAsync(sprint);
 
-                _response.Result = sprintDTO;
+                _response.Result = new
+                {
+                    id=sprint.Id,
+                    sprint= sprintDTO
+                };
                 _response.StatusCode = HttpStatusCode.Created;
 
                 return CreatedAtRoute("GetSprint", new { sprintId = sprint.Id }, _response);

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using System.Linq;
 using System.Security.Claims;
+using DevDash.model;
 
 namespace DevDash.Controllers
 {
@@ -23,26 +24,35 @@ namespace DevDash.Controllers
         [HttpPost("Register")]
         public async Task<IActionResult> Register([FromBody] RegisterDTO registerDTO)
         {
+           
+            if (registerDTO == null)
+                return BadRequest(new { message = "Input data is null" });
+
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+                return BadRequest(new { message = "Validation error" });
+
+            var existingUser = await _userRepository.GetAsync(u => u.Email==registerDTO.Email);
+            if (existingUser != null)
+                return BadRequest(new { message = "Account is already registered" });
 
             var user = await _userRepository.Register(registerDTO);
-            if (user == null)
-                return BadRequest(new { message = "Registration failed" });
 
-            return Ok(user);
+            if (user == null)
+                return StatusCode(500, new { message = "User registration failed due to a server error" });
+
+            return Ok(new { message = "Registration successful", user });
         }
+
 
         [HttpPost("Login")]
         public async Task<IActionResult> Login([FromBody] LoginDTO loginDTO)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+                return BadRequest("error in validation");
 
             var tokenDTO = await _userRepository.Login(loginDTO);
             if (string.IsNullOrEmpty(tokenDTO.AccessToken))
                 return Unauthorized(new { message = "Invalid credentials" });
-
             return Ok(tokenDTO);
         }
 

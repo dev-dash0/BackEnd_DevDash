@@ -188,7 +188,11 @@ namespace DevDash.Controllers
 
                 UserProject userProject = _mapper.Map<UserProject>(userProjectDTO);
                 await _dbUserProject.JoinAsync(userProject);
-                _response.Result = projectDTO ;
+                _response.Result = new
+                {
+                    id=project.Id,
+                    project= projectDTO
+                } ;
                 _response.StatusCode = HttpStatusCode.Created;
                 return CreatedAtRoute("GetProject", new { projectId = project.Id }, _response);
             }

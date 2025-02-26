@@ -88,11 +88,11 @@ namespace DevDash.Migrations
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("GETUTCDATE()");
 
-                    b.Property<DateOnly?>("Deadline")
-                        .HasColumnType("date");
+                    b.Property<DateTime?>("Deadline")
+                        .HasColumnType("datetime2");
 
-                    b.Property<DateOnly?>("DeliveredDate")
-                        .HasColumnType("date");
+                    b.Property<DateTime?>("DeliveredDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
                         .HasMaxLength(255)
@@ -122,8 +122,8 @@ namespace DevDash.Migrations
                     b.Property<int?>("SprintId")
                         .HasColumnType("int");
 
-                    b.Property<DateOnly?>("StartDate")
-                        .HasColumnType("date");
+                    b.Property<DateTime?>("StartDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Status")
                         .IsRequired()

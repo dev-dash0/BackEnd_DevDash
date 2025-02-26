@@ -1,17 +1,13 @@
 using DevDash.Middleware;
 using DevDash.model;
-
 using DevDash.Repository;
 using DevDash.Repository.IRepository;
-
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-
 using Microsoft.OpenApi.Models;
 using System.Text;
-
 
 namespace DevDash
 {
@@ -21,22 +17,33 @@ namespace DevDash
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            // ≈÷«›… CORS
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAll",
+                    policy =>
+                    {
+                        policy.AllowAnyOrigin()
+                              .AllowAnyMethod()
+                              .AllowAnyHeader();
+                    });
+            });
 
             builder.Services.AddControllers().ConfigureApiBehaviorOptions(
-                options =>
-                    options.SuppressModelStateInvalidFilter = true);
+                options => options.SuppressModelStateInvalidFilter = true);
 
             builder.Services.AddDbContext<AppDbContext>(options =>
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("cs"));
-
-
             });
+
             builder.Services.AddControllers()
                 .AddNewtonsoftJson(options =>
                 {
                     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
                 });
+
+            // ≈÷«›… «·„” Êœ⁄«  (Repositories)
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<ITenantRepository, TenantRepository>();
             builder.Services.AddScoped<ISprintRepository, SprintRepository>();
@@ -46,52 +53,48 @@ namespace DevDash
             builder.Services.AddScoped<IUserTenantRepository, UserTenantRepository>();
             builder.Services.AddScoped<IUserProjectRepository, UserProjectRepository>();
             builder.Services.AddScoped<IIssueAssignUserRepository, IssueAssignUserRepository>();
+            builder.Services.AddScoped<IDashBoardRepository, DashBoardRepository>();
 
             builder.Services.AddAutoMapper(typeof(MappingConfig));
-            //------------------------------------------------------------------
-            // Add services to the container.
+
             builder.Services.AddControllers()
                 .AddJsonOptions(options =>
                 {
                     options.JsonSerializerOptions.Converters.Add(new DateOnlyJsonConverter());
                 });
 
-
+            // ≈÷«›… «·ÂÊÌ… (Identity) Ê«·„’«œﬁ… (Authentication)
             builder.Services.AddIdentity<User, IdentityRole<int>>()
                 .AddEntityFrameworkStores<AppDbContext>();
-
 
             builder.Services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             })
-                .AddJwtBearer(options =>
+            .AddJwtBearer(options =>
+            {
+                options.RequireHttpsMetadata = false;
+                options.SaveToken = true;
+                options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    options.RequireHttpsMetadata = false;
-                    options.SaveToken = true; // Save the token in the server
-                    options.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateIssuer = true,
-                        ValidateAudience = true,
-                        ValidateLifetime = true,
-                        ValidateIssuerSigningKey = true,
-                        ValidIssuer = builder.Configuration["JWT:ValidIssuer"],
-                        ValidAudience = builder.Configuration["JWT:ValidAudience"],
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Secret"]))
-                    };
-                });
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = builder.Configuration["JWT:ValidIssuer"],
+                    ValidAudience = builder.Configuration["JWT:ValidAudience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Secret"]))
+                };
+            });
 
-            builder.Services.AddControllers().AddNewtonsoftJson();
-            //------------------------------------------------------------------
             builder.Services.AddMemoryCache();
             builder.Services.AddSingleton<TokenBlacklistService>();
-            //------------------------------------------------------------------
 
-
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+            // ≈⁄œ«œ Swagger
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen(options => {
+            builder.Services.AddSwaggerGen(options =>
+            {
                 options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     Description =
@@ -108,10 +111,10 @@ namespace DevDash
                         new OpenApiSecurityScheme
                         {
                             Reference = new OpenApiReference
-                                        {
-                                            Type = ReferenceType.SecurityScheme,
-                                            Id = "Bearer"
-                                        },
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            },
                             Scheme = "oauth2",
                             Name = "Bearer",
                             In = ParameterLocation.Header
@@ -119,15 +122,14 @@ namespace DevDash
                         new List<string>()
                     }
                 });
-
             });
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
+            //  ﬂÊÌ‰ «·‹ Middleware
             if (app.Environment.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage(); // Enable detailed error messages
+                app.UseDeveloperExceptionPage();
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
@@ -139,18 +141,16 @@ namespace DevDash
 
             app.UseHttpsRedirection();
 
+            //  ›⁄Ì· CORS ﬁ»· «·„’«œﬁ…
+            app.UseCors("AllowAll");
 
-            app.UseAuthentication(); // Ensure authentication middleware is called before authorization
+            app.UseAuthentication();
             app.UseAuthorization();
             app.UseMiddleware<TokenBlacklistMiddleware>();
-
-            //app.UseCustomUnauthorizedResponse();
 
             app.MapControllers();
 
             app.Run();
         }
     }
-
-  
 }

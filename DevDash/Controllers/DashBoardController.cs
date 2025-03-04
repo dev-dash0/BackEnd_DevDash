@@ -97,14 +97,14 @@ namespace DevDash.Controllers
                 {
                     return BadRequest("This user is not assigned to this tenant.");
                 }
-                var Projects =await _DashBoardRepository.GetProjectsDashboard(Tenantid, parsedUserId);
+                var Projects = await _DashBoardRepository.GetProjectsDashboard(Tenantid, parsedUserId);
                 _response.Result = Projects;
                 _response.IsSuccess = true;
                 return Ok(_response);
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Server Error: {ex}"); 
+                Console.WriteLine($"Server Error: {ex}");
                 _response.IsSuccess = false;
                 _response.ErrorMessages = new List<string> { ex.Message };
                 return StatusCode(500, _response);
@@ -161,31 +161,41 @@ namespace DevDash.Controllers
 
         [Authorize]
         [HttpGet("Calender")]
-        public async Task<ActionResult<APIResponse>> GetCalender()
+        
+        public async Task<ActionResult<APIResponse>> GetCalendar()
         {
+            var response = new APIResponse();
             try
             {
-                var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-                if (string.IsNullOrEmpty(userId) || !int.TryParse(userId, out int parsedUserId))
+                var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                if (!int.TryParse(userIdClaim, out int parsedUserId))
                 {
-                    return Unauthorized("Invalid or missing User ID.");
+                    response.IsSuccess = false;
+                    response.ErrorMessages = new List<string> { "Invalid or missing User ID." };
+                    return Unauthorized(response);
                 }
 
-                var result =await _DashBoardRepository.GetUserIssuesTimeline(parsedUserId);
+                var result = await _DashBoardRepository.GetUserIssuesTimeline(parsedUserId);
 
                 if (result == null)
                 {
-                    return BadRequest("No data found");
+                    response.IsSuccess = false;
+                    response.ErrorMessages = new List<string> { "No data found." };
+                    return NotFound(response);
                 }
-                return Ok(result);
+
+                response.IsSuccess = true;
+                response.Result = result;
+                return Ok(response);
             }
-                  catch (Exception ex)
+            catch (Exception ex)
             {
-                Console.WriteLine($"Server Error: {ex}");
-                _response.IsSuccess = false;
-                _response.ErrorMessages = new List<string> { ex.Message };
-                return StatusCode(500, _response);
+
+                response.IsSuccess = false;
+                response.ErrorMessages = new List<string> { "An internal server error occurred." };
+                return StatusCode(500, response);
             }
         }
+
     }
 }

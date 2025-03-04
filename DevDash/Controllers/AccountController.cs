@@ -29,8 +29,20 @@ namespace DevDash.Controllers
                 return BadRequest(new { message = "Input data is null" });
 
             if (!ModelState.IsValid)
-                return BadRequest(new { message = "Validation error" });
+            {
+                var errors = ModelState
+               .Where(ms => ms.Value.Errors.Count > 0)
+               .ToDictionary(
+                kvp => kvp.Key,
+                 kvp => kvp.Value.Errors.Select(e => e.ErrorMessage).ToArray()
+                );
 
+                return BadRequest(new
+                {
+                    Message = "Validation failed",
+                    Errors = errors
+                });
+            }
             var existingUser = await _userRepository.GetAsync(u => u.Email==registerDTO.Email);
             if (existingUser != null)
                 return BadRequest(new { message = "Account is already registered" });
@@ -48,7 +60,20 @@ namespace DevDash.Controllers
         public async Task<IActionResult> Login([FromBody] LoginDTO loginDTO)
         {
             if (!ModelState.IsValid)
-                return BadRequest("error in validation");
+            {
+                var errors = ModelState
+              .Where(ms => ms.Value.Errors.Count > 0)
+              .ToDictionary(
+               kvp => kvp.Key,
+                kvp => kvp.Value.Errors.Select(e => e.ErrorMessage).ToArray()
+               );
+
+                return BadRequest(new
+                {
+                    Message = "Validation failed",
+                    Errors = errors
+                });
+            }
 
             var tokenDTO = await _userRepository.Login(loginDTO);
             if (string.IsNullOrEmpty(tokenDTO.AccessToken))

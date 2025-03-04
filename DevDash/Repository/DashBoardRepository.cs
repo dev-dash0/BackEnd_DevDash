@@ -139,41 +139,32 @@ namespace DevDash.Repository
 
         ////////////////////////////////////
         ///
-  
-        public async Task<ActionResult<Dictionary<string, object>>> GetUserIssuesTimeline(int userId)
+
+        public async Task<List<object>> GetUserIssuesTimeline(int userId)
         {
-            var minStartDate = await _context.Issues
-                .Where(i => i.IssueAssignedUsers.Any(ia => ia.UserId == userId))
-                .Select(i => i.StartDate)
-                .MinAsync();
-
-            var maxDeadline = await _context.Issues
-                .Where(i => i.IssueAssignedUsers.Any(ia => ia.UserId == userId))
-                .Select(i => i.Deadline)
-                .MaxAsync();
-            if(minStartDate==null || maxDeadline==null)
-            {
-                return null;
-            }
-
-
-            DateTime currentDate = DateTime.UtcNow.Date;
-
             var issues = await _context.Issues
                 .AsNoTracking()
                 .Where(issue => issue.IssueAssignedUsers.Any(ia => ia.UserId == userId))
                 .Include(issue => issue.Project)
                 .Include(issue => issue.Tenant)
-                .Include(issue => issue.AssignedUsers)
-                .OrderByDescending(issue => issue.Priority)
+                .OrderBy(issue => issue.Deadline)
                 .ToListAsync();
 
-            var timeline = new Dictionary<string, object>();
+            if (!issues.Any())
+            {
+                return null; 
+            }
 
-            for (DateTime date = minStartDate.Value; date <= maxDeadline.Value; date = date.AddDays(1))
+            DateTime minStartDate = issues.Min(i => i.StartDate) ?? DateTime.UtcNow.Date;
+            DateTime maxDeadline = issues.Max(i => i.Deadline) ?? DateTime.UtcNow.Date;
+
+            var timeline = new List<object>();
+
+            for (DateTime date = minStartDate; date <= maxDeadline; date = date.AddDays(1))
             {
                 var issuesForDay = issues
                     .Where(issue => issue.StartDate <= date && issue.Deadline >= date)
+                    .OrderBy(issue => issue.Deadline)
                     .Select(issue => new
                     {
                         issue.Id,
@@ -182,28 +173,43 @@ namespace DevDash.Repository
                         issue.Type,
                         ProjectName = issue.Project.Name,
                         TenantName = issue.Tenant.Name,
-                        StartDate = issue.StartDate,
-                        Deadline = issue.Deadline
+                        issue.StartDate,
+                        issue.Deadline
                     })
                     .ToList();
 
-                timeline[date.ToString("yyyy-MM-dd")] = new
+                if (issuesForDay.Any())
                 {
-                    currentDate = currentDate.ToString("yyyy-MM-dd"),
-                    issues = issuesForDay
-                };
+                    timeline.Add(new
+                    {
+                        date = date.ToString("yyyy-MM-dd"),
+                        issues = issuesForDay
+                    });
+                }
             }
 
-            return timeline; // سيتم تحويله تلقائيًا إلى JSON
+
+            return timeline.OrderBy(day =>
+            {
+                var issuesList = ((dynamic)day).issues as List<dynamic>;
+
+                if (issuesList == null || !issuesList.Any())
+                    return DateTime.MaxValue; 
+
+                return issuesList
+                    .Select(issue =>
+                    {
+                        DateTime deadline;
+                        return DateTime.TryParse(issue.Deadline, out deadline) ? deadline : DateTime.MaxValue;
+                    })
+                    .Min(); 
+            }).ToList();
+
         }
 
 
 
-        ////
-        //////////////////////////////////
-
-
-
+        ///////////
 
 
 

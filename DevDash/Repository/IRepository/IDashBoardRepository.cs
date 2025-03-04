@@ -11,7 +11,7 @@ namespace DevDash.Repository.IRepository
         Task<DashBoardDTO> GetAnalysisSummaryAsync(int Tenantid,int? userid);
         Task<List<ProjectDashBoardDTO>> GetProjectsDashboard(int Tenantid,int userId);
         Task<List<IssueDashBoardDTO>> GetIssuesDashboard(int tenantId, int userId);
-        Task<ActionResult<Dictionary<string, object>>> GetUserIssuesTimeline(int userId);
+        Task<List<object>> GetUserIssuesTimeline(int userId);
 
     }
 }

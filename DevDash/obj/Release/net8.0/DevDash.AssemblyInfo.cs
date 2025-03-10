@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("DevDash")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9cbda377b38d62bec797e5e9dab687d4c72f181f")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e606abd7c74c71ae5dca5ce87a018847bb8403a1")]
 [assembly: System.Reflection.AssemblyProductAttribute("DevDash")]
 [assembly: System.Reflection.AssemblyTitleAttribute("DevDash")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

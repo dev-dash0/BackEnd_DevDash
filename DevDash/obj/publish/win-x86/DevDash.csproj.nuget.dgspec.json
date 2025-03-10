@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Nvidia\\Downloads\\DevDash (9)\\DevDash\\DevDash\\DevDash.csproj": {}
+    "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-PinFeature\\BackEnd_DevDash-PinFeature\\DevDash\\DevDash.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Nvidia\\Downloads\\DevDash (9)\\DevDash\\DevDash\\DevDash.csproj": {
+    "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-PinFeature\\BackEnd_DevDash-PinFeature\\DevDash\\DevDash.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Nvidia\\Downloads\\DevDash (9)\\DevDash\\DevDash\\DevDash.csproj",
+        "projectUniqueName": "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-PinFeature\\BackEnd_DevDash-PinFeature\\DevDash\\DevDash.csproj",
         "projectName": "DevDash",
-        "projectPath": "C:\\Users\\Nvidia\\Downloads\\DevDash (9)\\DevDash\\DevDash\\DevDash.csproj",
+        "projectPath": "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-PinFeature\\BackEnd_DevDash-PinFeature\\DevDash\\DevDash.csproj",
         "packagesPath": "C:\\Users\\Nvidia\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Nvidia\\Downloads\\DevDash (9)\\DevDash\\DevDash\\obj\\publish\\win-x86\\",
+        "outputPath": "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-PinFeature\\BackEnd_DevDash-PinFeature\\DevDash\\obj\\publish\\win-x86\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

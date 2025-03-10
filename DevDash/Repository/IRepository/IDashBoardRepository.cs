@@ -8,7 +8,8 @@ namespace DevDash.Repository.IRepository
 {
     public interface IDashBoardRepository
     {
-        Task<DashBoardDTO> GetAnalysisSummaryAsync(int Tenantid,int? userid);
+        Task<DashBoardTenantsDTO> GetAnalysisTenantsSummaryAsync(int Tenantid,int? userid);
+        Task<DashBoardProjectsDTO> GetAnalysisProjectsSummaryAsync(int Projectid, int? userid);
         Task<List<ProjectDashBoardDTO>> GetProjectsDashboard(int Tenantid,int userId);
         Task<List<IssueDashBoardDTO>> GetIssuesDashboard(int tenantId, int userId);
         Task<List<object>> GetUserIssuesTimeline(int userId);

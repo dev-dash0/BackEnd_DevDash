@@ -46,7 +46,7 @@ namespace DevDash.Controllers
                 var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
                 IEnumerable<Comment> Comments = await _dbComment.GetAllAsync(
                            filter: c => c.Issue.Id == IssueId && (string.IsNullOrEmpty(search) || c.Content.ToLower().Contains(search.ToLower())),
-                           includeProperties: "Issue",
+                           includeProperties: "Issue,CreatedBy",
                            pageSize: pageSize,
                            pageNumber: pageNumber
                        );
@@ -77,7 +77,10 @@ namespace DevDash.Controllers
                     _response.StatusCode = HttpStatusCode.BadRequest;
                     return BadRequest(_response);
                 }
-                var Comment = await _dbComment.GetAsync(u => u.Id == id);
+                var Comment = await _dbComment.GetAsync(u => u.Id == id
+                , includeProperties: "Issue,CreatedBy"
+                );
+              
                 if (Comment == null)
                 {
                     _response.StatusCode = HttpStatusCode.NotFound;

@@ -16,23 +16,29 @@ namespace DevDash.Controllers
     {
         private readonly IDashBoardRepository _DashBoardRepository;
         private readonly ITenantRepository _TenantRepository;
+        private readonly IProjectRepository _ProjectRepository;
+        private readonly IUserProjectRepository _UserProjectRepository;
         private readonly AppDbContext _dbContext;
         private readonly IUserTenantRepository _UserTenantRepository;
         private APIResponse _response;
 
         public DashBoardController(IDashBoardRepository DashBoardRepository, ITenantRepository tenantRepository
-            , IUserTenantRepository UserTenantRepository, AppDbContext dbContext)
+            , IUserTenantRepository UserTenantRepository,IProjectRepository projectRepository
+            , IUserProjectRepository userProjectRepository
+            , AppDbContext dbContext)
         {
             _UserTenantRepository = UserTenantRepository;
             _DashBoardRepository = DashBoardRepository;
             this._response = new APIResponse();
             _TenantRepository = tenantRepository;
+            _ProjectRepository = projectRepository;
+            _UserProjectRepository = userProjectRepository;
             _dbContext = dbContext;
         }
         [Authorize]
-        [HttpGet]
+        [HttpGet("Tenants")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<APIResponse>> GetAnalysis([FromQuery] int Tenantid)
+        public async Task<ActionResult<APIResponse>> GetTenantAnalysis([FromQuery] int Tenantid)
         {
             try
             {
@@ -56,7 +62,7 @@ namespace DevDash.Controllers
                     return BadRequest("This User no found in this tenant");
 
                 }
-                _response.Result = await _DashBoardRepository.GetAnalysisSummaryAsync(Tenantid, parsedUserId);
+                _response.Result = await _DashBoardRepository.GetAnalysisTenantsSummaryAsync(Tenantid, parsedUserId);
                 _response.IsSuccess = true;
                 return _response;
             }
@@ -68,6 +74,63 @@ namespace DevDash.Controllers
             }
             return _response;
         }
+
+        [Authorize]
+        [HttpGet("Projects")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult<APIResponse>> GetProjectAnalysis([FromQuery] int Projectid)
+        {
+            try
+            {
+                if (Projectid == 0)
+                {
+                    return BadRequest("ID is invalid");
+                }
+                var project = await _ProjectRepository.GetAsync(p => p.Id ==Projectid);
+
+                if (project == null)
+                {
+                    return BadRequest("There is no project with this id");
+
+                }
+                var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+                if (string.IsNullOrEmpty(userId)) return Unauthorized();
+                int parsedUserId = int.Parse(userId);
+                var userproject = await _UserProjectRepository.GetAsync(t => t.UserId == parsedUserId && t.ProjectId == Projectid);
+                if (userproject == null)
+                {
+                    return BadRequest("This User no found in this project");
+
+                }
+                _response.Result = await _DashBoardRepository.GetAnalysisProjectsSummaryAsync(Projectid, parsedUserId);
+                _response.IsSuccess = true;
+                return _response;
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.ErrorMessages
+                     = new List<string>() { ex.ToString() };
+            }
+            return _response;
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         [Authorize]
 
         [HttpGet("allproject")]

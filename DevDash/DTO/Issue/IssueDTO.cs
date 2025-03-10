@@ -6,7 +6,7 @@ namespace DevDash.DTO.Issue
 {
     public class IssueDTO
     {
-        public int Id { get; set; }
+        //public int Id { get; set; }
 
         [Required]
         [MaxLength(255)]

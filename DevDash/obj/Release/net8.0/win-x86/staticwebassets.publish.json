@@ -1,20 +1,12 @@
 {
   "Version": 1,
-  "Hash": "jldjeCRHWryiuruWSIVyq7R9SOvOCVm8knWRrX9ZjWc=",
+  "Hash": "yPbRs3sYmnaKRxgFs2ZIs4ePKrrSVjSowqNQoSiPoAY=",
   "Source": "DevDash",
   "BasePath": "_content/DevDash",
   "Mode": "Default",
   "ManifestType": "Publish",
   "ReferencedProjectsConfiguration": [],
-  "DiscoveryPatterns": [
-    {
-      "Name": "DevDash\\wwwroot",
-      "Source": "DevDash",
-      "ContentRoot": "C:\\Users\\Nvidia\\Downloads\\DevDash (9)\\DevDash\\DevDash\\wwwroot\\",
-      "BasePath": "_content/DevDash",
-      "Pattern": "**"
-    }
-  ],
+  "DiscoveryPatterns": [],
   "Assets": [],
   "Endpoints": []
 }

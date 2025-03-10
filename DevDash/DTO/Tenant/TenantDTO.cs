@@ -10,7 +10,7 @@ namespace DevDash.DTO.Tenant
 {
     public class TenantDTO
     {
-        //public int Id { get; set; }
+        public int Id { get; set; }
 
         [Required]
         [StringLength(20, MinimumLength = 3)]

@@ -7,7 +7,7 @@ namespace DevDash.DTO.Project
 {
     public class ProjectDTO
     {
-        //public int Id { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
         public string? Description { get; set; }
         public string ProjectCode { get; set; } = Guid.NewGuid().ToString().Substring(0, 8);

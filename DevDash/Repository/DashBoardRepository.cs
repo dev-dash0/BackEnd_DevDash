@@ -52,7 +52,7 @@ namespace DevDash.Repository
 
             var InProgress = await _context.Projects
             .AsNoTracking()
-            .Where(i => filteredProjectIds.Contains(i.TenantId) && i.Status == "In Progress")
+            .Where(i => filteredProjectIds.Contains(i.TenantId) && i.Status == "Working on")
              .ToListAsync();
             var Overdue = await _context.Projects
             .AsNoTracking()

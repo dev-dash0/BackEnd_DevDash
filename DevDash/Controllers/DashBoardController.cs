@@ -134,20 +134,13 @@ namespace DevDash.Controllers
         [Authorize]
 
         [HttpGet("allproject")]
-        public async Task<ActionResult<APIResponse>> GetprojectDashboard(int Tenantid)
+        public async Task<ActionResult<APIResponse>> GetprojectDashboard()
         {
             try
             {
-                if (Tenantid <= 0)
-                {
-                    return BadRequest("Tenant ID is invalid.");
-                }
+               
 
-                var tenant = await _TenantRepository.GetAsync(t => t.Id == Tenantid);
-                if (tenant == null)
-                {
-                    return NotFound("No tenant found with this ID.");
-                }
+               
 
                 var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
                 if (string.IsNullOrEmpty(userId) || !int.TryParse(userId, out int parsedUserId))
@@ -155,12 +148,12 @@ namespace DevDash.Controllers
                     return Unauthorized("Invalid or missing User ID.");
                 }
 
-                var userTenant = await _UserTenantRepository.GetAsync(t => t.UserId == parsedUserId && t.TenantId == Tenantid);
-                if (userTenant == null)
-                {
-                    return BadRequest("This user is not assigned to this tenant.");
-                }
-                var Projects = await _DashBoardRepository.GetProjectsDashboard(Tenantid, parsedUserId);
+                //var userTenant = await _UserTenantRepository.GetAsync(t => t.UserId == parsedUserId && t.TenantId == Tenantid);
+                //if (userTenant == null)
+                //{
+                //    return BadRequest("This user is not assigned to this tenant.");
+                //}
+                var Projects = await _DashBoardRepository.GetProjectsDashboard(parsedUserId);
                 _response.Result = Projects;
                 _response.IsSuccess = true;
                 return Ok(_response);
@@ -183,31 +176,24 @@ namespace DevDash.Controllers
 
         [Authorize]
         [HttpGet("allissue")]
-        public async Task<ActionResult<APIResponse>> GetissueDashboard(int Tenantid)
+        public async Task<ActionResult<APIResponse>> GetissueDashboard()
         {
             try
             {
-                if (Tenantid <= 0)
-                {
-                    return BadRequest("Tenant ID is invalid.");
-                }
-                var tenant = await _TenantRepository.GetAsync(t => t.Id == Tenantid);
-                if (tenant == null)
-                {
-                    return NotFound("No tenant found with this ID.");
-                }
+               
+                
                 var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
                 if (string.IsNullOrEmpty(userId) || !int.TryParse(userId, out int parsedUserId))
                 {
                     return Unauthorized("Invalid or missing User ID.");
                 }
 
-                var userTenant = await _UserTenantRepository.GetAsync(t => t.UserId == parsedUserId && t.TenantId == Tenantid);
-                if (userTenant == null)
-                {
-                    return BadRequest("This user is not assigned to this tenant.");
-                }
-                var issues = await _DashBoardRepository.GetIssuesDashboard(Tenantid, parsedUserId);
+                //var userTenant = await _UserTenantRepository.GetAsync(t => t.UserId == parsedUserId && t.TenantId == Tenantid);
+                //if (userTenant == null)
+                //{
+                //    return BadRequest("This user is not assigned to this tenant.");
+                //}
+                var issues = await _DashBoardRepository.GetIssuesDashboard(parsedUserId);
                 _response.Result = issues;
                 _response.IsSuccess = true;
                 return Ok(_response);

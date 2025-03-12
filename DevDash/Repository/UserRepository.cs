@@ -306,12 +306,11 @@ namespace DevDash.Repository
         {
             var user = await _userManager.FindByIdAsync(userId.ToString());
             if (user == null) return null;
-
             user.FirstName = updateProfileDTO.FirstName;
             user.LastName = updateProfileDTO.LastName;
             user.PhoneNumber = updateProfileDTO.PhoneNumber;
             user.Birthday = updateProfileDTO.Birthday;
-
+            user.ImageUrl = updateProfileDTO.ImageUrl;
             var result = await _userManager.UpdateAsync(user);
             return result.Succeeded ? _mapper.Map<UserDTO>(user) : null;
         }

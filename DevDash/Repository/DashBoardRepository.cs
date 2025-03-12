@@ -73,12 +73,12 @@ namespace DevDash.Repository
                 ProjectsOverdue = projectsOverdue
             };
         }
-        public async Task<List<ProjectDashBoardDTO>> GetProjectsDashboard(int tenantId, int userId)
+        public async Task<List<ProjectDashBoardDTO>> GetProjectsDashboard(int userId)
         {
-            if (tenantId <= 0 || userId <= 0)
-            {
-                throw new ArgumentException("Tenant ID and User ID must be greater than zero.");
-            }
+            //if (tenantId <= 0 || userId <= 0)
+            //{
+            //    throw new ArgumentException("Tenant ID and User ID must be greater than zero.");
+            //}
             var userProjectIds = await _context.UserProjects
                 .AsNoTracking()
                 .Where(up => up.UserId == userId)
@@ -92,7 +92,7 @@ namespace DevDash.Repository
 
             var filteredProjects = await _context.Projects
                 .AsNoTracking()
-                .Where(p => p.TenantId == tenantId && userProjectIds.Contains(p.Id))
+                .Where(p => userProjectIds.Contains(p.Id))
                 .ToListAsync();
             var projects = _mapper.Map<List<ProjectDashBoardDTO>>(filteredProjects);
             return projects;
@@ -101,12 +101,9 @@ namespace DevDash.Repository
 
 
 
-        public async Task<List<IssueDashBoardDTO>> GetIssuesDashboard(int tenantId, int userId)
+        public async Task<List<IssueDashBoardDTO>> GetIssuesDashboard(int userId)
         {
-            if (tenantId <= 0 || userId <= 0)
-            {
-                throw new ArgumentException("Tenant ID and User ID must be greater than zero.");
-            }
+           
             var userIssueIds = await _context.IssueAssignedUsers
                 .AsNoTracking()
                 .Where(up => up.UserId == userId)
@@ -119,7 +116,7 @@ namespace DevDash.Repository
             }
             var filteredIssues = await _context.Issues
           .AsNoTracking()
-          .Where(issue => issue.TenantId == tenantId && userIssueIds.Contains(issue.Id))
+          .Where(issue => userIssueIds.Contains(issue.Id))
           .Select(issue => new IssueDashBoardDTO
           {
               Id = issue.Id,

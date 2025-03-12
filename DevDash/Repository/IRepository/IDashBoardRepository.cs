@@ -10,8 +10,8 @@ namespace DevDash.Repository.IRepository
     {
         Task<DashBoardTenantsDTO> GetAnalysisTenantsSummaryAsync(int Tenantid,int? userid);
         Task<DashBoardProjectsDTO> GetAnalysisProjectsSummaryAsync(int Projectid, int? userid);
-        Task<List<ProjectDashBoardDTO>> GetProjectsDashboard(int Tenantid,int userId);
-        Task<List<IssueDashBoardDTO>> GetIssuesDashboard(int tenantId, int userId);
+        Task<List<ProjectDashBoardDTO>> GetProjectsDashboard(int userId);
+        Task<List<IssueDashBoardDTO>> GetIssuesDashboard( int userId);
         Task<List<object>> GetUserIssuesTimeline(int userId);
         Task<List<PinnedItem>> GetUserPinnedproject(int userId);
         Task<List<PinnedItem>> GetUserPinnedissue(int userId);

@@ -57,9 +57,6 @@ namespace DevDash.Controllers
             try
             {
 
-                
-
-
                 var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
                 if (string.IsNullOrEmpty(userId))
                     return Unauthorized(new { message = "Invalid token" });

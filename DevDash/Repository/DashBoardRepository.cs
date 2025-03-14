@@ -91,9 +91,13 @@ namespace DevDash.Repository
             }
 
             var filteredProjects = await _context.Projects
-                .AsNoTracking()
-                .Where(p => userProjectIds.Contains(p.Id))
-                .ToListAsync();
+     .AsNoTracking()
+     .Where(p => userProjectIds.Contains(p.Id))
+     .Include(p => p.Tenant)      
+     .Include(p => p.Creator)      
+     .Include(p => p.UserProjects) 
+     .ThenInclude(up => up.User)   
+     .ToListAsync();
             var projects = _mapper.Map<List<ProjectDashBoardDTO>>(filteredProjects);
             return projects;
         }

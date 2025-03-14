@@ -1,11 +1,17 @@
-﻿using DevDash.DTO.Account;
+﻿using AutoMapper;
+using DevDash.DTO.Account;
+using DevDash.DTO.Issue;
 using DevDash.DTO.Project;
+using DevDash.DTO.Sprint;
+using DevDash.DTO.Tenant;
 using DevDash.Migrations;
 using DevDash.model;
+using DevDash.Repository;
 using DevDash.Repository.IRepository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Net;
 using System.Security.Claims;
 
 namespace DevDash.Controllers
@@ -18,14 +24,23 @@ namespace DevDash.Controllers
         private readonly ITenantRepository _TenantRepository;
         private readonly IProjectRepository _ProjectRepository;
         private readonly IUserProjectRepository _UserProjectRepository;
+        private readonly IUserRepository _UserRepository;
+        private readonly ISprintRepository _SprintRepository;
+        private readonly IPinnedItemRepository _PinnedItemRepository;
+        private readonly IIssueRepository _IssueRepository;
         private readonly AppDbContext _dbContext;
         private readonly IUserTenantRepository _UserTenantRepository;
+        private readonly IMapper _mapper;
         private APIResponse _response;
 
         public DashBoardController(IDashBoardRepository DashBoardRepository, ITenantRepository tenantRepository
             , IUserTenantRepository UserTenantRepository,IProjectRepository projectRepository
-            , IUserProjectRepository userProjectRepository
-            , AppDbContext dbContext)
+            , IUserProjectRepository userProjectRepository,
+            IPinnedItemRepository pinnedItemRepository
+            ,IIssueRepository issueRepository
+            , IMapper mapper
+
+            , AppDbContext dbContext, IUserRepository userRepository, ISprintRepository sprintRepository)
         {
             _UserTenantRepository = UserTenantRepository;
             _DashBoardRepository = DashBoardRepository;
@@ -34,6 +49,11 @@ namespace DevDash.Controllers
             _ProjectRepository = projectRepository;
             _UserProjectRepository = userProjectRepository;
             _dbContext = dbContext;
+            _UserRepository = userRepository;
+            _PinnedItemRepository = pinnedItemRepository;
+            _SprintRepository = sprintRepository;
+            _IssueRepository = issueRepository;
+            _mapper = mapper;
         }
         [Authorize]
         [HttpGet("Tenants")]
@@ -138,10 +158,6 @@ namespace DevDash.Controllers
         {
             try
             {
-               
-
-               
-
                 var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
                 if (string.IsNullOrEmpty(userId) || !int.TryParse(userId, out int parsedUserId))
                 {
@@ -167,21 +183,12 @@ namespace DevDash.Controllers
             }
         }
 
-
-
-
-
-
-
-
         [Authorize]
         [HttpGet("allissue")]
         public async Task<ActionResult<APIResponse>> GetissueDashboard()
         {
             try
-            {
-               
-                
+            { 
                 var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
                 if (string.IsNullOrEmpty(userId) || !int.TryParse(userId, out int parsedUserId))
                 {
@@ -248,47 +255,80 @@ namespace DevDash.Controllers
 
         [Authorize]
         [HttpGet("Pinneditems")]
+
         public async Task<ActionResult<APIResponse>> GetPinnedItems()
         {
-           
             try
             {
-                var userIdClaim =User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-                if (!int.TryParse(userIdClaim, out int parsedUserId))
+                
+                if (!int.TryParse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value, out int userId))
+                    return Unauthorized(new { message = "Invalid token" });
+
+                
+                var user = await _UserRepository.GetAsync(u => u.Id == userId);
+                if (user == null)
+                    return BadRequest(new { message = "User not found" });
+
+                var pinnedItems = await _PinnedItemRepository.GetAllAsync(p => p.UserId == userId);
+                if (!pinnedItems.Any())
+                    return NotFound(new { message = "No pinned items found" });
+
+                var tenants = new List<TenantDTO>();
+                var projects = new List<ProjectDTO>();
+                var sprints = new List<SprintDTO>();
+                var issues = new List<IssueDTO>();
+
+                foreach (var pinnedItem in pinnedItems)
                 {
-                    _response.IsSuccess = false;
-                    _response.ErrorMessages = new List<string> { "Invalid or missing User ID." };
-                    return Unauthorized(_response);
+                    if (pinnedItem.ItemType == "Tenant")
+                    {
+                        var tenant = await _TenantRepository.GetAsync(t => t.Id == pinnedItem.ItemId);
+                        if (tenant != null)
+                            tenants.Add(_mapper.Map<TenantDTO>(tenant));
+                    }
+                    else if (pinnedItem.ItemType == "Project")
+                    {
+                        var project = await _ProjectRepository.GetAsync(p => p.Id == pinnedItem.ItemId);
+                        if (project != null)
+                            projects.Add(_mapper.Map<ProjectDTO>(project));
+                    }
+                    else if (pinnedItem.ItemType == "Sprint")
+                    {
+                        var sprint = await _SprintRepository.GetAsync(s => s.Id == pinnedItem.ItemId);
+                        if (sprint != null)
+                            sprints.Add(_mapper.Map<SprintDTO>(sprint));
+                    }
+                    else if (pinnedItem.ItemType == "Issue")
+                    {
+                        var issue = await _IssueRepository.GetAsync(i => i.Id == pinnedItem.ItemId);
+                        if (issue != null)
+                            issues.Add(_mapper.Map<IssueDTO>(issue));
+                    }
                 }
-                var pinnedtenantsItems = await _DashBoardRepository.GetUserPinnedtenant(parsedUserId);
-                var pinnedprojectItems = await _DashBoardRepository.GetUserPinnedproject(parsedUserId);
-                var pinnedsprintsItems = await _DashBoardRepository.GetUserPinnedsprint(parsedUserId);
-                var pinnedIssuesItems = await _DashBoardRepository.GetUserPinnedissue(parsedUserId);
-              
-                if (pinnedIssuesItems == null && pinnedprojectItems==null && pinnedsprintsItems==null && pinnedtenantsItems==null)
-                {
-                    _response.IsSuccess = false;
-                    _response.ErrorMessages = new List<string> { "No data found." };
-                    return NotFound(_response);
-                }
-                _response.IsSuccess = true;
+
+                
                 _response.Result = new
                 {
-                    Tenants=pinnedtenantsItems,
-                    projects = pinnedprojectItems,
-                    sprints=pinnedsprintsItems,
-                    issues = pinnedIssuesItems
+                    Tenants = tenants,
+                    Projects = projects,
+                    Sprints = sprints,
+                    Issues = issues
                 };
+                _response.StatusCode = HttpStatusCode.OK;
                 return Ok(_response);
             }
             catch (Exception ex)
             {
-
                 _response.IsSuccess = false;
-                _response.ErrorMessages = new List<string> { "An internal server error occurred." };
-                return StatusCode(500, _response);
+                _response.ErrorMessages = new List<string> { ex.Message };
+                return StatusCode(StatusCodes.Status500InternalServerError, _response);
             }
         }
+
+
+
+
+
 
 
     }

@@ -1,4 +1,5 @@
-﻿using DevDash.DTO.User;
+﻿using DevDash.DTO.Tenant;
+using DevDash.DTO.User;
 using DevDash.DTO.UserProject;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -23,6 +24,7 @@ namespace DevDash.DTO.Project
         public string Status { get; set; } = string.Empty;
         public int TenantId { get; set; }
         public int CreatorId { get; set; }
+        public TenantDTO Tenant { get; set; }
         public UserDTO Creator { get; set; }
         public ICollection<UserProjectDTO>? UserProjects { get; set; }
     }

@@ -11,7 +11,7 @@ namespace DevDash.model
         public DateTime Assign_date { get; set; } = DateTime.Now;
 
         // Navigation Properties
-        public required Issue Issue { get; set; }
-        public required User User { get; set; }
+        public  Issue? Issue { get; set; }
+        public  User? User { get; set; }
     }
 }

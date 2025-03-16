@@ -13,10 +13,10 @@ namespace DevDash.Repository.IRepository
         Task<List<ProjectDashBoardDTO>> GetProjectsDashboard(int userId);
         Task<List<IssueDashBoardDTO>> GetIssuesDashboard( int userId);
         Task<List<object>> GetUserIssuesTimeline(int userId);
-        Task<List<PinnedItem>> GetUserPinnedproject(int userId);
-        Task<List<PinnedItem>> GetUserPinnedissue(int userId);
-        Task<List<PinnedItem>> GetUserPinnedsprint(int userId);
-        Task<List<PinnedItem>> GetUserPinnedtenant(int userId);
+        Task<List<Project>> GetUserPinnedProjects(int userId);
+        Task<List<Issue>> GetUserPinnedIssues(int userId);
+        Task<List<Sprint>> GetUserPinnedSprints(int userId);
+        Task<List<Tenant>> GetUserPinnedTenants(int userId);
 
     }
 }

@@ -273,38 +273,15 @@ namespace DevDash.Controllers
                 if (!pinnedItems.Any())
                     return NotFound(new { message = "No pinned items found" });
 
-                var tenants = new List<TenantDTO>();
-                var projects = new List<ProjectDTO>();
-                var sprints = new List<SprintDTO>();
-                var issues = new List<IssueDTO>();
+                //var tenants = new List<Tenant>();
+                //var projects = new List<Project>();
+                //var sprints = new List<Sprint>();
+                //var issues = new List<Issue>();
 
-                foreach (var pinnedItem in pinnedItems)
-                {
-                    if (pinnedItem.ItemType == "Tenant")
-                    {
-                        var tenant = await _TenantRepository.GetAsync(t => t.Id == pinnedItem.ItemId);
-                        if (tenant != null)
-                            tenants.Add(_mapper.Map<TenantDTO>(tenant));
-                    }
-                    else if (pinnedItem.ItemType == "Project")
-                    {
-                        var project = await _ProjectRepository.GetAsync(p => p.Id == pinnedItem.ItemId);
-                        if (project != null)
-                            projects.Add(_mapper.Map<ProjectDTO>(project));
-                    }
-                    else if (pinnedItem.ItemType == "Sprint")
-                    {
-                        var sprint = await _SprintRepository.GetAsync(s => s.Id == pinnedItem.ItemId);
-                        if (sprint != null)
-                            sprints.Add(_mapper.Map<SprintDTO>(sprint));
-                    }
-                    else if (pinnedItem.ItemType == "Issue")
-                    {
-                        var issue = await _IssueRepository.GetAsync(i => i.Id == pinnedItem.ItemId);
-                        if (issue != null)
-                            issues.Add(_mapper.Map<IssueDTO>(issue));
-                    }
-                }
+               var  tenants = await _DashBoardRepository.GetUserPinnedTenants(userId);
+               var   issues = await _DashBoardRepository.GetUserPinnedIssues(userId);
+               var projects = await _DashBoardRepository.GetUserPinnedProjects(userId);
+               var sprints = await _DashBoardRepository.GetUserPinnedSprints(userId);
 
                 
                 _response.Result = new

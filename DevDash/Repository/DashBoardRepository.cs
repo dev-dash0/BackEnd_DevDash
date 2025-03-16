@@ -214,43 +214,65 @@ namespace DevDash.Repository
 
         ///////////
 
-        public async Task<List<PinnedItem>> GetUserPinnedproject(int userId)
+        public async Task<List<Project>> GetUserPinnedProjects(int userId)
         {
-            var pinnedprojectItems = await _context.PinnedItems
-                   .Where(pi => pi.UserId == userId && pi.ItemType == "Project")
-                   .ToListAsync();
+            var pinnedProjectIds = await _context.PinnedItems
+                .Where(pi => pi.UserId == userId && pi.ItemType == "Project")
+                .Select(pi =>(int) pi.ItemId) // Assuming ItemId stores the Project Id
+                .ToListAsync();
 
-            return pinnedprojectItems;
+            var pinnedProjects = await _context.Projects
+                .Where(project => pinnedProjectIds.Contains(project.Id))
+                .ToListAsync();
+
+            return pinnedProjects;
         }
-        public async Task<List<PinnedItem>> GetUserPinnedissue(int userId)
-        {
-            var pinnedIssuesItems = await _context.PinnedItems
-    .Where(pi => pi.UserId == userId && pi.ItemType == "Issue")
-    .ToListAsync();
-            var pinnedsprintsItems = await _context.PinnedItems
-               .Where(pi => pi.UserId == userId && pi.ItemType == "Sprint")
-               .ToListAsync();
 
-            return pinnedIssuesItems;
+        public async Task<List<Issue>> GetUserPinnedIssues(int userId)
+        {
+            var pinnedIssueIds = await _context.PinnedItems
+                .Where(pi => pi.UserId == userId && pi.ItemType == "Issue")
+                .Select(pi =>(int) pi.ItemId) 
+                .ToListAsync();
+
+            var pinnedIssues = await _context.Issues
+                .Where(issue => pinnedIssueIds.Contains(issue.Id))
+                .ToListAsync();
+
+            return pinnedIssues;
         }
-        public async Task<List<PinnedItem>> GetUserPinnedsprint(int userId)
-        {
-           
-            var pinnedsprintsItems = await _context.PinnedItems
-               .Where(pi => pi.UserId == userId && pi.ItemType == "Sprint")
-               .ToListAsync();
 
-            return pinnedsprintsItems;
+        public async Task<List<Sprint>> GetUserPinnedSprints(int userId)
+        {
+            var pinnedSprintIds = await _context.PinnedItems
+                .Where(pi => pi.UserId == userId && pi.ItemType == "Sprint")
+                .Select(pi => (int)pi.ItemId) // Assuming ItemId stores the Sprint Id
+                .ToListAsync();
+
+            var pinnedSprints = await _context.Sprints
+                .Where(sprint => pinnedSprintIds.Contains(sprint.Id) &&
+                                 _context.UserProjects.Any(pu => pu.ProjectId == sprint.ProjectId && pu.UserId == userId))
+                .ToListAsync();
+
+            return pinnedSprints;
         }
-        public async Task<List<PinnedItem>> GetUserPinnedtenant(int userId)
-        {
 
-            var pinnedtenantsItems = await _context.PinnedItems
+        public async Task<List<Tenant>> GetUserPinnedTenants(int userId)
+        {
+            
+            var pinnedTenantIds = await _context.PinnedItems
                .Where(pi => pi.UserId == userId && pi.ItemType == "Tenant")
+               .Select(pi => (int)pi.ItemId) 
                .ToListAsync();
 
-            return pinnedtenantsItems;
+
+            var pinnedTenants = await _context.Tenants
+                .Where(tenant => pinnedTenantIds.Contains(tenant.Id))
+                .ToListAsync();
+
+            return pinnedTenants;
         }
+
 
         public async Task<DashBoardProjectsDTO> GetAnalysisProjectsSummaryAsync(int Projectid, int? userid)
         {

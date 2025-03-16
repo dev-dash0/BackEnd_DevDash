@@ -26,7 +26,7 @@ namespace DevDash.model
         public DateTime CreationDate { get; set; } = DateTime.Now;
 
         [Required]
-        [RegularExpression("Planning|Reviewing|Working on|Completed|Canceled|Postponed")]
+        [RegularExpression("Planning|Working on|Completed|Canceled|Postponed")]
         public string Status { get; set; } = string.Empty;
 
         [Required]

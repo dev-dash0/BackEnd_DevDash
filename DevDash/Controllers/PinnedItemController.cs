@@ -25,22 +25,30 @@ namespace DevDash.Controllers
         private readonly IProjectRepository _projectRepository;
         private readonly ISprintRepository _sprintRepository;
         private readonly IIssueRepository _issueRepository;
-
+        private readonly IUserTenantRepository _userTenantRepository;
+        private readonly IUserProjectRepository _userProjectRepository;
+        private readonly IIssueAssignUserRepository _issueAssignUserRepository;
         private readonly IMapper _mapper;
         private readonly APIResponse _response;
 
         public PinnedItemController(IPinnedItemRepository pinnedItemRepository, IUserRepository userRepository,
             ITenantRepository tenantRepository, IProjectRepository projectRepository,
-            ISprintRepository sprintRepository, IIssueRepository issueRepository, IMapper mapper)
+            ISprintRepository sprintRepository
+            , IUserProjectRepository userProjectRepository
+            , IIssueRepository issueRepository,IUserTenantRepository userTenantRepository, IMapper mapper, IIssueAssignUserRepository issueAssignUserRepository)
         {
             _pinnedItemRepository = pinnedItemRepository;
             _userRepository = userRepository;
             _tenantRepository = tenantRepository;
             _projectRepository = projectRepository;
+            _userTenantRepository = userTenantRepository;
+            _userProjectRepository = userProjectRepository;
             _sprintRepository = sprintRepository;
             _issueRepository = issueRepository;
             _mapper = mapper;
             _response = new APIResponse();
+            _issueAssignUserRepository = issueAssignUserRepository;
+
         }
 
         [HttpPost("pin")]
@@ -48,9 +56,65 @@ namespace DevDash.Controllers
         {
             try
             {
+
                 var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
                 if (string.IsNullOrEmpty(userId))
                     return Unauthorized(new { message = "Invalid token" });
+                if(itemType != "Tenant" && itemType != "tenant" && itemType != "Project" && itemType != "project" 
+                    && itemType != "Sprint" && itemType != "sprint"
+&& itemType != "Issue" && itemType != "issue"
+                    )
+                        {
+                    return BadRequest(new { message = "Error in ItemType" });
+                }
+                {
+
+                }
+
+                if (itemType == "Tenant" || itemType == "tenant")
+
+                {
+                    var item =await _userTenantRepository.GetAsync(t => t.TenantId == itemId && int.Parse(userId) == t.UserId);
+                    if (item == null)
+                    {
+                        return BadRequest(new { message = "User is not a member of this tenant" });
+                    }
+                }
+                else if (itemType == "Project" || itemType == "project")
+
+                {
+                    var item =await _userProjectRepository.GetAsync(t => t.ProjectId == itemId && int.Parse(userId) == t.UserId);
+                    if (item == null)
+                    {
+                        return BadRequest(new { message = "User is not a member of this project" });
+                    }
+                }
+                else if(itemType== "Sprint" || itemType == "sprint")
+                {
+
+                    Sprint item = await _sprintRepository.GetAsync(t => t.Id == itemId);
+                    if (item == null)
+                    {
+                        return BadRequest(new { message = "Sprint not found" });
+                    }
+
+                    var actualitem = await _userProjectRepository.GetAsync(t => t.ProjectId == item.ProjectId && int.Parse(userId) == t.UserId);
+                    if (actualitem == null)
+                    {
+                        return BadRequest(new { message = "User is not a member of this Sprint" });
+                    }
+
+                }
+                else if(itemType== "Issue" || itemType == "issue")
+                {
+                    var item = await _issueAssignUserRepository.GetAsync(t => t.IssueId == itemId && int.Parse(userId) == t.UserId);
+                    if (item == null)
+                    {
+                        return BadRequest(new { message = "User is not assigned to this issue" });
+                    }
+                }
+
+
 
                 var user = await _userRepository.GetAsync(u => u.Id == int.Parse(userId));
                 if (user == null)

@@ -1,4 +1,6 @@
 ﻿using DevDash.DTO.Tenant;
+using DevDash.DTO.User;
+using DevDash.DTO.UserProject;
 using DevDash.model;
 using System.ComponentModel.DataAnnotations;
 
@@ -19,6 +21,9 @@ namespace DevDash.DTO.Project
         [Required]
         [RegularExpression("Planning|Reviewing|Working on|Completed|Canceled|Postponed")]
         public string Status { get; set; } = string.Empty;
-      
+        public TenantDTO Tenant { get; set; }
+        public UserDTO Creator { get; set; }
+        public ICollection<UserProjectDTO>? UserProjects { get; set; }
+
     }
 }

@@ -6,6 +6,7 @@ namespace DevDash.DTO.Sprint
 {
     public class SprintDTO
     {
+        public int Id { get; set; }
         public string Title { get; set; }
         public string? Description { get; set; }
         public DateOnly? StartDate { get; set; }

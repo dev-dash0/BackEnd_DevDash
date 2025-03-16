@@ -46,6 +46,7 @@ namespace DevDash.model
 
         [MaxLength(20)]
         [Required]
+        //[RegularExpression("BackLog|to do|In Progress|Reviewing|Completed|Canceled|Postponed")]
         [RegularExpression("BackLog|to do|In Progress|Reviewing|Completed|Canceled|Postponed")]
         public required string Status { get; set; }
 

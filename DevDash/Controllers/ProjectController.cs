@@ -66,7 +66,7 @@ namespace DevDash.Controllers
                         (string.IsNullOrEmpty(search) ||
                          p.Name.ToLower().Contains(search.ToLower()) ||
                          p.Priority.ToLower().Contains(search.ToLower())),
-                    includeProperties: "Creator,UserProjects",
+                    includeProperties: "Creator,UserProjects,Tenant",
                     pageSize: pageSize,
                     pageNumber: pageNumber
                 );
@@ -107,7 +107,7 @@ namespace DevDash.Controllers
                     return Unauthorized();
                 }
 
-                Project project = await _dbProject.GetAsync(u => u.Id == projectId, includeProperties: "Creator,UserProjects");
+                Project project = await _dbProject.GetAsync(u => u.Id == projectId, includeProperties: "Creator,UserProjects,Tenant");
                 if (project == null)
                 {
                     _response.StatusCode = HttpStatusCode.NotFound;

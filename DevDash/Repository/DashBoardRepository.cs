@@ -25,7 +25,7 @@ namespace DevDash.Repository
             _mapper = mapper;
             _context = context;
         }
-        public async Task<DashBoardDTO> GetAnalysisSummaryAsync(int tenantId, int? userId)
+        public async Task<DashBoardTenantsDTO> GetAnalysisTenantsSummaryAsync(int tenantId, int? userId)
         {
             var projectsQuery = _context.Projects
            .AsNoTracking()
@@ -45,40 +45,40 @@ namespace DevDash.Repository
             .Select(p => p.Id)
             .ToListAsync();
 
-            var completed = await _context.Issues
+            var completed = await _context.Projects
             .AsNoTracking()
-            .Where(i => filteredProjectIds.Contains(i.ProjectId) && i.Status == "Completed")
+            .Where(i => filteredProjectIds.Contains(i.TenantId) && i.Status == "Completed")
             .ToListAsync();
 
-            var InProgress = await _context.Issues
+            var InProgress = await _context.Projects
             .AsNoTracking()
-            .Where(i => filteredProjectIds.Contains(i.ProjectId) && i.Status == "In Progress")
+            .Where(i => filteredProjectIds.Contains(i.TenantId) && i.Status == "Working on")
              .ToListAsync();
-            var Overdue = await _context.Issues
+            var Overdue = await _context.Projects
             .AsNoTracking()
-           .Where(i => filteredProjectIds.Contains(i.ProjectId) && i.Status == "Postponed")
+           .Where(i => filteredProjectIds.Contains(i.TenantId) && i.Status == "Postponed")
            .ToListAsync();
 
-            var completedIssues = completed.Count();
-            var issuesInProgress = InProgress.Count();
-            var issuesOverdue = Overdue.Count();
+            var completedProjects = completed.Count();
+            var projectsInProgress = InProgress.Count();
+            var projectsOverdue = Overdue.Count();
 
 
 
-            return new DashBoardDTO
+            return new DashBoardTenantsDTO
             {
                 TotalProjects = totalProjects,
-                CompletedIssues = completedIssues,
-                IssuesInProgress = issuesInProgress,
-                IssuesOverdue = issuesOverdue
+                CompletedProjects = completedProjects,
+                ProjectsInProgress = projectsInProgress,
+                ProjectsOverdue = projectsOverdue
             };
         }
-        public async Task<List<ProjectDashBoardDTO>> GetProjectsDashboard(int tenantId, int userId)
+        public async Task<List<ProjectDashBoardDTO>> GetProjectsDashboard(int userId)
         {
-            if (tenantId <= 0 || userId <= 0)
-            {
-                throw new ArgumentException("Tenant ID and User ID must be greater than zero.");
-            }
+            //if (tenantId <= 0 || userId <= 0)
+            //{
+            //    throw new ArgumentException("Tenant ID and User ID must be greater than zero.");
+            //}
             var userProjectIds = await _context.UserProjects
                 .AsNoTracking()
                 .Where(up => up.UserId == userId)
@@ -91,9 +91,13 @@ namespace DevDash.Repository
             }
 
             var filteredProjects = await _context.Projects
-                .AsNoTracking()
-                .Where(p => p.TenantId == tenantId && userProjectIds.Contains(p.Id))
-                .ToListAsync();
+     .AsNoTracking()
+     .Where(p => userProjectIds.Contains(p.Id))
+     .Include(p => p.Tenant)      
+     .Include(p => p.Creator)      
+     .Include(p => p.UserProjects) 
+     .ThenInclude(up => up.User)   
+     .ToListAsync();
             var projects = _mapper.Map<List<ProjectDashBoardDTO>>(filteredProjects);
             return projects;
         }
@@ -101,12 +105,9 @@ namespace DevDash.Repository
 
 
 
-        public async Task<List<IssueDashBoardDTO>> GetIssuesDashboard(int tenantId, int userId)
+        public async Task<List<IssueDashBoardDTO>> GetIssuesDashboard(int userId)
         {
-            if (tenantId <= 0 || userId <= 0)
-            {
-                throw new ArgumentException("Tenant ID and User ID must be greater than zero.");
-            }
+           
             var userIssueIds = await _context.IssueAssignedUsers
                 .AsNoTracking()
                 .Where(up => up.UserId == userId)
@@ -119,7 +120,7 @@ namespace DevDash.Repository
             }
             var filteredIssues = await _context.Issues
           .AsNoTracking()
-          .Where(issue => issue.TenantId == tenantId && userIssueIds.Contains(issue.Id))
+          .Where(issue => userIssueIds.Contains(issue.Id))
           .Select(issue => new IssueDashBoardDTO
           {
               Id = issue.Id,
@@ -213,44 +214,116 @@ namespace DevDash.Repository
 
         ///////////
 
-        public async Task<List<PinnedItem>> GetUserPinnedproject(int userId)
+        public async Task<List<Project>> GetUserPinnedProjects(int userId)
         {
-            var pinnedprojectItems = await _context.PinnedItems
-                   .Where(pi => pi.UserId == userId && pi.ItemType == "Project")
-                   .ToListAsync();
+            var pinnedProjectIds = await _context.PinnedItems
+                .Where(pi => pi.UserId == userId && pi.ItemType == "Project")
+                .Select(pi =>(int) pi.ItemId) // Assuming ItemId stores the Project Id
+                .ToListAsync();
 
-            return pinnedprojectItems;
+            var pinnedProjects = await _context.Projects
+                .Where(project => pinnedProjectIds.Contains(project.Id))
+                .ToListAsync();
+
+            return pinnedProjects;
         }
-        public async Task<List<PinnedItem>> GetUserPinnedissue(int userId)
-        {
-            var pinnedIssuesItems = await _context.PinnedItems
-    .Where(pi => pi.UserId == userId && pi.ItemType == "Issue")
-    .ToListAsync();
-            var pinnedsprintsItems = await _context.PinnedItems
-               .Where(pi => pi.UserId == userId && pi.ItemType == "Sprint")
-               .ToListAsync();
 
-            return pinnedIssuesItems;
+        public async Task<List<Issue>> GetUserPinnedIssues(int userId)
+        {
+            var pinnedIssueIds = await _context.PinnedItems
+                .Where(pi => pi.UserId == userId && pi.ItemType == "Issue")
+                .Select(pi =>(int) pi.ItemId) 
+                .ToListAsync();
+
+            var pinnedIssues = await _context.Issues
+                .Where(issue => pinnedIssueIds.Contains(issue.Id))
+                .ToListAsync();
+
+            return pinnedIssues;
         }
-        public async Task<List<PinnedItem>> GetUserPinnedsprint(int userId)
-        {
-           
-            var pinnedsprintsItems = await _context.PinnedItems
-               .Where(pi => pi.UserId == userId && pi.ItemType == "Sprint")
-               .ToListAsync();
 
-            return pinnedsprintsItems;
+        public async Task<List<Sprint>> GetUserPinnedSprints(int userId)
+        {
+            var pinnedSprintIds = await _context.PinnedItems
+                .Where(pi => pi.UserId == userId && pi.ItemType == "Sprint")
+                .Select(pi => (int)pi.ItemId) // Assuming ItemId stores the Sprint Id
+                .ToListAsync();
+
+            var pinnedSprints = await _context.Sprints
+                .Where(sprint => pinnedSprintIds.Contains(sprint.Id) &&
+                                 _context.UserProjects.Any(pu => pu.ProjectId == sprint.ProjectId && pu.UserId == userId))
+                .ToListAsync();
+
+            return pinnedSprints;
         }
-        public async Task<List<PinnedItem>> GetUserPinnedtenant(int userId)
-        {
 
-            var pinnedtenantsItems = await _context.PinnedItems
+        public async Task<List<Tenant>> GetUserPinnedTenants(int userId)
+        {
+            
+            var pinnedTenantIds = await _context.PinnedItems
                .Where(pi => pi.UserId == userId && pi.ItemType == "Tenant")
+               .Select(pi => (int)pi.ItemId) 
                .ToListAsync();
 
-            return pinnedtenantsItems;
+
+            var pinnedTenants = await _context.Tenants
+                .Where(tenant => pinnedTenantIds.Contains(tenant.Id))
+                .ToListAsync();
+
+            return pinnedTenants;
         }
 
+
+        public async Task<DashBoardProjectsDTO> GetAnalysisProjectsSummaryAsync(int Projectid, int? userid)
+        {
+            var projectsQuery = _context.Projects
+          .AsNoTracking()
+          .Where(p => p.Id == Projectid);
+            var userProjectIds = await _context.UserProjects
+                .AsNoTracking()
+                .Where(up => up.UserId == userid)
+                .Select(up => up.ProjectId)
+                .ToListAsync();
+            var filteredProjects = await projectsQuery
+                .Where(p => userProjectIds.Contains(p.Id))
+                .ToListAsync();
+            var totalProjects = filteredProjects.Count();
+            var filteredProjectIds = await projectsQuery
+            .Where(p => userProjectIds.Contains(p.Id))
+            .Select(p => p.Id)
+            .ToListAsync();
+           var  totalIssue = await _context.Issues
+        .AsNoTracking()
+        .Where(i => filteredProjectIds.Contains(i.ProjectId))
+        .ToListAsync();
+
+            var completed = await _context.Issues
+           .AsNoTracking()
+           .Where(i => filteredProjectIds.Contains(i.ProjectId) && i.Status == "Completed")
+           .ToListAsync();
+
+            var InProgress = await _context.Issues
+            .AsNoTracking()
+            .Where(i => filteredProjectIds.Contains(i.ProjectId) && i.Status == "In Progress")
+             .ToListAsync();
+            var Overdue = await _context.Issues
+            .AsNoTracking()
+           .Where(i => filteredProjectIds.Contains(i.ProjectId) && i.Status == "Postponed")
+           .ToListAsync();
+            var totalIssues = totalIssue.Count();
+            var completedIssues = completed.Count();
+            var issuesInProgress = InProgress.Count();
+            var issuesOverdue = Overdue.Count();
+            return new DashBoardProjectsDTO
+            {
+                TotalIssues = totalIssues,
+                CompletedIssues = completedIssues,
+                IssuesInProgress = issuesInProgress,
+                IssuesOverdue = issuesOverdue
+            };
+          
+
+        }
     }
 
 }

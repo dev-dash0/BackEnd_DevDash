@@ -311,9 +311,43 @@ namespace DevDash.Repository
             user.LastName = updateProfileDTO.LastName;
             user.PhoneNumber = updateProfileDTO.PhoneNumber;
             user.Birthday = updateProfileDTO.Birthday;
+            user.ImageUrl = updateProfileDTO.ImageUrl;
 
-            var result = await _userManager.UpdateAsync(user);
-            return result.Succeeded ? _mapper.Map<UserDTO>(user) : null;
+        
+            if (!string.IsNullOrWhiteSpace(updateProfileDTO.UserName) && user.UserName != updateProfileDTO.UserName)
+            {
+                var existingUser = await _userManager.FindByNameAsync(updateProfileDTO.UserName);
+                if (existingUser != null)
+                {
+                    throw new Exception("Username is already taken.");
+                }
+                user.UserName = updateProfileDTO.UserName;
+            }
+
+           
+            if (!string.IsNullOrWhiteSpace(updateProfileDTO.Email) && user.Email != updateProfileDTO.Email)
+            {
+                var existingEmailUser = await _userManager.FindByEmailAsync(updateProfileDTO.Email);
+                if (existingEmailUser != null)
+                {
+                    throw new Exception("Email is already in use.");
+                }
+
+             
+                var token = await _userManager.GenerateChangeEmailTokenAsync(user, updateProfileDTO.Email);
+                var result = await _userManager.ChangeEmailAsync(user, updateProfileDTO.Email, token);
+
+                if (!result.Succeeded)
+                {
+                    throw new Exception("Failed to update email.");
+                }
+
+              
+                user.EmailConfirmed = false;
+            }
+
+            var updateResult = await _userManager.UpdateAsync(user);
+            return updateResult.Succeeded ? _mapper.Map<UserDTO>(user) : null;
         }
 
         public async Task<bool> RemoveAccount(int userId)

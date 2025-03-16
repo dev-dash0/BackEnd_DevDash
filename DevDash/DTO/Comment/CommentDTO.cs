@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using DevDash.DTO.User;
 
 namespace DevDash.DTO.Comment
 {
@@ -24,5 +25,6 @@ namespace DevDash.DTO.Comment
 
         [ForeignKey("CreatedBy")]
         public int? CreatedById { get; set; }
+        public UserDTO CreatedBy {  get; set; }
     }
 }

@@ -18,5 +18,6 @@ namespace DevDash.DTO.Issue
         public required string Priority { get; set; }
         public string ProjectName {  get; set; }    
 
+
     }
 }

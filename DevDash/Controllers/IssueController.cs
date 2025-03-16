@@ -39,10 +39,11 @@ namespace DevDash.Controllers
         {
             try
             {
-                var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-                if (string.IsNullOrEmpty(userId)) return Unauthorized(new { message = "Invalid token" });
+                if (!int.TryParse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value, out int userId))
+                    return Unauthorized(new { message = "Invalid token" });
 
-                var userProject = await _dbUserProject.GetAsync(up => up.UserId == int.Parse(userId) && up.ProjectId == projectId);
+
+                var userProject = await _dbUserProject.GetAsync(up => up.UserId == userId && up.ProjectId == projectId);
                 if (userProject == null) return Forbid();
 
                 IEnumerable<Issue> Issues = new List<Issue>();
@@ -61,7 +62,7 @@ namespace DevDash.Controllers
                 {
                     Issues = await _dbissue.GetAllAsync(
                         filter: i => i.ProjectId == projectId && i.SprintId == null && i.IsBacklog &&
-                                     i.IssueAssignedUsers.Any(iau => iau.UserId == int.Parse(userId)) &&
+                                     i.IssueAssignedUsers.Any(iau => iau.UserId == userId) &&
                                      (string.IsNullOrEmpty(search) || i.Labels.ToLower().Contains(search.ToLower())),
                         includeProperties: "",
                         pageSize: pageSize,
@@ -75,6 +76,7 @@ namespace DevDash.Controllers
 
                 _response.Result = _mapper.Map<List<IssueDTO>>(Issues);
                 _response.StatusCode = HttpStatusCode.OK;
+              
                 return Ok(_response);
             }
             catch (Exception ex)
@@ -102,7 +104,7 @@ namespace DevDash.Controllers
                     Issues = await _dbissue.GetAllAsync(
                         filter: i => i.SprintId == sprintId &&
                                      (string.IsNullOrEmpty(search) || i.Labels.ToLower().Contains(search.ToLower())),
-                        includeProperties: "",
+                        includeProperties: "CreatedBy",
                         pageSize: pageSize,
                         pageNumber: pageNumber
                     );
@@ -207,11 +209,11 @@ namespace DevDash.Controllers
                 if (createDTO == null)
                     return BadRequest(new { message = "IssueCreateDTO cannot be null" });
 
-                var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-                if (string.IsNullOrEmpty(userId))
+                if (!int.TryParse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value, out int userId))
                     return Unauthorized(new { message = "Invalid token" });
 
-                var userProject = await _dbUserProject.GetAsync(up => up.UserId == int.Parse(userId) && up.ProjectId == projectId);
+
+                var userProject = await _dbUserProject.GetAsync(up => up.UserId == userId && up.ProjectId == projectId);
                 if (userProject == null || (userProject.Role != "Admin" && userProject.Role != "Project Manager"))
                     return Unauthorized(new { message = "You do not have permission to create an issue in this project" });
 
@@ -221,7 +223,7 @@ namespace DevDash.Controllers
 
                 createDTO.IsBacklog = true;
                 createDTO.ProjectId = projectId;
-                createDTO.CreatedById = int.Parse(userId);
+                createDTO.CreatedById = userId;
                 createDTO.TenantId = project.TenantId;
 
                 Issue issue  = _mapper.Map<Issue>(createDTO);
@@ -232,6 +234,14 @@ namespace DevDash.Controllers
                     id=issue.Id,
                     issue= IssueDTO
                 };
+                var issueAssignedUser = new IssueAssignedUser
+                {
+                    IssueId = issue.Id,
+                    UserId = userId,
+
+
+                };
+                await _dbIssueAssignUser.JoinAsync(issueAssignedUser);
                 _response.StatusCode = HttpStatusCode.Created;
 
                 return CreatedAtRoute("GetIssue", new { id = issue.Id }, _response);
@@ -257,21 +267,21 @@ namespace DevDash.Controllers
                 if (createDTO == null)
                     return BadRequest(new { message = "IssueCreateDTO cannot be null" });
 
-                var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-                if (string.IsNullOrEmpty(userId))
+                if (!int.TryParse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value, out int userId))
                     return Unauthorized(new { message = "Invalid token" });
+
 
                 var sprint = await _dbSprint.GetAsync(s => s.Id == sprintId);
                 if (sprint == null)
                     return BadRequest(new { message = "Sprint ID is Invalid!" });
 
-                var userProject = await _dbUserProject.GetAsync(up => up.UserId == int.Parse(userId) && up.ProjectId == sprint.ProjectId);
+                var userProject = await _dbUserProject.GetAsync(up => up.UserId == userId && up.ProjectId == sprint.ProjectId);
                 if (userProject == null || (userProject.Role != "Admin" && userProject.Role != "Project Manager"))
                     return Unauthorized(new { message = "You do not have permission to create an issue in this project" });
-
+              
                 createDTO.IsBacklog = false;
                 createDTO.ProjectId = sprint.ProjectId;
-                createDTO.CreatedById = int.Parse(userId);
+                createDTO.CreatedById = userId;
                 createDTO.TenantId = sprint.TenantId;
                 createDTO.SprintId = sprintId;
 
@@ -284,7 +294,14 @@ namespace DevDash.Controllers
                     issue = IssueDTO
                 };
                 _response.StatusCode = HttpStatusCode.Created;
-
+                var issueAssignedUser = new IssueAssignedUser
+                {
+                    IssueId = issue.Id,
+                    UserId = userId,
+                   
+                  
+                };
+                await _dbIssueAssignUser.JoinAsync(issueAssignedUser);
                 return CreatedAtRoute("GetIssue", new { id = issue.Id }, _response);
             }
             catch (Exception ex)

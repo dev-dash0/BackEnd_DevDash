@@ -104,7 +104,7 @@ namespace DevDash.Controllers
                     Issues = await _dbissue.GetAllAsync(
                         filter: i => i.SprintId == sprintId &&
                                      (string.IsNullOrEmpty(search) || i.Labels.ToLower().Contains(search.ToLower())),
-                        includeProperties: "",
+                        includeProperties: "CreatedBy",
                         pageSize: pageSize,
                         pageNumber: pageNumber
                     );

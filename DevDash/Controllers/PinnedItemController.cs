@@ -60,26 +60,36 @@ namespace DevDash.Controllers
                 var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
                 if (string.IsNullOrEmpty(userId))
                     return Unauthorized(new { message = "Invalid token" });
+                if(itemType != "Tenant" && itemType != "tenant" && itemType != "Project" && itemType != "project" 
+                    && itemType != "Sprint" && itemType != "sprint"
+&& itemType != "Issue" && itemType != "issue"
+                    )
+                        {
+                    return BadRequest(new { message = "Error in ItemType" });
+                }
+                {
 
-                if (itemType == "Tenant")
+                }
+
+                if (itemType == "Tenant" || itemType == "tenant")
 
                 {
-                    var item = _userTenantRepository.GetAsync(t => t.TenantId == itemId && int.Parse(userId) == t.UserId);
+                    var item =await _userTenantRepository.GetAsync(t => t.TenantId == itemId && int.Parse(userId) == t.UserId);
                     if (item == null)
                     {
                         return BadRequest(new { message = "User is not a member of this tenant" });
                     }
                 }
-                else if (itemType == "Project")
+                else if (itemType == "Project" || itemType == "project")
 
                 {
-                    var item = _userProjectRepository.GetAsync(t => t.ProjectId == itemId && int.Parse(userId) == t.UserId);
+                    var item =await _userProjectRepository.GetAsync(t => t.ProjectId == itemId && int.Parse(userId) == t.UserId);
                     if (item == null)
                     {
                         return BadRequest(new { message = "User is not a member of this project" });
                     }
                 }
-                else if(itemType== "Sprint")
+                else if(itemType== "Sprint" || itemType == "sprint")
                 {
 
                     Sprint item = await _sprintRepository.GetAsync(t => t.Id == itemId);
@@ -95,7 +105,7 @@ namespace DevDash.Controllers
                     }
 
                 }
-                else if(itemType== "Issue")
+                else if(itemType== "Issue" || itemType == "issue")
                 {
                     var item = await _issueAssignUserRepository.GetAsync(t => t.IssueId == itemId && int.Parse(userId) == t.UserId);
                     if (item == null)

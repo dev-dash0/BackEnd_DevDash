@@ -282,14 +282,18 @@ namespace DevDash.Controllers
                var   issues = await _DashBoardRepository.GetUserPinnedIssues(userId);
                var projects = await _DashBoardRepository.GetUserPinnedProjects(userId);
                var sprints = await _DashBoardRepository.GetUserPinnedSprints(userId);
+                var tenantsdto = _mapper.Map<List<TenantDTO>>(tenants);
+                var issuesdto = _mapper.Map<List<IssueDTO>>(issues);
+                var sprintsdto = _mapper.Map<List<SprintDTO>>(sprints);
+                var projectsdto = _mapper.Map<List<ProjectDTO>>(projects);
 
-                
+
                 _response.Result = new
                 {
-                    Tenants = tenants,
-                    Projects = projects,
-                    Sprints = sprints,
-                    Issues = issues
+                    Tenants = tenantsdto,
+                    Projects = projectsdto,
+                    Sprints = sprintsdto,
+                    Issues = issuesdto
                 };
                 _response.StatusCode = HttpStatusCode.OK;
                 return Ok(_response);

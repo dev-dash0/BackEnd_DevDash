@@ -65,9 +65,10 @@ namespace DevDash
                     options.JsonSerializerOptions.Converters.Add(new DateOnlyJsonConverter());
                 });
 
-            // ≈÷«›… «·ÂÊÌ… (Identity) Ê«·„’«œﬁ… (Authentication)
+            
             builder.Services.AddIdentity<User, IdentityRole<int>>()
-                .AddEntityFrameworkStores<AppDbContext>();
+                .AddEntityFrameworkStores<AppDbContext>()
+                .AddDefaultTokenProviders();
 
             builder.Services.AddAuthentication(options =>
             {

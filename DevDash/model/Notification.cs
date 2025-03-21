@@ -8,21 +8,18 @@ namespace DevDash.model
         [Key]
         public int Id { get; set; }
 
-        [StringLength(255)]
-        [Required]
-        public required string Content { get; set; }
+        [Required(ErrorMessage = "User ID is required.")]
+        [StringLength(50, ErrorMessage = "User ID must not exceed 50 characters.")]
+        public string UserId { get; set; } // Target user's ID
 
-        public int? IssueId { get; set; }
+        [Required(ErrorMessage = "Notification message is required.")]
+        [StringLength(500, ErrorMessage = "Message must not exceed 500 characters.")]
+        public string Message { get; set; }
 
-        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
-        public DateTime Timestamp { get; set; } = DateTime.Now;
+        [Required(ErrorMessage = "CreatedAt is required.")]
+        [DataType(DataType.DateTime)]
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-        [StringLength(20)]
-        [Required]
-        [RegularExpression("^(Unread|Read)$", ErrorMessage = "Invalid state")]
-        public required string State { get; set; }
-
-        // Navigation Properties
-        public Issue? Issue { get; set; }
+        public bool IsRead { get; set; } = false;
     }
 }

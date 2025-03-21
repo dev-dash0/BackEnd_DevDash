@@ -7,19 +7,37 @@ namespace DevDash.Repository
     public class TenantRepository : Repository<Tenant>, ITenantRepository
     {
         private readonly AppDbContext _db;
-        public TenantRepository(AppDbContext db) : base(db)
+        private readonly INotificationRepository _notificationRepository;
+
+        public TenantRepository(AppDbContext db, INotificationRepository notificationRepository) : base(db)
         {
             _db = db;
+            _notificationRepository = notificationRepository;
         }
 
+        public async Task<Tenant> CreateAsync(Tenant tenant, int ownerId)
+        {
+            await _db.Tenants.AddAsync(tenant);
+            await _db.SaveChangesAsync();
 
-        public async Task<Tenant> UpdateAsync(Tenant tenant)
+            await _notificationRepository.SendNotificationAsync(ownerId.ToString(),
+                $"You have created a new Tenant: {tenant.Name}");
+
+            return tenant;
+        }
+
+        public async Task<Tenant> UpdateAsync(Tenant tenant, int userId)
         {
             _db.Tenants.Update(tenant);
             await _db.SaveChangesAsync();
+
+            await _notificationRepository.SendNotificationAsync(userId.ToString(),
+                $"Tenant '{tenant.Name}' has been updated successfully.");
+
             return tenant;
         }
-        public async Task RemoveAsync(Tenant tenant)
+
+        public async Task RemoveAsync(Tenant tenant, int userId)
         {
             var commentsToRemove = await _db.Comments.Where(u => u.TenantId == tenant.Id).ToListAsync();
             _db.Comments.RemoveRange(commentsToRemove);
@@ -53,12 +71,10 @@ namespace DevDash.Repository
             _db.UserTenants.RemoveRange(userTenantsToRemove);
 
             _db.Tenants.Remove(tenant);
-
             await _db.SaveChangesAsync();
 
-
+            await _notificationRepository.SendNotificationAsync(userId.ToString(),
+                $"Tenant '{tenant.Name}' has been deleted.");
         }
-
-
     }
 }

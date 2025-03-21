@@ -89,7 +89,7 @@ namespace DevDash.Controllers
                 };
 
                 UserProject userProject = _mapper.Map<UserProject>(userProjectDTO);
-                await _userProject.JoinAsync(userProject);
+                await _userProject.JoinAsync(userProject,userId);
 
                 _response.Result = userProjectDTO;
                 _response.StatusCode = HttpStatusCode.Created;
@@ -137,7 +137,7 @@ namespace DevDash.Controllers
                     return BadRequest(ModelState);
                 }
                 
-                await _userProject.LeaveAsync(existingUserProject);
+                await _userProject.LeaveAsync(existingUserProject,userId);
                 _response.StatusCode = HttpStatusCode.NoContent;
                 return _response;
             }

@@ -21,6 +21,8 @@ public class AppDbContext : IdentityDbContext<User, IdentityRole<int>, int>
 
     public DbSet<PinnedItem> PinnedItems { get; set; }
 
+    public DbSet<Notification> Notifications { get; set; }
+
     //public DbSet<Notification> Notifications { get; set; }
     //public DbSet<Integration> Integrations { get; set; }
 
@@ -234,6 +236,10 @@ public class AppDbContext : IdentityDbContext<User, IdentityRole<int>, int>
         
         modelBuilder.Entity<PinnedItem>()
         .Property(p => p.PinnedDate)
+        .HasDefaultValueSql("GETUTCDATE()");
+        
+        modelBuilder.Entity<Notification>()
+        .Property(p => p.CreatedAt)
         .HasDefaultValueSql("GETUTCDATE()");
 
         //modelBuilder.Entity<Integration>()

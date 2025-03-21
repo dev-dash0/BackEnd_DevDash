@@ -11,175 +11,133 @@ namespace DevDash.Controllers
     [Route("api/[controller]")]
     public class IssueAssignedUserController : ControllerBase
     {
-        private ITenantRepository _tenant;
-        private IProjectRepository _project;
-        private IUserRepository _user;
-        private IIssueRepository _issue;
-        private IUserProjectRepository _userProject;
-        private IUserTenantRepository _userTenant;
-        private IIssueAssignUserRepository _issueAssignedUser;
+        private readonly ITenantRepository _tenantRepository;
+        private readonly IProjectRepository _projectRepository;
+        private readonly IUserRepository _userRepository;
+        private readonly IIssueRepository _issueRepository;
+        private readonly IUserProjectRepository _userProjectRepository;
+        private readonly IUserTenantRepository _userTenantRepository;
+        private readonly IIssueAssignUserRepository _issueAssignUserRepository;
         private readonly IMapper _mapper;
-        private APIResponse _response;
-        public IssueAssignedUserController(IUserProjectRepository userProject, ITenantRepository tenant,
-         IUserRepository user, IMapper mapper, IProjectRepository project, IUserTenantRepository userTenant,
-         IIssueAssignUserRepository issueAssignedUser, IIssueRepository issue)
+        private readonly APIResponse _response;
+
+        public IssueAssignedUserController(
+            IUserProjectRepository userProjectRepository,
+            ITenantRepository tenantRepository,
+            IUserRepository userRepository,
+            IMapper mapper,
+            IProjectRepository projectRepository,
+            IUserTenantRepository userTenantRepository,
+            IIssueAssignUserRepository issueAssignUserRepository,
+            IIssueRepository issueRepository)
         {
-            this._response = new APIResponse();
-            _tenant = tenant;
-            _project = project;
+            _response = new APIResponse();
+            _tenantRepository = tenantRepository;
+            _projectRepository = projectRepository;
             _mapper = mapper;
-            _user = user;
-            _userProject = userProject;
-            _issueAssignedUser = issueAssignedUser;
-            _userTenant = userTenant;
-            _issue = issue;
+            _userRepository = userRepository;
+            _userProjectRepository = userProjectRepository;
+            _issueAssignUserRepository = issueAssignUserRepository;
+            _userTenantRepository = userTenantRepository;
+            _issueRepository = issueRepository;
         }
+
         [HttpPost]
         public async Task<ActionResult<APIResponse>> JoinIssue(JoinIssueDTO joinIssue)
         {
             try
-            { 
-            if(joinIssue == null)
+            {
+                if (joinIssue == null)
+                    return BadRequest("Data is empty!");
+
+                var (user, issue, project, tenant) = await GetIssueContextAsync(joinIssue.userId, joinIssue.issueId);
+                if (user == null || issue == null || project == null || tenant == null)
+                    return BadRequest("Invalid input data!");
+
+                if (!await IsUserAssignedToProjectAsync(user.Id, project.Id))
+                    return BadRequest("User not found in the project!");
+
+                if (!await IsUserAssignedToTenantAsync(user.Id, tenant.Id))
+                    return BadRequest("User not assigned to the tenant!");
+
+                if (await _issueAssignUserRepository.GetAsync(ut => ut.UserId == user.Id && ut.IssueId == issue.Id) != null)
+                    return BadRequest("User is already a member of this issue!");
+
+                var issueAssignedUser = new IssueAssignedUser
                 {
-                    ModelState.AddModelError("ErrorMessages", "Data is Empty!");
-                    return BadRequest(ModelState);
-                }
-                var user = await _user.GetAsync(u => u.Id == joinIssue.userId);
-            if (user == null)
-            {
-                ModelState.AddModelError("ErrorMessages", "User ID is Invalid!");
-                return BadRequest(ModelState);
-            }
+                    UserId = user.Id,
+                    IssueId = issue.Id,
+                };
 
-            var Issue = await _issue.GetAsync(I => I.Id == joinIssue.issueId);
-            if (Issue == null)
-            {
-                ModelState.AddModelError("ErrorMessages", "Issue is Invalid!");
-                return BadRequest(ModelState);
-            }
-            var Project = await _project.GetAsync(p => p.Id == Issue.ProjectId);
-            if(Project==null)
-            {
-                ModelState.AddModelError("ErrorMessages", "Project is Invalid!");
-                return BadRequest(ModelState);
-            }
-            //check if this user found on this Issue
-            var userproject = await _userProject.GetAsync(uI => uI.UserId == user.Id && uI.ProjectId == Project.Id);
-            if (userproject == null)
-            {
-                ModelState.AddModelError("ErrorMessages", "User not found on project");
-                return BadRequest(ModelState);
-            }
+                await _issueAssignUserRepository.JoinAsync(issueAssignedUser,joinIssue.userId.ToString());
 
-            var existingUserIssue=await _issueAssignedUser
-                   .GetAsync(ut => ut.UserId == user.Id && ut.IssueId == Issue.Id);
+                _response.IsSuccess = true;
+                _response.Result = _mapper.Map<IssueAssignedUserDTO>(issueAssignedUser);
+                _response.StatusCode = HttpStatusCode.Created;
 
-             
-
-                if (existingUserIssue != null)
-            {
-                ModelState.AddModelError("ErrorMessages", "User is already a member of this Issue!");
-                return BadRequest(ModelState);
+                return _response;
             }
-            var tenant = await _tenant.GetAsync(t => t.Id==Project.TenantId);
-            if (tenant == null)
-            {
-                ModelState.AddModelError("ErrorMessages", "Tenant is Invalid!");
-                return BadRequest(ModelState);
-            }
-            var existingUserTenant = await _userTenant.GetAsync(ut => ut.UserId == user.Id && ut.TenantId == tenant.Id);
-            if(existingUserTenant==null)
-            {
-                
-                    ModelState.AddModelError("ErrorMessages", "User not Assigned in Tenant");
-                    return BadRequest(ModelState);
-            }
-            IssueAssignedUserDTO issueAssignedUserDTO = new ()
-            {
-                userId = user.Id,
-                issueId = Issue.Id,
-                Assign_date= DateTime.Now
-            };
-            IssueAssignedUser issueAssignedUser = _mapper.Map<IssueAssignedUser>(issueAssignedUserDTO);
-            await  _issueAssignedUser.JoinAsync(issueAssignedUser);
-            _response.IsSuccess = true;
-            _response.Result = issueAssignedUserDTO;
-            _response.StatusCode = HttpStatusCode.Created;
-            return _response;
-        }
             catch (Exception ex)
             {
-                _response.IsSuccess = false;
-                _response.ErrorMessages = new List<string> { ex.ToString() };
-
+                return HandleException(ex);
             }
-            return _response;
         }
 
         [HttpDelete]
-        public async Task<ActionResult<APIResponse>> LeaveIssue(LeaveIssueDTO leaveIssueDTO)
+        public async Task<ActionResult<APIResponse>> LeaveIssue(LeaveIssueDTO leaveIssue)
         {
             try
             {
-                var user = await _user.GetAsync(u => u.Id == leaveIssueDTO.userId);
-                if (user == null)
-                {
-                    ModelState.AddModelError("ErrorMessages", "User ID is Invalid!");
-                    return BadRequest(ModelState);
-                }
+                if (leaveIssue == null)
+                    return BadRequest("Invalid data!");
 
-                var Issue = await _issue.GetAsync(I => I.Id == leaveIssueDTO.issueId);
-                if (Issue == null)
-                {
-                    ModelState.AddModelError("ErrorMessages", "Issue is Invalid!");
-                    return BadRequest(ModelState);
-                }
-                var Project = await _project.GetAsync(p => p.Id == Issue.ProjectId);
-                if (Project == null)
-                {
-                    ModelState.AddModelError("ErrorMessages", "Project is Invalid!");
-                    return BadRequest(ModelState);
-                }
-                //check if this user found on this Issue
-                var userproject = await _userProject.GetAsync(uI => uI.UserId == user.Id && uI.ProjectId == Project.Id);
-                if (userproject == null)
-                {
-                    ModelState.AddModelError("ErrorMessages", "User not found on project");
-                    return BadRequest(ModelState);
-                }
-                var existingUserIssue = await _issueAssignedUser
-                       .GetAsync(ut => ut.UserId == user.Id && ut.IssueId == Issue.Id);
+                var (user, issue, project, tenant) = await GetIssueContextAsync(leaveIssue.userId, leaveIssue.issueId);
+                if (user == null || issue == null || project == null || tenant == null)
+                    return BadRequest("Invalid input data!");
 
-                if (existingUserIssue != null)
-                {
-                    ModelState.AddModelError("ErrorMessages", "User is already a member of this Issue!");
-                    return BadRequest(ModelState);
-                }
-                var tenant = await _tenant.GetAsync(t => t.Id == Project.TenantId);
-                if (tenant == null)
-                {
-                    ModelState.AddModelError("ErrorMessages", "Tenant is Invalid!");
-                    return BadRequest(ModelState);
-                }
-                var existingUserTenant = await _userTenant.GetAsync(ut => ut.UserId == user.Id && ut.TenantId == tenant.Id);
-                if (existingUserTenant == null)
-                {
+                if (!await IsUserAssignedToProjectAsync(user.Id, project.Id))
+                    return BadRequest("User not found in the project!");
 
-                    ModelState.AddModelError("ErrorMessages", "User not Assigned in Tenant");
-                    return BadRequest(ModelState);
-                }
+                if (!await IsUserAssignedToTenantAsync(user.Id, tenant.Id))
+                    return BadRequest("User not assigned to the tenant!");
 
-                _issueAssignedUser.LeaveAsync(existingUserIssue);
+                var existingUserIssue = await _issueAssignUserRepository.GetAsync(ut => ut.UserId == user.Id && ut.IssueId == issue.Id);
+                if (existingUserIssue == null)
+                    return BadRequest("User is not assigned to this issue!");
+
+                await _issueAssignUserRepository.LeaveAsync(existingUserIssue, leaveIssue.userId.ToString());
+
                 _response.StatusCode = HttpStatusCode.NoContent;
                 return _response;
             }
             catch (Exception ex)
             {
-                _response.IsSuccess = false;
-                _response.ErrorMessages = new List<string> { ex.ToString() };
+                return HandleException(ex);
             }
-            return _response;
         }
 
+        private async Task<(User?, Issue?, Project?, Tenant?)> GetIssueContextAsync(int userId, int issueId)
+        {
+            var user = await _userRepository.GetAsync(u => u.Id == userId);
+            var issue = await _issueRepository.GetAsync(i => i.Id == issueId);
+            var project = issue != null ? await _projectRepository.GetAsync(p => p.Id == issue.ProjectId) : null;
+            var tenant = project != null ? await _tenantRepository.GetAsync(t => t.Id == project.TenantId) : null;
+
+            return (user, issue, project, tenant);
+        }
+
+        private async Task<bool> IsUserAssignedToProjectAsync(int userId, int projectId) =>
+            await _userProjectRepository.GetAsync(u => u.UserId == userId && u.ProjectId == projectId) != null;
+
+        private async Task<bool> IsUserAssignedToTenantAsync(int userId, int tenantId) =>
+            await _userTenantRepository.GetAsync(u => u.UserId == userId && u.TenantId == tenantId) != null;
+
+        private ActionResult<APIResponse> HandleException(Exception ex)
+        {
+            _response.IsSuccess = false;
+            _response.ErrorMessages = new List<string> { ex.Message };
+            _response.StatusCode = HttpStatusCode.InternalServerError;
+            return _response;
+        }
     }
 }

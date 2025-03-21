@@ -5,7 +5,10 @@ namespace DevDash.Repository.IRepository
 {
     public interface IUserProjectRepository : IJoinRepository<UserProject>
     {
-        public  Task LeaveAsync(UserProject entity);
-        
+
+        Task JoinAsync(UserProject entity, string userId);
+
+        Task LeaveAsync(UserProject entity, string userId);
+
     }
 }

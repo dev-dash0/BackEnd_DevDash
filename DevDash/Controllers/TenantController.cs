@@ -25,12 +25,13 @@ namespace DevDash.Controllers
         private readonly IMapper _mapper;
         private APIResponse _response;
         public TenantController(ITenantRepository tenantRepo,IMapper mapper
-            , IUserTenantRepository userTenant,IUserRepository user)
+            , IUserTenantRepository userTenant,IUserRepository user
+            , INotificationRepository notificationRepository)
         {
             _dbTenant = tenantRepo;
             _dbUserTenant = userTenant;
             _dbUser = user;
-            _mapper = mapper;   
+            _mapper = mapper;
             this._response = new APIResponse();
         }
         [HttpGet(Name = "GetTenants")]
@@ -135,7 +136,7 @@ namespace DevDash.Controllers
                 TenantDTO tenantDTO = _mapper.Map<TenantDTO>(createDTO);
                 tenantDTO.OwnerID = int.Parse(OwnerID);
                 Tenant tenant = _mapper.Map<Tenant>(tenantDTO);
-                await _dbTenant.CreateAsync(tenant);
+                await _dbTenant.CreateAsync(tenant,int.Parse(OwnerID));
 
                 UserTenantDTO userTenantDTO = new()
                 {
@@ -145,7 +146,8 @@ namespace DevDash.Controllers
                     JoinedDate = DateTime.Now,
                 };
                 UserTenant userTenant = _mapper.Map<UserTenant>(userTenantDTO);
-                await _dbUserTenant.JoinAsync(userTenant);
+                await _dbUserTenant.JoinAsync(userTenant,OwnerID);
+
 
                 _response.Result = new
                 {
@@ -187,8 +189,11 @@ namespace DevDash.Controllers
                 {
                     return Unauthorized();
                 }
-                    await _dbTenant.RemoveAsync(tenant);
-                    _response.StatusCode = HttpStatusCode.NoContent;
+
+
+                await _dbTenant.RemoveAsync(tenant,int.Parse(userId));
+
+                _response.StatusCode = HttpStatusCode.NoContent;
                     _response.IsSuccess = true;
                     return Ok(_response);
             }
@@ -228,7 +233,8 @@ namespace DevDash.Controllers
                 }
                 _mapper.Map(updateDTO, tenant);
 
-                await _dbTenant.UpdateAsync(tenant);
+                await _dbTenant.UpdateAsync(tenant,int.Parse(userId));
+
                 _response.StatusCode = HttpStatusCode.NoContent;
                 _response.IsSuccess = true;
                 return Ok(_response);

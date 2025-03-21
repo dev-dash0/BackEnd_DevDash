@@ -187,7 +187,7 @@ namespace DevDash.Controllers
                 };
 
                 UserProject userProject = _mapper.Map<UserProject>(userProjectDTO);
-                await _dbUserProject.JoinAsync(userProject);
+                await _dbUserProject.JoinAsync(userProject,userId);
                 _response.Result = new
                 {
                     id=project.Id,

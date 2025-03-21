@@ -3,7 +3,9 @@ namespace DevDash.Repository.IRepository
 {
     public interface IUserTenantRepository : IJoinRepository<UserTenant>
     {
-        public Task LeaveAsync(UserTenant entity);
+        Task JoinAsync(UserTenant entity, string userId);
+
+        Task LeaveAsync(UserTenant entity,string userId);
 
     }
 }

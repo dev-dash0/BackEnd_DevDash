@@ -23,7 +23,6 @@ namespace DevDash.Repository
             }
             return await query.FirstOrDefaultAsync();
         }
-
         public async Task JoinAsync(T entity)
         {
             await dbSet.AddAsync(entity);

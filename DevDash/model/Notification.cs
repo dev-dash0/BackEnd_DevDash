@@ -10,7 +10,7 @@ namespace DevDash.model
 
         [Required(ErrorMessage = "User ID is required.")]
         [StringLength(50, ErrorMessage = "User ID must not exceed 50 characters.")]
-        public string UserId { get; set; } // Target user's ID
+        public int UserId { get; set; } // Target user's ID
 
         [Required(ErrorMessage = "Notification message is required.")]
         [StringLength(500, ErrorMessage = "Message must not exceed 500 characters.")]

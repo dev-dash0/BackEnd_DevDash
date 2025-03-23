@@ -146,7 +146,7 @@ namespace DevDash.Controllers
                     JoinedDate = DateTime.Now,
                 };
                 UserTenant userTenant = _mapper.Map<UserTenant>(userTenantDTO);
-                await _dbUserTenant.JoinAsync(userTenant,OwnerID);
+                await _dbUserTenant.JoinAsync(userTenant,int.Parse(OwnerID));
 
 
                 _response.Result = new

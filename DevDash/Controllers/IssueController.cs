@@ -239,7 +239,7 @@ namespace DevDash.Controllers
                     IssueId = issue.Id,
                     UserId = userId,
                 };
-                await _dbIssueAssignUser.JoinAsync(issueAssignedUser,userId.ToString());
+                await _dbIssueAssignUser.JoinAsync(issueAssignedUser,userId);
                 _response.StatusCode = HttpStatusCode.Created;
 
                 return CreatedAtRoute("GetIssue", new { id = issue.Id }, _response);
@@ -299,7 +299,7 @@ namespace DevDash.Controllers
                    
                   
                 };
-                await _dbIssueAssignUser.JoinAsync(issueAssignedUser,userId.ToString());
+                await _dbIssueAssignUser.JoinAsync(issueAssignedUser,userId);
                 return CreatedAtRoute("GetIssue", new { id = issue.Id }, _response);
             }
             catch (Exception ex)

@@ -69,7 +69,7 @@ namespace DevDash.Controllers
                     IssueId = issue.Id,
                 };
 
-                await _issueAssignUserRepository.JoinAsync(issueAssignedUser,joinIssue.userId.ToString());
+                await _issueAssignUserRepository.JoinAsync(issueAssignedUser,joinIssue.userId);
 
                 _response.IsSuccess = true;
                 _response.Result = _mapper.Map<IssueAssignedUserDTO>(issueAssignedUser);
@@ -105,7 +105,7 @@ namespace DevDash.Controllers
                 if (existingUserIssue == null)
                     return BadRequest("User is not assigned to this issue!");
 
-                await _issueAssignUserRepository.LeaveAsync(existingUserIssue, leaveIssue.userId.ToString());
+                await _issueAssignUserRepository.LeaveAsync(existingUserIssue, leaveIssue.userId);
 
                 _response.StatusCode = HttpStatusCode.NoContent;
                 return _response;

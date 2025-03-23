@@ -103,6 +103,43 @@ namespace DevDash.Controllers
             }
         }
 
+        [HttpGet("owned-pinned-items")]
+        public async Task<ActionResult<APIResponse>> GetOwnedPinnedItems([FromQuery] string itemType)
+        {
+            var response = new APIResponse();
+            try
+            {
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (string.IsNullOrEmpty(userId)) return Unauthorized(new { message = "Invalid token" });
+
+                if (!IsValidItemType(itemType)) return BadRequest(new { message = "Invalid item type" });
+
+                var pinnedItems = await _pinnedItemRepository.GetAllAsync(p => p.UserId == int.Parse(userId) && p.ItemType == itemType);
+                var itemIds = pinnedItems.Select(p => p.ItemId).ToList();
+
+                object result = itemType.ToLower() switch
+                {
+                    "tenant" => _mapper.Map<IEnumerable<TenantDTO>>(await _tenantRepository.GetAllAsync(t => itemIds.Contains(t.Id))),
+                    "project" => _mapper.Map<IEnumerable<ProjectDTO>>(await _projectRepository.GetAllAsync(p => itemIds.Contains(p.Id))),
+                    "sprint" => _mapper.Map<IEnumerable<SprintDTO>>(await _sprintRepository.GetAllAsync(s => itemIds.Contains(s.Id))),
+                    "issue" => _mapper.Map<IEnumerable<IssueDTO>>(await _issueRepository.GetAllAsync(i => itemIds.Contains(i.Id))),
+                    _ => null
+                };
+
+                if (result == null) return BadRequest(new { message = "Invalid item type" });
+
+                response.StatusCode = HttpStatusCode.OK;
+                response.Result = result;
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                response.ErrorMessages = new List<string> { ex.Message };
+                return StatusCode(500, response);
+            }
+        }
+
         private bool IsValidItemType(string itemType)
         {
             var validTypes = new HashSet<string> { "Tenant", "Project", "Sprint", "Issue" };

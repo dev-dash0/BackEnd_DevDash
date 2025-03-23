@@ -16,7 +16,7 @@ namespace DevDash.Repository
             _hubContext = hubContext;
         }
 
-        public async Task SendNotificationAsync(string userId, string message)
+        public async Task SendNotificationAsync(int userId, string message)
         {
             var notification = new Notification
             {
@@ -27,10 +27,10 @@ namespace DevDash.Repository
             _context.Notifications.Add(notification);
             await _context.SaveChangesAsync();
 
-            await _hubContext.Clients.User(userId).SendAsync("ReceiveNotification", message);
+            await _hubContext.Clients.User(userId.ToString()).SendAsync("ReceiveNotification", message);
         }
 
-        public async Task<List<Notification>> GetUserNotificationsAsync(string userId)
+        public async Task<List<Notification>> GetUserNotificationsAsync(int userId)
         {
             return await _context.Notifications
             .Where(n => n.UserId == userId && n.IsRead == false)

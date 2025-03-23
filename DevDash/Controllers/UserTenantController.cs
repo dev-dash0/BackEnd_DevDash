@@ -72,7 +72,7 @@ namespace DevDash.Controllers
                     JoinedDate = DateTime.Now,
                 };
                 UserTenant userTenant = _mapper.Map<UserTenant>(userTenantDTO);
-                await _userTenantRepository.JoinAsync(userTenant,userId);
+                await _userTenantRepository.JoinAsync(userTenant,int.Parse(userId));
 
                 _response.Result = userTenantDTO;
                 _response.StatusCode = HttpStatusCode.Created;
@@ -117,7 +117,7 @@ namespace DevDash.Controllers
                 }
 
                 
-                await _userTenantRepository.LeaveAsync(existingUserTenant,userId.ToString());
+                await _userTenantRepository.LeaveAsync(existingUserTenant,int.Parse(userId));
 
 
                 _response.StatusCode = HttpStatusCode.NoContent;

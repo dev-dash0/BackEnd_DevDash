@@ -4,8 +4,8 @@ namespace DevDash.Repository.IRepository
 {
     public interface INotificationRepository
     {
-        Task SendNotificationAsync(string userId, string message);
-        Task<List<Notification>> GetUserNotificationsAsync(string userId);
+        Task SendNotificationAsync(int userId, string message);
+        Task<List<Notification>> GetUserNotificationsAsync(int userId);
         Task MarkAsReadAsync(int notificationId);
     }
 }

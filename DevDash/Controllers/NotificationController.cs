@@ -36,7 +36,7 @@ namespace DevDash.Controllers
                     return Unauthorized(_response);
                 }
 
-                var notifications = await _notificationRepository.GetUserNotificationsAsync(userId);
+                var notifications = await _notificationRepository.GetUserNotificationsAsync(int.Parse(userId));
                 _response.Result = notifications;
                 _response.StatusCode = HttpStatusCode.OK;
                 return Ok(_response);

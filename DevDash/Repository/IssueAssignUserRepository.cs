@@ -15,7 +15,7 @@ namespace DevDash.Repository
             _notificationRepository = notificationRepository;
         }
 
-        public async Task JoinAsync(IssueAssignedUser entity, string userId)
+        public async Task JoinAsync(IssueAssignedUser entity, int userId)
         {
             Issue? issue = await _db.Issues.FirstOrDefaultAsync(i => i.Id == entity.IssueId);
             if (issue == null) return;
@@ -27,7 +27,7 @@ namespace DevDash.Repository
                 $"Issue: {issue.Title} is assigned to you");
         }
 
-        public async Task LeaveAsync(IssueAssignedUser entity, string userId)
+        public async Task LeaveAsync(IssueAssignedUser entity, int userId)
         {
             Issue? issue = await _db.Issues.FirstOrDefaultAsync(i => i.Id == entity.IssueId);
             if (issue == null) return;

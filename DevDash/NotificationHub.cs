@@ -6,9 +6,9 @@ namespace DevDash
     [Authorize]
     public class NotificationHub : Hub
     {
-        public async Task SendNotification(string userId, string message)
+        public async Task SendNotification(int userId, string message)
         {
-            await Clients.User(userId).SendAsync("ReceiveNotification", message);
+            await Clients.User(userId.ToString()).SendAsync("ReceiveNotification", message);
         }
 
         public override async Task OnConnectedAsync()

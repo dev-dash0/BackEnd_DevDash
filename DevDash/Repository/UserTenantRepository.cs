@@ -18,7 +18,7 @@ namespace DevDash.Repository
             _userProjectRepository = userProjectRepository;
         }
 
-        public async Task JoinAsync(UserTenant entity, string userId)
+        public async Task JoinAsync(UserTenant entity, int userId)
         {
             Tenant? tenant = await _db.Tenants.FirstOrDefaultAsync(t => t.Id == entity.TenantId);
             if (tenant == null) return;
@@ -26,14 +26,14 @@ namespace DevDash.Repository
             await _db.UserTenants.AddAsync(entity);
             await _db.SaveChangesAsync();
 
-            string message = userId == tenant.OwnerID.ToString()
+            string message = userId == tenant.OwnerID
                 ? $"You have created a new Tenant: {tenant.Name}"
                 : $"You have joined a new Tenant: {tenant.Name}";
 
             await _notificationRepository.SendNotificationAsync(userId, message);
         }
 
-        public async Task LeaveAsync(UserTenant entity, string userId)
+        public async Task LeaveAsync(UserTenant entity, int userId)
         {
             Tenant? tenant = await _db.Tenants.FirstOrDefaultAsync(t => t.Id == entity.TenantId);
             if (tenant == null) return;
@@ -55,7 +55,7 @@ namespace DevDash.Repository
             _db.UserTenants.Remove(entity);
             await _db.SaveChangesAsync();
 
-            string message = userId == tenant.OwnerID.ToString()
+            string message = userId == tenant.OwnerID
                 ? $"Tenant '{tenant.Name}' has been removed successfully."
                 : $"You have left the Tenant: {tenant.Name}";
 

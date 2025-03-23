@@ -24,10 +24,9 @@ namespace DevDash
                 options.AddPolicy("AllowAll",
                     policy =>
                     {
-                        policy.WithOrigins("https://localhost:44306", "https://localhost:4200", "http://localhost:5197", "https://localhost:7275")
+                        policy.AllowAnyOrigin()
                              .AllowAnyMethod()
-                              .AllowAnyHeader()
-                              .AllowCredentials();
+                              .AllowAnyHeader();
                     });
             });
 

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="4e43a525-9346-4363-81b0-9693b2f21e67" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/DevDash/Controllers/DashBoardController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/DevDash/Controllers/DashBoardController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DevDash/DTO/Account/UpdateProfileDTO.cs" beforeDir="false" afterPath="$PROJECT_DIR$/DevDash/DTO/Account/UpdateProfileDTO.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DevDash/Properties/PublishProfiles/site18839-WebDeploy.pubxml.user" beforeDir="false" afterPath="$PROJECT_DIR$/DevDash/Properties/PublishProfiles/site18839-WebDeploy.pubxml.user" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DevDash/Repository/DashBoardRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/DevDash/Repository/DashBoardRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DevDash/Repository/IRepository/IDashBoardRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/DevDash/Repository/IRepository/IDashBoardRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DevDash/obj/Release/net8.0/DevDash.AssemblyInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/DevDash/obj/Release/net8.0/DevDash.AssemblyInfo.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DevDash/obj/Release/net8.0/DevDash.AssemblyInfoInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/DevDash/obj/Release/net8.0/DevDash.AssemblyInfoInputs.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DevDash/obj/Release/net8.0/DevDash.dll" beforeDir="false" afterPath="$PROJECT_DIR$/DevDash/obj/Release/net8.0/DevDash.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DevDash/obj/Release/net8.0/DevDash.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/DevDash/obj/Release/net8.0/DevDash.pdb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DevDash/obj/Release/net8.0/DevDash.sourcelink.json" beforeDir="false" afterPath="$PROJECT_DIR$/DevDash/obj/Release/net8.0/DevDash.sourcelink.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DevDash/obj/Release/net8.0/apphost.exe" beforeDir="false" afterPath="$PROJECT_DIR$/DevDash/obj/Release/net8.0/apphost.exe" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DevDash/obj/Release/net8.0/ref/DevDash.dll" beforeDir="false" afterPath="$PROJECT_DIR$/DevDash/obj/Release/net8.0/ref/DevDash.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DevDash/obj/Release/net8.0/refint/DevDash.dll" beforeDir="false" afterPath="$PROJECT_DIR$/DevDash/obj/Release/net8.0/refint/DevDash.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DevDash/obj/Release/net8.0/win-x86/DevDash.AssemblyInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/DevDash/obj/Release/net8.0/win-x86/DevDash.AssemblyInfo.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DevDash/obj/Release/net8.0/win-x86/DevDash.AssemblyInfoInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/DevDash/obj/Release/net8.0/win-x86/DevDash.AssemblyInfoInputs.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DevDash/obj/Release/net8.0/win-x86/DevDash.dll" beforeDir="false" afterPath="$PROJECT_DIR$/DevDash/obj/Release/net8.0/win-x86/DevDash.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DevDash/obj/Release/net8.0/win-x86/DevDash.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/DevDash/obj/Release/net8.0/win-x86/DevDash.pdb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DevDash/obj/Release/net8.0/win-x86/DevDash.sourcelink.json" beforeDir="false" afterPath="$PROJECT_DIR$/DevDash/obj/Release/net8.0/win-x86/DevDash.sourcelink.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DevDash/obj/Release/net8.0/win-x86/PubTmp/Out/DevDash.dll" beforeDir="false" afterPath="$PROJECT_DIR$/DevDash/obj/Release/net8.0/win-x86/PubTmp/Out/DevDash.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DevDash/obj/Release/net8.0/win-x86/PubTmp/Out/DevDash.exe" beforeDir="false" afterPath="$PROJECT_DIR$/DevDash/obj/Release/net8.0/win-x86/PubTmp/Out/DevDash.exe" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DevDash/obj/Release/net8.0/win-x86/PubTmp/Out/DevDash.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/DevDash/obj/Release/net8.0/win-x86/PubTmp/Out/DevDash.pdb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DevDash/obj/Release/net8.0/win-x86/apphost.exe" beforeDir="false" afterPath="$PROJECT_DIR$/DevDash/obj/Release/net8.0/win-x86/apphost.exe" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DevDash/obj/Release/net8.0/win-x86/ref/DevDash.dll" beforeDir="false" afterPath="$PROJECT_DIR$/DevDash/obj/Release/net8.0/win-x86/ref/DevDash.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DevDash/obj/Release/net8.0/win-x86/refint/DevDash.dll" beforeDir="false" afterPath="$PROJECT_DIR$/DevDash/obj/Release/net8.0/win-x86/refint/DevDash.dll" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="2uOgXrLI5TaGcP0FjgblkP9GhPZ" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true"
+  }
+}]]></component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="4e43a525-9346-4363-81b0-9693b2f21e67" name="Changes" comment="" />
+      <created>1742125081530</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1742125081530</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>

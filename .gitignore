@@ -1,0 +1,7 @@
+*/bin
+.vs
+.env
+*/.env
+DevDash/obj/Debug/*
+DevDash/obj/*.cache
+DevDash/obj/*.nuget.cache 

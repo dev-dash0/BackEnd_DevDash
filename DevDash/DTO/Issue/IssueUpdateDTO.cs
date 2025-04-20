@@ -14,7 +14,7 @@ namespace DevDash.DTO.Issue
         public required string Title { get; set; }
         [MaxLength(255)]
         public string? Labels { get; set; }
-
+        public IFormFile? Attachment { get; set; }
         [MaxLength(255)]
         public string? Description { get; set; }
         [JsonIgnore]

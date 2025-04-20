@@ -63,6 +63,8 @@ namespace DevDash.model
         [ForeignKey("UserId")]
         public  int? CreatedById { get; set; }
 
+        public string? AttachmentPath { get; set; }
+
         // Navigation Properties
         public Sprint? Sprint { get; set; }
         public required Project Project { get; set; }

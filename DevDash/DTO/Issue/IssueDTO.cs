@@ -15,7 +15,8 @@ namespace DevDash.DTO.Issue
         [MaxLength(255)]
         public string? Description { get; set; }
         public bool IsBacklog { get; set; } 
-        public DateTime? CreationDate { get; set; } 
+        public DateTime? CreationDate { get; set; }
+        public IFormFile? Attachment { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? Deadline { get; set; }
         public DateTime? DeliveredDate { get; set; }
@@ -26,6 +27,8 @@ namespace DevDash.DTO.Issue
         [RegularExpression("Bug|Feature|Task|Epic", ErrorMessage = "Invalid issue type.")]
         [Required]
         public required string Type { get; set; }
+
+        public string? AttachmentPath { get; set; }
 
         [MaxLength(20)]
         [Required]

@@ -1,6 +1,7 @@
 ﻿using DevDash.DTO.Comment;
 using DevDash.DTO.User;
 using DevDash.model;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
@@ -22,6 +23,7 @@ namespace DevDash.DTO.Issue
         public DateTime? StartDate { get; set; }
         public DateTime? Deadline { get; set; }
         public DateTime? DeliveredDate { get; set; }
+        public IFormFile? Attachment { get; set; }
         public DateTime? LastUpdate { get; set; }
         [MaxLength(255)]
         public string? Labels { get; set; }
@@ -41,14 +43,14 @@ namespace DevDash.DTO.Issue
         [RegularExpression("BackLog|to do|In Progress|Reviewing|Completed|Canceled|Postponed")]
         public required string Status { get; set; }
 
-        [JsonIgnore]
-        public int? CreatedById { get; set; }
-        [JsonIgnore]
-        public int TenantId { get; set; }
-        [JsonIgnore]
-        public int ProjectId { get; set; }
-        [JsonIgnore]
-        public int? SprintId { get; set; } = null;
+        //[BindNever]
+        //public int? CreatedById { get; set; }
+        //[BindNever]
+        //public int TenantId { get; set; }
+        //[BindNever]
+        //public int ProjectId { get; set; }
+        //[BindNever]
+        //public int? SprintId { get; set; } = null;
 
     }
 }

@@ -890,3 +890,4 @@ C:\Users\Nvidia\Downloads\BackEnd_DevDash-externallogin\BackEnd_DevDash-external
 C:\Users\Nvidia\Downloads\BackEnd_DevDash-externallogin\BackEnd_DevDash-externallogin\DevDash\obj\Release\net8.0\win-x86\DevDash.pdb
 C:\Users\Nvidia\Downloads\BackEnd_DevDash-externallogin\BackEnd_DevDash-externallogin\DevDash\obj\Release\net8.0\win-x86\DevDash.genruntimeconfig.cache
 C:\Users\Nvidia\Downloads\BackEnd_DevDash-externallogin\BackEnd_DevDash-externallogin\DevDash\obj\Release\net8.0\win-x86\ref\DevDash.dll
+C:\Users\Nvidia\Downloads\BackEnd_DevDash-externallogin\BackEnd_DevDash-externallogin\DevDash\obj\Release\net8.0\win-x86\DevDash.sourcelink.json

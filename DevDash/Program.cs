@@ -204,7 +204,7 @@ namespace DevDash
          
 
             app.UseWebSockets();
-
+            app.UseStaticFiles();
             app.UseRouting();
             //app.UseHttpsRedirection();
             app.UseCors("AllowAll");

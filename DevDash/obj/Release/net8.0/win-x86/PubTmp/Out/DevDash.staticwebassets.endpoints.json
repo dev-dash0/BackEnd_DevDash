@@ -1,5 +1,334 @@
 {
   "Version": 1,
   "ManifestType": "Publish",
-  "Endpoints": []
+  "Endpoints": [
+    {
+      "Route": "15d37af2-2434-4fac-be25-db196d77c246.3ywskofz1t.pdf",
+      "AssetFile": "15d37af2-2434-4fac-be25-db196d77c246.pdf",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "476829"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/pdf"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"NcbxWfDeBCGvgJO4gYT0UA+su/I3jVrtFgJ0D9LVgnI=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 20 Apr 2025 17:36:05 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "3ywskofz1t"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-NcbxWfDeBCGvgJO4gYT0UA+su/I3jVrtFgJ0D9LVgnI="
+        },
+        {
+          "Name": "label",
+          "Value": "15d37af2-2434-4fac-be25-db196d77c246.pdf"
+        }
+      ]
+    },
+    {
+      "Route": "15d37af2-2434-4fac-be25-db196d77c246.pdf",
+      "AssetFile": "15d37af2-2434-4fac-be25-db196d77c246.pdf",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "476829"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/pdf"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"NcbxWfDeBCGvgJO4gYT0UA+su/I3jVrtFgJ0D9LVgnI=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 20 Apr 2025 17:36:05 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-NcbxWfDeBCGvgJO4gYT0UA+su/I3jVrtFgJ0D9LVgnI="
+        }
+      ]
+    },
+    {
+      "Route": "373fd7cb-483e-4f08-ac50-c8cce1fd3e72.pdf",
+      "AssetFile": "373fd7cb-483e-4f08-ac50-c8cce1fd3e72.pdf",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "422701"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/pdf"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"Gpah3xLr9+1pWZVQUpOTPQWOISgrlgCZMOia+WeLm1o=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 20 Apr 2025 16:58:04 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-Gpah3xLr9+1pWZVQUpOTPQWOISgrlgCZMOia+WeLm1o="
+        }
+      ]
+    },
+    {
+      "Route": "373fd7cb-483e-4f08-ac50-c8cce1fd3e72.yahiinumhx.pdf",
+      "AssetFile": "373fd7cb-483e-4f08-ac50-c8cce1fd3e72.pdf",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "422701"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/pdf"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"Gpah3xLr9+1pWZVQUpOTPQWOISgrlgCZMOia+WeLm1o=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 20 Apr 2025 16:58:04 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "yahiinumhx"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-Gpah3xLr9+1pWZVQUpOTPQWOISgrlgCZMOia+WeLm1o="
+        },
+        {
+          "Name": "label",
+          "Value": "373fd7cb-483e-4f08-ac50-c8cce1fd3e72.pdf"
+        }
+      ]
+    },
+    {
+      "Route": "6be5283f-f95b-4bfc-8ddd-dda827974256.docx",
+      "AssetFile": "6be5283f-f95b-4bfc-8ddd-dda827974256.docx",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "817061"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"790XCeKsW6Tm9Mj+RMRTabXNwdNH61jrZKdgxQqwQn8=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 20 Apr 2025 17:43:02 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-790XCeKsW6Tm9Mj+RMRTabXNwdNH61jrZKdgxQqwQn8="
+        }
+      ]
+    },
+    {
+      "Route": "6be5283f-f95b-4bfc-8ddd-dda827974256.l7c94i74dv.docx",
+      "AssetFile": "6be5283f-f95b-4bfc-8ddd-dda827974256.docx",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "817061"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"790XCeKsW6Tm9Mj+RMRTabXNwdNH61jrZKdgxQqwQn8=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 20 Apr 2025 17:43:02 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "l7c94i74dv"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-790XCeKsW6Tm9Mj+RMRTabXNwdNH61jrZKdgxQqwQn8="
+        },
+        {
+          "Name": "label",
+          "Value": "6be5283f-f95b-4bfc-8ddd-dda827974256.docx"
+        }
+      ]
+    },
+    {
+      "Route": "ea096699-42b3-462c-bd16-ef710077ec74.pdf",
+      "AssetFile": "ea096699-42b3-462c-bd16-ef710077ec74.pdf",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "422701"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/pdf"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"Gpah3xLr9+1pWZVQUpOTPQWOISgrlgCZMOia+WeLm1o=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 20 Apr 2025 16:50:18 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-Gpah3xLr9+1pWZVQUpOTPQWOISgrlgCZMOia+WeLm1o="
+        }
+      ]
+    },
+    {
+      "Route": "ea096699-42b3-462c-bd16-ef710077ec74.yahiinumhx.pdf",
+      "AssetFile": "ea096699-42b3-462c-bd16-ef710077ec74.pdf",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "422701"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/pdf"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"Gpah3xLr9+1pWZVQUpOTPQWOISgrlgCZMOia+WeLm1o=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 20 Apr 2025 16:50:18 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "yahiinumhx"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-Gpah3xLr9+1pWZVQUpOTPQWOISgrlgCZMOia+WeLm1o="
+        },
+        {
+          "Name": "label",
+          "Value": "ea096699-42b3-462c-bd16-ef710077ec74.pdf"
+        }
+      ]
+    }
+  ]
 }

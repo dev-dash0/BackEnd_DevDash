@@ -1,0 +1,76 @@
+﻿<Project>
+  <ItemGroup>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\15d37af2-2434-4fac-be25-db196d77c246.pdf'))">
+      <SourceType>Package</SourceType>
+      <SourceId>DevDash</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/DevDash</BasePath>
+      <RelativePath>15d37af2-2434-4fac-be25-db196d77c246.pdf</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <Fingerprint>3ywskofz1t</Fingerprint>
+      <Integrity>NcbxWfDeBCGvgJO4gYT0UA+su/I3jVrtFgJ0D9LVgnI=</Integrity>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\15d37af2-2434-4fac-be25-db196d77c246.pdf'))</OriginalItemSpec>
+    </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\373fd7cb-483e-4f08-ac50-c8cce1fd3e72.pdf'))">
+      <SourceType>Package</SourceType>
+      <SourceId>DevDash</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/DevDash</BasePath>
+      <RelativePath>373fd7cb-483e-4f08-ac50-c8cce1fd3e72.pdf</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <Fingerprint>yahiinumhx</Fingerprint>
+      <Integrity>Gpah3xLr9+1pWZVQUpOTPQWOISgrlgCZMOia+WeLm1o=</Integrity>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\373fd7cb-483e-4f08-ac50-c8cce1fd3e72.pdf'))</OriginalItemSpec>
+    </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\6be5283f-f95b-4bfc-8ddd-dda827974256.docx'))">
+      <SourceType>Package</SourceType>
+      <SourceId>DevDash</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/DevDash</BasePath>
+      <RelativePath>6be5283f-f95b-4bfc-8ddd-dda827974256.docx</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <Fingerprint>l7c94i74dv</Fingerprint>
+      <Integrity>790XCeKsW6Tm9Mj+RMRTabXNwdNH61jrZKdgxQqwQn8=</Integrity>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\6be5283f-f95b-4bfc-8ddd-dda827974256.docx'))</OriginalItemSpec>
+    </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\ea096699-42b3-462c-bd16-ef710077ec74.pdf'))">
+      <SourceType>Package</SourceType>
+      <SourceId>DevDash</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/DevDash</BasePath>
+      <RelativePath>ea096699-42b3-462c-bd16-ef710077ec74.pdf</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <Fingerprint>yahiinumhx</Fingerprint>
+      <Integrity>Gpah3xLr9+1pWZVQUpOTPQWOISgrlgCZMOia+WeLm1o=</Integrity>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\ea096699-42b3-462c-bd16-ef710077ec74.pdf'))</OriginalItemSpec>
+    </StaticWebAsset>
+  </ItemGroup>
+</Project>

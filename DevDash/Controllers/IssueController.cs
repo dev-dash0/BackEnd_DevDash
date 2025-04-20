@@ -3,6 +3,7 @@ using DevDash.DTO.Issue;
 using DevDash.model;
 using DevDash.Repository.IRepository;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using System.Net;
 using System.Security.Claims;
 
@@ -202,7 +203,7 @@ namespace DevDash.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<APIResponse>> CreateBacklogIssue([FromQuery] int projectId, [FromBody] IssueCreataDTO createDTO)
+        public async Task<ActionResult<APIResponse>> CreateBacklogIssue([FromQuery] int projectId, [FromForm] IssueCreataDTO createDTO)
         {
             try
             {
@@ -212,7 +213,6 @@ namespace DevDash.Controllers
                 if (!int.TryParse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value, out int userId))
                     return Unauthorized(new { message = "Invalid token" });
 
-
                 var userProject = await _dbUserProject.GetAsync(up => up.UserId == userId && up.ProjectId == projectId);
                 if (userProject == null || (userProject.Role != "Admin" && userProject.Role != "Project Manager"))
                     return Unauthorized(new { message = "You do not have permission to create an issue in this project" });
@@ -221,25 +221,42 @@ namespace DevDash.Controllers
                 if (project == null)
                     return BadRequest(new { message = "Project ID is Invalid!" });
 
-                createDTO.IsBacklog = true;
-                createDTO.ProjectId = projectId;
-                createDTO.CreatedById = userId;
-                createDTO.TenantId = project.TenantId;
-
-                Issue issue  = _mapper.Map<Issue>(createDTO);
+                List<string> validExtentions = new List<string> { ".jpg", ".png", ".jpeg", ".pdf", ".docx" };
+                string extension = Path.GetExtension(createDTO.Attachment.FileName);
+                if (!validExtentions.Contains(extension))
+                {
+                    return BadRequest(new { message = "Invalid file type. Only .jpg, .png, .jpeg, .pdf, and .docx are allowed." });
+                }
+                string fileName = Guid.NewGuid().ToString() + extension;
+                string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
+                Directory.CreateDirectory(path); 
+                string fullPath = fileName;
+                using (FileStream stream = new FileStream(fullPath, FileMode.Create))
+                {
+                    createDTO.Attachment.CopyTo(stream); 
+                }
+                
+                var issue = _mapper.Map<Issue>(createDTO);
+                issue.IsBacklog = true;
+                issue.ProjectId = projectId;
+                issue.AttachmentPath = "http://devdash.runasp.net/" + fullPath;
+                issue.CreatedById = userId;
+                issue.TenantId = project.TenantId;
+                issue.SprintId = null;
+                issue.Status = "BackLog";
                 await _dbissue.CreateAsync(issue);
-               var IssueDTO= _mapper.Map<IssueDTO>(issue);
+                var IssueDTO = _mapper.Map<IssueDTO>(issue);
                 _response.Result = new
                 {
-                    id=issue.Id,
-                    issue= IssueDTO
+                    id = issue.Id,
+                    issue = IssueDTO
                 };
                 var issueAssignedUser = new IssueAssignedUser
                 {
                     IssueId = issue.Id,
                     UserId = userId,
                 };
-                await _dbIssueAssignUser.JoinAsync(issueAssignedUser,userId);
+                await _dbIssueAssignUser.JoinAsync(issueAssignedUser, userId);
                 _response.StatusCode = HttpStatusCode.Created;
 
                 return CreatedAtRoute("GetIssue", new { id = issue.Id }, _response);
@@ -252,13 +269,12 @@ namespace DevDash.Controllers
             }
         }
 
-
         [HttpPost("sprint")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<APIResponse>> CreateSprintIssue([FromQuery] int sprintId, [FromBody] IssueCreataDTO createDTO)
+        public async Task<ActionResult<APIResponse>> CreateSprintIssue([FromQuery] int sprintId, [FromForm] IssueCreataDTO createDTO)
         {
             try
             {
@@ -268,7 +284,6 @@ namespace DevDash.Controllers
                 if (!int.TryParse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value, out int userId))
                     return Unauthorized(new { message = "Invalid token" });
 
-
                 var sprint = await _dbSprint.GetAsync(s => s.Id == sprintId);
                 if (sprint == null)
                     return BadRequest(new { message = "Sprint ID is Invalid!" });
@@ -276,30 +291,56 @@ namespace DevDash.Controllers
                 var userProject = await _dbUserProject.GetAsync(up => up.UserId == userId && up.ProjectId == sprint.ProjectId);
                 if (userProject == null || (userProject.Role != "Admin" && userProject.Role != "Project Manager"))
                     return Unauthorized(new { message = "You do not have permission to create an issue in this project" });
-              
-                createDTO.IsBacklog = false;
-                createDTO.ProjectId = sprint.ProjectId;
-                createDTO.CreatedById = userId;
-                createDTO.TenantId = sprint.TenantId;
-                createDTO.SprintId = sprintId;
 
-                Issue issue = _mapper.Map<Issue>(createDTO);
-                await _dbissue.CreateAsync(issue);
-                var IssueDTO = _mapper.Map<IssueDTO>(issue);
-                _response.Result = new
+                string? filePath = null;
+
+                if (createDTO.Attachment != null && createDTO.Attachment.Length > 0)
                 {
-                    id=issue.Id,
-                    issue = IssueDTO
-                };
-                _response.StatusCode = HttpStatusCode.Created;
+                    List<string> validExtensions = new List<string> { ".jpg", ".png", ".jpeg", ".pdf", ".docx" };
+                    string extension = Path.GetExtension(createDTO.Attachment.FileName);
+
+                    if (!validExtensions.Contains(extension))
+                        return BadRequest(new { message = "Invalid file type. Only .jpg, .png, .jpeg, .pdf, and .docx are allowed." });
+
+                    string fileName = Guid.NewGuid().ToString() + extension;
+                    string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
+                    Directory.CreateDirectory(path);
+                    string fullPath = Path.Combine(path, fileName);
+
+                    using (FileStream stream = new FileStream(fullPath, FileMode.Create))
+                    {
+                        createDTO.Attachment.CopyTo(stream);
+                    }
+
+                    filePath = "http://devdash.runasp.net/" + fileName;
+                }
+
+                var issue = _mapper.Map<Issue>(createDTO);
+                issue.IsBacklog = false;
+                issue.ProjectId = sprint.ProjectId;
+                issue.SprintId = sprintId;
+                issue.CreatedById = userId;
+                issue.TenantId = sprint.TenantId;
+                issue.AttachmentPath = filePath;
+               
+
+                await _dbissue.CreateAsync(issue);
+
                 var issueAssignedUser = new IssueAssignedUser
                 {
                     IssueId = issue.Id,
-                    UserId = userId,
-                   
-                  
+                    UserId = userId
                 };
-                await _dbIssueAssignUser.JoinAsync(issueAssignedUser,userId);
+                await _dbIssueAssignUser.JoinAsync(issueAssignedUser, userId);
+
+                var IssueDTO = _mapper.Map<IssueDTO>(issue);
+                _response.Result = new
+                {
+                    id = issue.Id,
+                    issue = IssueDTO
+                };
+                _response.StatusCode = HttpStatusCode.Created;
+
                 return CreatedAtRoute("GetIssue", new { id = issue.Id }, _response);
             }
             catch (Exception ex)
@@ -360,11 +401,12 @@ namespace DevDash.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<APIResponse>> UpdateIssue(int id, [FromBody] IssueUpdateDTO updateDTO)
+      
+        public async Task<ActionResult<APIResponse>> UpdateIssue(int id, [FromForm] IssueUpdateDTO updateDTO)
         {
             try
             {
-                if (updateDTO == null )
+                if (updateDTO == null)
                 {
                     _response.StatusCode = HttpStatusCode.BadRequest;
                     _response.ErrorMessages = new List<string> { "Invalid issue ID or data" };
@@ -378,30 +420,58 @@ namespace DevDash.Controllers
                     _response.ErrorMessages = new List<string> { "Issue not found" };
                     return NotFound(_response);
                 }
-                
-                var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-                if (string.IsNullOrEmpty(userId))
+
+                if (!int.TryParse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value, out int userId))
                 {
                     _response.StatusCode = HttpStatusCode.Unauthorized;
                     _response.ErrorMessages = new List<string> { "Invalid token" };
                     return Unauthorized(_response);
                 }
 
-                var userProject = await _dbUserProject.GetAsync(up => up.UserId == int.Parse(userId) && up.ProjectId == issue.ProjectId);
-                bool hasPermission = userProject != null && (userProject.Role == "Admin" || userProject.Role == "Project Manager");
-
-                if (!hasPermission)
+                var userProject = await _dbUserProject.GetAsync(up => up.UserId == userId && up.ProjectId == issue.ProjectId);
+                if (userProject == null || (userProject.Role != "Admin" && userProject.Role != "Project Manager"))
                 {
                     _response.StatusCode = HttpStatusCode.Forbidden;
                     _response.ErrorMessages = new List<string> { "You do not have permission to update this issue" };
-                    return Unauthorized();
+                    return Forbid();
                 }
-                
-                if (updateDTO.SprintId != null ) updateDTO.IsBacklog = false;
-                else
+
+             
+                updateDTO.IsBacklog = updateDTO.SprintId == null;
+
+               
+                if (updateDTO.Attachment != null && updateDTO.Attachment.Length > 0)
                 {
-                    updateDTO.IsBacklog = true;
-                    //updateDTO.SprintId = null;
+                    List<string> validExtensions = new List<string> { ".jpg", ".png", ".jpeg", ".pdf", ".docx" };
+                    string extension = Path.GetExtension(updateDTO.Attachment.FileName);
+
+                    if (!validExtensions.Contains(extension.ToLower()))
+                    {
+                        _response.StatusCode = HttpStatusCode.BadRequest;
+                        _response.ErrorMessages = new List<string> { "Invalid file type. Only .jpg, .png, .jpeg, .pdf, .docx allowed." };
+                        return BadRequest(_response);
+                    }
+
+               
+                    if (!string.IsNullOrEmpty(issue.AttachmentPath))
+                    {
+                        string oldPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", Path.GetFileName(issue.AttachmentPath));
+                        if (System.IO.File.Exists(oldPath))
+                            System.IO.File.Delete(oldPath);
+                    }
+
+               
+                    string fileName = Guid.NewGuid().ToString() + extension;
+                    string savePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
+                    Directory.CreateDirectory(savePath);
+                    string fullPath = Path.Combine(savePath, fileName);
+                    using (var stream = new FileStream(fullPath, FileMode.Create))
+                    {
+                        await updateDTO.Attachment.CopyToAsync(stream);
+                    }
+
+                   
+                    issue.AttachmentPath = $"http://devdash.runasp.net/{fileName}";
                 }
 
                 _mapper.Map(updateDTO, issue);
@@ -419,6 +489,7 @@ namespace DevDash.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, _response);
             }
         }
+
 
 
 

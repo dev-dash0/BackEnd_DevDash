@@ -23,6 +23,10 @@ public class AppDbContext : IdentityDbContext<User, IdentityRole<int>, int>
 
     public DbSet<Notification> Notifications { get; set; }
 
+    //password reset
+    public DbSet<PasswordReset> PasswordReset { get; set; }
+
+
     //public DbSet<Notification> Notifications { get; set; }
     //public DbSet<Integration> Integrations { get; set; }
 

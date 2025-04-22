@@ -18,8 +18,9 @@ namespace DevDash.Repository.IRepository
         Task<UserDTO> GetUserProfile(int userId);
         Task<TokenDTO> LoginWithGoogle(LoginWithGoogleDTO loginDTO);
         Task<bool> ChangePassword(int userId, ChangePasswordDTO changePasswordDTO);
-        Task<bool> SendPasswordResetToken(string email);
-        Task<bool> ResetPassword(ResetPasswordDTO resetPasswordDTO);
+        Task<StepResponseDTO> SendPasswordResetToken(string email);
+        Task<StepResponseDTO> VerifyToken(PasswordTokenDTO passwordTokenDTO);
+        Task<StepResponseDTO> ResetPassword(NewPasswordDTO newPasswordDTO);
         Task<UserDTO> UpdateUserProfile(int userId, UpdateProfileDTO updateProfileDTO);
 
         Task<bool> RemoveAccount(int userId);

@@ -63,6 +63,7 @@ namespace DevDash
             builder.Services.AddScoped<IPinnedItemRepository, PinnedItemRepository>();
             builder.Services.AddScoped<ISearchRepository, SearchRepository>();
             builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
+            builder.Services.AddScoped<IPasswordRecoveryRepository, PasswordRecoveryRepository>();
 
             // ? Register AutoMapper
             builder.Services.AddAutoMapper(typeof(MappingConfig));

@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-externallogin\\BackEnd_DevDash-externallogin\\DevDash\\DevDash.csproj": {}
+    "F:\\graduation project\\final backend\\BackEnd_DevDash\\DevDash\\DevDash.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-externallogin\\BackEnd_DevDash-externallogin\\DevDash\\DevDash.csproj": {
+    "F:\\graduation project\\final backend\\BackEnd_DevDash\\DevDash\\DevDash.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-externallogin\\BackEnd_DevDash-externallogin\\DevDash\\DevDash.csproj",
+        "projectUniqueName": "F:\\graduation project\\final backend\\BackEnd_DevDash\\DevDash\\DevDash.csproj",
         "projectName": "DevDash",
-        "projectPath": "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-externallogin\\BackEnd_DevDash-externallogin\\DevDash\\DevDash.csproj",
-        "packagesPath": "C:\\Users\\Nvidia\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-externallogin\\BackEnd_DevDash-externallogin\\DevDash\\obj\\",
+        "projectPath": "F:\\graduation project\\final backend\\BackEnd_DevDash\\DevDash\\DevDash.csproj",
+        "packagesPath": "C:\\Users\\Shahd Mostafa.DESKTOP-FIK5SPH\\.nuget\\packages\\",
+        "outputPath": "F:\\graduation project\\final backend\\BackEnd_DevDash\\DevDash\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\Nvidia\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Shahd Mostafa.DESKTOP-FIK5SPH\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -42,9 +42,9 @@
         "restoreAuditProperties": {
           "enableAudit": "true",
           "auditLevel": "low",
-          "auditMode": "all"
+          "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "9.0.100"
+        "SdkAnalysisLevel": "9.0.200"
       },
       "frameworks": {
         "net8.0": {
@@ -57,6 +57,10 @@
             "AutoMapper.Extensions.Microsoft.DependencyInjection": {
               "target": "Package",
               "version": "[12.0.0, )"
+            },
+            "MailKit": {
+              "target": "Package",
+              "version": "[4.11.0, )"
             },
             "Microsoft.AspNetCore.Authentication.Google": {
               "target": "Package",
@@ -104,6 +108,10 @@
               "target": "Package",
               "version": "[8.0.0, )"
             },
+            "MimeKit": {
+              "target": "Package",
+              "version": "[4.11.0, )"
+            },
             "NetcodeHub.Packages.Extensions.LocalStorage": {
               "target": "Package",
               "version": "[1.0.0, )"
@@ -132,7 +140,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.100/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.201/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

@@ -10,6 +10,9 @@ using DevDash.model;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 using DevDash.DTO.Account;
+using MailKit;
+using Microsoft.Extensions.Caching.Memory;
+using DevDash.Migrations;
 
 namespace DevDash.Repository
 {
@@ -20,15 +23,17 @@ namespace DevDash.Repository
         private readonly RoleManager<IdentityRole<int>> _roleManager;
         private string secretKey;
         private readonly IMapper _mapper;
+        private readonly IPasswordRecoveryRepository _emailService;
 
         public UserRepository(AppDbContext db, IConfiguration configuration,
-            UserManager<User> userManager, IMapper mapper, RoleManager<IdentityRole<int>> roleManager)
+            UserManager<User> userManager, IMapper mapper, RoleManager<IdentityRole<int>> roleManager, IPasswordRecoveryRepository emailRepository)
         {
             _db = db;
             _mapper = mapper;
             _userManager = userManager;
             secretKey = configuration.GetValue<string>("JWT:Secret");
             _roleManager = roleManager;
+            _emailService = emailRepository;
         }
 
         public bool IsUniqueEmail(string email)
@@ -87,7 +92,7 @@ namespace DevDash.Repository
             {
                 return null;
             }
-            
+
         }
 
         private async Task<string> GetAccessToken(User user, string jwtTokenId)
@@ -296,23 +301,121 @@ namespace DevDash.Repository
             return result.Succeeded;
         }
 
-        public async Task<bool> SendPasswordResetToken(string email)
+        public async Task<StepResponseDTO> SendPasswordResetToken(string email)
         {
             var user = await _userManager.FindByEmailAsync(email);
-            if (user == null) return false;
-
-            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            if (user == null)
+            {
+                throw new Exception("User not found.");
+            }
+            //var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            Random random = new Random();
+            var token = random.Next(100000, 999999).ToString();
+            var existingUser = await _db.PasswordReset.FirstOrDefaultAsync(x => x.UserId == user.Id && x.Step != 3);
+            if (existingUser != null)
+            {
+                _db.PasswordReset.Remove(existingUser);
+            }
+            var step = new PasswordReset
+            {
+                UserId = user.Id,
+                Step = 1,
+                Token = token,
+                CreatedAt = DateTime.UtcNow,
+                ExpiresAt = DateTime.UtcNow.AddMinutes(3)
+            };
+            await _db.PasswordReset.AddAsync(step);
+            await _db.SaveChangesAsync();
             // Send the token via email (implementation needed)
-            return true;
+
+            await _emailService.SendEmailAsync(new EmailBodyDTO
+            {
+                To = email,
+                Subject = "Reset Your Password",
+                Body = $@"
+                        <p>Hello {user.UserName},</p>
+                        <p>You requested to reset your password.</p>
+                        <p>Here is your reset OTP:</p>
+                        <div style='
+                            background-color:#f4f4f4;
+                            padding:10px;
+                            font-family:monospace;
+                            border-radius:5px;
+                            width:fit-content;
+                        '>{token}</div>
+                        <p>Copy this OTP and paste it in the reset form on DevDash.</p>
+                        <p>This OTP is valid for <span style='color:#dc3545; font-weight:500'>3 minutes only.</span> if it expires you'll need to verify your email again.</p>
+                        <p>If you didn’t request this, you can safely ignore this email.</p>
+                        <br/>
+                        <p>— DevDash Team</p>"
+            });
+            var response = _mapper.Map<StepResponseDTO>(step);
+            response.Message = true;
+            return _mapper.Map<StepResponseDTO>(response);
         }
 
-        public async Task<bool> ResetPassword(ResetPasswordDTO resetPasswordDTO)
+        public async Task<StepResponseDTO> VerifyToken(PasswordTokenDTO passwordTokenDTO)
         {
-            var user = await _userManager.FindByEmailAsync(resetPasswordDTO.Email);
-            if (user == null) return false;
+            var step = await _db.PasswordReset.FirstOrDefaultAsync(x => x.Step == 1);
 
-            var result = await _userManager.ResetPasswordAsync(user, resetPasswordDTO.Token, resetPasswordDTO.NewPassword);
-            return result.Succeeded;
+            if (step == null)
+            {
+                throw new Exception("OTP not found.");
+            }
+            if (step.ExpiresAt < DateTime.UtcNow)
+            {
+                throw new Exception("OTP expired.");
+            }
+            if(step.Token != passwordTokenDTO.Token)
+            {
+                throw new Exception("Invalid OTP.");
+            }
+
+            step.Step = 2;
+            _db.PasswordReset.Update(step);
+            await _db.SaveChangesAsync();
+
+            var response = _mapper.Map<StepResponseDTO>(step);
+            response.Message = true;
+            return _mapper.Map<StepResponseDTO>(response);
+        }
+
+        public async Task<StepResponseDTO> ResetPassword(NewPasswordDTO newPasswordDTO)
+        {
+            var step = await _db.PasswordReset.FirstOrDefaultAsync(x => x.Step == 2 && x.ExpiresAt >= DateTime.UtcNow);
+
+            if (step == null)
+            {
+                throw new Exception("You must verify your OTP first.");
+            }
+
+            if (step.ExpiresAt < DateTime.UtcNow)
+            {
+                throw new Exception("OTP expired.");
+            }
+
+            var user = await _userManager.FindByIdAsync(step.UserId.ToString());
+            if (user == null)
+            {
+                throw new Exception("User not found.");
+            }
+
+            //var result = await _userManager.ResetPasswordAsync(user, step.Token, newPasswordDTO.NewPassword);
+            user.PasswordHash = _userManager.PasswordHasher.HashPassword(user, newPasswordDTO.NewPassword);
+            var result = await _userManager.UpdateAsync(user);
+            if (!result.Succeeded)
+            {
+                var errors = string.Join("; ", result.Errors.Select(e => e.Description));
+                throw new Exception($"Failed to reset password. Reasons: {errors}");
+            }
+            step.Step = 3;
+            _db.PasswordReset.Update(step);
+            await _db.SaveChangesAsync();
+
+            var response = _mapper.Map<StepResponseDTO>(step);
+            response.Message = true;
+
+            return _mapper.Map<StepResponseDTO>(response);
         }
 
         public async Task<UserDTO> UpdateUserProfile(int userId, UpdateProfileDTO updateProfileDTO)

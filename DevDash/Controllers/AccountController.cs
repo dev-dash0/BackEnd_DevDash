@@ -17,6 +17,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Net.Http;
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
+using Org.BouncyCastle.Crypto.Generators;
 
 namespace DevDash.Controllers
 {
@@ -282,12 +283,64 @@ namespace DevDash.Controllers
         }
 
 
+        // password reset
+        [HttpPost("ForgotPassword")]
+        public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordEmailDTO forgotPasswordEmailDTO)
+        {
+            if (string.IsNullOrEmpty(forgotPasswordEmailDTO.Email))
+                return BadRequest(new { message = "Email is required" });
+
+            try
+            {
+                var result = await _userRepository.SendPasswordResetToken(forgotPasswordEmailDTO.Email);
+                if (result.Message ==false)
+                    return BadRequest(new { message = "Failed to send reset token" });
 
 
+                return Ok(new {step= result.Step ,message = "Password reset token sent to your email." });
+            }
+            catch (Exception ex)
+            {
+                return NotFound(new { message = ex.Message });
+            }
+        }
+
+        [HttpPost("VerifyOTP")]
+        public async Task<IActionResult> VerifyToken([FromBody] PasswordTokenDTO passwordTokenDTO)
+        {
+            if (string.IsNullOrEmpty(passwordTokenDTO.Token))
+                return BadRequest(new { message = "OTP is required" });
+
+            try
+            {
+                var result = await _userRepository.VerifyToken(passwordTokenDTO);
+                return Ok(new { step = result.Step, message = "OTP verified successfully." });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
 
 
+        [HttpPost("ResetPassword")]
+        public async Task<IActionResult> ResetPassword(
+            [FromBody] NewPasswordDTO newPasswordDTO)
+        {
+            if (string.IsNullOrWhiteSpace(newPasswordDTO.NewPassword))
+            {
+                return BadRequest(new { message = "New password is required." });
+            }
 
-
-
+            try
+            {
+                var result = await _userRepository.ResetPassword(newPasswordDTO);
+                return Ok(new { step = result.Step, message = "Password has been reset successfully." });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
     }
 }

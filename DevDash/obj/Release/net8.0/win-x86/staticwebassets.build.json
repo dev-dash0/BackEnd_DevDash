@@ -1,0 +1,640 @@
+{
+  "Version": 1,
+  "Hash": "84ncaOnOXgfaMGNkFf605Bn0LgV9V9pEuUCG59ffikQ=",
+  "Source": "DevDash",
+  "BasePath": "_content/DevDash",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "DevDash\\wwwroot",
+      "Source": "DevDash",
+      "ContentRoot": "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-ForgetPassword\\BackEnd_DevDash-ForgetPassword\\DevDash\\wwwroot\\",
+      "BasePath": "_content/DevDash",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": [
+    {
+      "Identity": "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-ForgetPassword\\BackEnd_DevDash-ForgetPassword\\DevDash\\wwwroot\\15d37af2-2434-4fac-be25-db196d77c246.pdf",
+      "SourceId": "DevDash",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-ForgetPassword\\BackEnd_DevDash-ForgetPassword\\DevDash\\wwwroot\\",
+      "BasePath": "_content/DevDash",
+      "RelativePath": "15d37af2-2434-4fac-be25-db196d77c246#[.{fingerprint}]?.pdf",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "3ywskofz1t",
+      "Integrity": "NcbxWfDeBCGvgJO4gYT0UA+su/I3jVrtFgJ0D9LVgnI=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\15d37af2-2434-4fac-be25-db196d77c246.pdf"
+    },
+    {
+      "Identity": "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-ForgetPassword\\BackEnd_DevDash-ForgetPassword\\DevDash\\wwwroot\\1b317b9d-699e-4ec3-8f73-9c63bba9e70d.pdf",
+      "SourceId": "DevDash",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-ForgetPassword\\BackEnd_DevDash-ForgetPassword\\DevDash\\wwwroot\\",
+      "BasePath": "_content/DevDash",
+      "RelativePath": "1b317b9d-699e-4ec3-8f73-9c63bba9e70d#[.{fingerprint}]?.pdf",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "vt8w7c64el",
+      "Integrity": "TZRALW4rpsTMPK8fD3Ap7s4EtmNms6/KWZUGylrzmIw=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\1b317b9d-699e-4ec3-8f73-9c63bba9e70d.pdf"
+    },
+    {
+      "Identity": "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-ForgetPassword\\BackEnd_DevDash-ForgetPassword\\DevDash\\wwwroot\\3563d6d1-5da1-485d-b520-29b1e84b5229.pdf",
+      "SourceId": "DevDash",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-ForgetPassword\\BackEnd_DevDash-ForgetPassword\\DevDash\\wwwroot\\",
+      "BasePath": "_content/DevDash",
+      "RelativePath": "3563d6d1-5da1-485d-b520-29b1e84b5229#[.{fingerprint}]?.pdf",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "vt8w7c64el",
+      "Integrity": "TZRALW4rpsTMPK8fD3Ap7s4EtmNms6/KWZUGylrzmIw=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\3563d6d1-5da1-485d-b520-29b1e84b5229.pdf"
+    },
+    {
+      "Identity": "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-ForgetPassword\\BackEnd_DevDash-ForgetPassword\\DevDash\\wwwroot\\373fd7cb-483e-4f08-ac50-c8cce1fd3e72.pdf",
+      "SourceId": "DevDash",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-ForgetPassword\\BackEnd_DevDash-ForgetPassword\\DevDash\\wwwroot\\",
+      "BasePath": "_content/DevDash",
+      "RelativePath": "373fd7cb-483e-4f08-ac50-c8cce1fd3e72#[.{fingerprint}]?.pdf",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "yahiinumhx",
+      "Integrity": "Gpah3xLr9+1pWZVQUpOTPQWOISgrlgCZMOia+WeLm1o=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\373fd7cb-483e-4f08-ac50-c8cce1fd3e72.pdf"
+    },
+    {
+      "Identity": "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-ForgetPassword\\BackEnd_DevDash-ForgetPassword\\DevDash\\wwwroot\\6be5283f-f95b-4bfc-8ddd-dda827974256.docx",
+      "SourceId": "DevDash",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-ForgetPassword\\BackEnd_DevDash-ForgetPassword\\DevDash\\wwwroot\\",
+      "BasePath": "_content/DevDash",
+      "RelativePath": "6be5283f-f95b-4bfc-8ddd-dda827974256#[.{fingerprint}]?.docx",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "l7c94i74dv",
+      "Integrity": "790XCeKsW6Tm9Mj+RMRTabXNwdNH61jrZKdgxQqwQn8=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\6be5283f-f95b-4bfc-8ddd-dda827974256.docx"
+    },
+    {
+      "Identity": "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-ForgetPassword\\BackEnd_DevDash-ForgetPassword\\DevDash\\wwwroot\\ea096699-42b3-462c-bd16-ef710077ec74.pdf",
+      "SourceId": "DevDash",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-ForgetPassword\\BackEnd_DevDash-ForgetPassword\\DevDash\\wwwroot\\",
+      "BasePath": "_content/DevDash",
+      "RelativePath": "ea096699-42b3-462c-bd16-ef710077ec74#[.{fingerprint}]?.pdf",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "yahiinumhx",
+      "Integrity": "Gpah3xLr9+1pWZVQUpOTPQWOISgrlgCZMOia+WeLm1o=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\ea096699-42b3-462c-bd16-ef710077ec74.pdf"
+    }
+  ],
+  "Endpoints": [
+    {
+      "Route": "15d37af2-2434-4fac-be25-db196d77c246.3ywskofz1t.pdf",
+      "AssetFile": "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-ForgetPassword\\BackEnd_DevDash-ForgetPassword\\DevDash\\wwwroot\\15d37af2-2434-4fac-be25-db196d77c246.pdf",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "476829"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/pdf"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"NcbxWfDeBCGvgJO4gYT0UA+su/I3jVrtFgJ0D9LVgnI=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Tue, 22 Apr 2025 12:46:59 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "3ywskofz1t"
+        },
+        {
+          "Name": "label",
+          "Value": "15d37af2-2434-4fac-be25-db196d77c246.pdf"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-NcbxWfDeBCGvgJO4gYT0UA+su/I3jVrtFgJ0D9LVgnI="
+        }
+      ]
+    },
+    {
+      "Route": "15d37af2-2434-4fac-be25-db196d77c246.pdf",
+      "AssetFile": "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-ForgetPassword\\BackEnd_DevDash-ForgetPassword\\DevDash\\wwwroot\\15d37af2-2434-4fac-be25-db196d77c246.pdf",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "476829"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/pdf"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"NcbxWfDeBCGvgJO4gYT0UA+su/I3jVrtFgJ0D9LVgnI=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Tue, 22 Apr 2025 12:46:59 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-NcbxWfDeBCGvgJO4gYT0UA+su/I3jVrtFgJ0D9LVgnI="
+        }
+      ]
+    },
+    {
+      "Route": "1b317b9d-699e-4ec3-8f73-9c63bba9e70d.pdf",
+      "AssetFile": "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-ForgetPassword\\BackEnd_DevDash-ForgetPassword\\DevDash\\wwwroot\\1b317b9d-699e-4ec3-8f73-9c63bba9e70d.pdf",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "308097"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/pdf"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"TZRALW4rpsTMPK8fD3Ap7s4EtmNms6/KWZUGylrzmIw=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Tue, 22 Apr 2025 12:46:59 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-TZRALW4rpsTMPK8fD3Ap7s4EtmNms6/KWZUGylrzmIw="
+        }
+      ]
+    },
+    {
+      "Route": "1b317b9d-699e-4ec3-8f73-9c63bba9e70d.vt8w7c64el.pdf",
+      "AssetFile": "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-ForgetPassword\\BackEnd_DevDash-ForgetPassword\\DevDash\\wwwroot\\1b317b9d-699e-4ec3-8f73-9c63bba9e70d.pdf",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "308097"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/pdf"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"TZRALW4rpsTMPK8fD3Ap7s4EtmNms6/KWZUGylrzmIw=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Tue, 22 Apr 2025 12:46:59 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "vt8w7c64el"
+        },
+        {
+          "Name": "label",
+          "Value": "1b317b9d-699e-4ec3-8f73-9c63bba9e70d.pdf"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-TZRALW4rpsTMPK8fD3Ap7s4EtmNms6/KWZUGylrzmIw="
+        }
+      ]
+    },
+    {
+      "Route": "3563d6d1-5da1-485d-b520-29b1e84b5229.pdf",
+      "AssetFile": "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-ForgetPassword\\BackEnd_DevDash-ForgetPassword\\DevDash\\wwwroot\\3563d6d1-5da1-485d-b520-29b1e84b5229.pdf",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "308097"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/pdf"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"TZRALW4rpsTMPK8fD3Ap7s4EtmNms6/KWZUGylrzmIw=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Tue, 22 Apr 2025 12:46:59 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-TZRALW4rpsTMPK8fD3Ap7s4EtmNms6/KWZUGylrzmIw="
+        }
+      ]
+    },
+    {
+      "Route": "3563d6d1-5da1-485d-b520-29b1e84b5229.vt8w7c64el.pdf",
+      "AssetFile": "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-ForgetPassword\\BackEnd_DevDash-ForgetPassword\\DevDash\\wwwroot\\3563d6d1-5da1-485d-b520-29b1e84b5229.pdf",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "308097"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/pdf"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"TZRALW4rpsTMPK8fD3Ap7s4EtmNms6/KWZUGylrzmIw=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Tue, 22 Apr 2025 12:46:59 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "vt8w7c64el"
+        },
+        {
+          "Name": "label",
+          "Value": "3563d6d1-5da1-485d-b520-29b1e84b5229.pdf"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-TZRALW4rpsTMPK8fD3Ap7s4EtmNms6/KWZUGylrzmIw="
+        }
+      ]
+    },
+    {
+      "Route": "373fd7cb-483e-4f08-ac50-c8cce1fd3e72.pdf",
+      "AssetFile": "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-ForgetPassword\\BackEnd_DevDash-ForgetPassword\\DevDash\\wwwroot\\373fd7cb-483e-4f08-ac50-c8cce1fd3e72.pdf",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "422701"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/pdf"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"Gpah3xLr9+1pWZVQUpOTPQWOISgrlgCZMOia+WeLm1o=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Tue, 22 Apr 2025 12:46:59 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-Gpah3xLr9+1pWZVQUpOTPQWOISgrlgCZMOia+WeLm1o="
+        }
+      ]
+    },
+    {
+      "Route": "373fd7cb-483e-4f08-ac50-c8cce1fd3e72.yahiinumhx.pdf",
+      "AssetFile": "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-ForgetPassword\\BackEnd_DevDash-ForgetPassword\\DevDash\\wwwroot\\373fd7cb-483e-4f08-ac50-c8cce1fd3e72.pdf",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "422701"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/pdf"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"Gpah3xLr9+1pWZVQUpOTPQWOISgrlgCZMOia+WeLm1o=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Tue, 22 Apr 2025 12:46:59 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "yahiinumhx"
+        },
+        {
+          "Name": "label",
+          "Value": "373fd7cb-483e-4f08-ac50-c8cce1fd3e72.pdf"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-Gpah3xLr9+1pWZVQUpOTPQWOISgrlgCZMOia+WeLm1o="
+        }
+      ]
+    },
+    {
+      "Route": "6be5283f-f95b-4bfc-8ddd-dda827974256.docx",
+      "AssetFile": "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-ForgetPassword\\BackEnd_DevDash-ForgetPassword\\DevDash\\wwwroot\\6be5283f-f95b-4bfc-8ddd-dda827974256.docx",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "817061"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"790XCeKsW6Tm9Mj+RMRTabXNwdNH61jrZKdgxQqwQn8=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Tue, 22 Apr 2025 12:46:59 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-790XCeKsW6Tm9Mj+RMRTabXNwdNH61jrZKdgxQqwQn8="
+        }
+      ]
+    },
+    {
+      "Route": "6be5283f-f95b-4bfc-8ddd-dda827974256.l7c94i74dv.docx",
+      "AssetFile": "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-ForgetPassword\\BackEnd_DevDash-ForgetPassword\\DevDash\\wwwroot\\6be5283f-f95b-4bfc-8ddd-dda827974256.docx",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "817061"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"790XCeKsW6Tm9Mj+RMRTabXNwdNH61jrZKdgxQqwQn8=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Tue, 22 Apr 2025 12:46:59 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "l7c94i74dv"
+        },
+        {
+          "Name": "label",
+          "Value": "6be5283f-f95b-4bfc-8ddd-dda827974256.docx"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-790XCeKsW6Tm9Mj+RMRTabXNwdNH61jrZKdgxQqwQn8="
+        }
+      ]
+    },
+    {
+      "Route": "ea096699-42b3-462c-bd16-ef710077ec74.pdf",
+      "AssetFile": "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-ForgetPassword\\BackEnd_DevDash-ForgetPassword\\DevDash\\wwwroot\\ea096699-42b3-462c-bd16-ef710077ec74.pdf",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "422701"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/pdf"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"Gpah3xLr9+1pWZVQUpOTPQWOISgrlgCZMOia+WeLm1o=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Tue, 22 Apr 2025 12:46:59 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-Gpah3xLr9+1pWZVQUpOTPQWOISgrlgCZMOia+WeLm1o="
+        }
+      ]
+    },
+    {
+      "Route": "ea096699-42b3-462c-bd16-ef710077ec74.yahiinumhx.pdf",
+      "AssetFile": "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-ForgetPassword\\BackEnd_DevDash-ForgetPassword\\DevDash\\wwwroot\\ea096699-42b3-462c-bd16-ef710077ec74.pdf",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "422701"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/pdf"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"Gpah3xLr9+1pWZVQUpOTPQWOISgrlgCZMOia+WeLm1o=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Tue, 22 Apr 2025 12:46:59 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "yahiinumhx"
+        },
+        {
+          "Name": "label",
+          "Value": "ea096699-42b3-462c-bd16-ef710077ec74.pdf"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-Gpah3xLr9+1pWZVQUpOTPQWOISgrlgCZMOia+WeLm1o="
+        }
+      ]
+    }
+  ]
+}

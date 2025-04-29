@@ -1150,3 +1150,4 @@ C:\Users\Nvidia\Downloads\BackEnd_DevDash-ForgetPassword\BackEnd_DevDash-ForgetP
 C:\Users\Nvidia\Downloads\BackEnd_DevDash-ForgetPassword\BackEnd_DevDash-ForgetPassword\DevDash\obj\Release\net8.0\DevDash.pdb
 C:\Users\Nvidia\Downloads\BackEnd_DevDash-ForgetPassword\BackEnd_DevDash-ForgetPassword\DevDash\obj\Release\net8.0\DevDash.genruntimeconfig.cache
 C:\Users\Nvidia\Downloads\BackEnd_DevDash-ForgetPassword\BackEnd_DevDash-ForgetPassword\DevDash\obj\Release\net8.0\ref\DevDash.dll
+C:\Users\Nvidia\Downloads\BackEnd_DevDash-ForgetPassword\BackEnd_DevDash-ForgetPassword\DevDash\obj\Release\net8.0\DevDash.sourcelink.json

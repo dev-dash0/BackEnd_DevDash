@@ -51,7 +51,7 @@ namespace DevDash.Controllers
 
                 var tenants = await _dbTenant.GetAllAsync(
                     filter: t =>
-                        (t.OwnerID == userId || t.UserTenants.Any(ut => ut.UserId == userId)) &&
+                        (t.UserTenants.Any(ut => ut.UserId == userId)) &&
                         (string.IsNullOrEmpty(search) ||
                          t.Name.ToLower().Contains(search.ToLower()) ||
                          t.Keywords.ToLower().Contains(search.ToLower())),

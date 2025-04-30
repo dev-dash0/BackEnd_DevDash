@@ -105,7 +105,7 @@ namespace DevDash.Controllers
                     Issues = await _dbissue.GetAllAsync(
                         filter: i => i.SprintId == sprintId &&
                                      (string.IsNullOrEmpty(search) || i.Labels.ToLower().Contains(search.ToLower())),
-                        includeProperties: "CreatedBy",
+                        includeProperties: "CreatedBy,AssignedUsers",
                         pageSize: pageSize,
                         pageNumber: pageNumber
                     );
@@ -116,7 +116,7 @@ namespace DevDash.Controllers
                         filter: i => i.SprintId == sprintId &&
                                      i.IssueAssignedUsers.Any(iau => iau.UserId == int.Parse(userId)) &&
                                      (string.IsNullOrEmpty(search) || i.Labels.ToLower().Contains(search.ToLower())),
-                        includeProperties: "CreatedBy",
+                        includeProperties: "CreatedBy,AssignedUsers",
                         pageSize: pageSize,
                         pageNumber: pageNumber
                     );

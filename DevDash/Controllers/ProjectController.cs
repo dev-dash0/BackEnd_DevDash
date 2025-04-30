@@ -2,6 +2,7 @@
 using Azure;
 using DevDash.DTO.Project;
 using DevDash.DTO.Tenant;
+using DevDash.DTO.User;
 using DevDash.DTO.UserProject;
 using DevDash.DTO.UserTenant;
 using DevDash.model;
@@ -73,9 +74,10 @@ namespace DevDash.Controllers
                         (string.IsNullOrEmpty(search) ||
                          p.Name.ToLower().Contains(search.ToLower()) ||
                          p.Priority.ToLower().Contains(search.ToLower())),
-                    includeProperties: "Creator,UserProjects,Tenant",
+                    includeProperties: "Creator,UserProjects,Tenant,Tenant.JoinedUsers",
                     pageSize: pageSize,
                     pageNumber: pageNumber
+                   
                 );
 
                 var projectDtos = _mapper.Map<List<ProjectDTO>>(projects);
@@ -85,6 +87,9 @@ namespace DevDash.Controllers
                     if (userTenant != null)
                     {
                         projectDto.Tenant.Role = userTenant.Role;
+                        
+
+
                     }
                 }
 

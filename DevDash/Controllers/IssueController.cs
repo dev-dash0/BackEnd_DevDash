@@ -147,7 +147,7 @@ namespace DevDash.Controllers
 
                 var issue = await _dbissue.GetAsync(
                     i => i.Id == id,
-                    includeProperties: "CreatedBy"
+                    includeProperties: "CreatedBy,AssignedUsers"
                 );
 
                 if (issue == null)

@@ -100,32 +100,17 @@ namespace DevDash.Controllers
 
                 IEnumerable<Issue> Issues = new List<Issue>();
 
-                if (userProject.Role == "Admin" || userProject.Role == "Project Manager")
-                {
-                    Issues = await _dbissue.GetAllAsync(
-                        filter: i => i.SprintId == sprintId &&
-                                     (string.IsNullOrEmpty(search) || i.Labels.ToLower().Contains(search.ToLower())),
-                        includeProperties: "CreatedBy,AssignedUsers",
-                        pageSize: pageSize,
-                        pageNumber: pageNumber
-                    );
-                }
-                else if (userProject.Role == "Developer")
-                {
-                    Issues = await _dbissue.GetAllAsync(
-                        filter: i => i.SprintId == sprintId &&
-                                     i.IssueAssignedUsers.Any(iau => iau.UserId == int.Parse(userId)) &&
-                                     (string.IsNullOrEmpty(search) || i.Labels.ToLower().Contains(search.ToLower())),
-                        includeProperties: "CreatedBy,AssignedUsers",
-                        pageSize: pageSize,
-                        pageNumber: pageNumber
-                    );
-                }
-                else
-                {
-                    return Forbid();
-                }
 
+                Issues = await _dbissue.GetAllAsync(
+                    filter: i => i.SprintId == sprintId &&
+                                 (string.IsNullOrEmpty(search) || i.Labels.ToLower().Contains(search.ToLower())),
+                    includeProperties: "CreatedBy,AssignedUsers",
+                    pageSize: pageSize,
+                    pageNumber: pageNumber
+                );
+                 
+                
+               
                 _response.Result = _mapper.Map<List<IssueDTO>>(Issues);
                 _response.StatusCode = HttpStatusCode.OK;
                 return Ok(_response);

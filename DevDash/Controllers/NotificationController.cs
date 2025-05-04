@@ -15,15 +15,16 @@ namespace DevDash.Controllers
     {
         private readonly INotificationRepository _notificationRepository;
         private APIResponse _response;
-
-        public NotificationController(INotificationRepository notificationRepository)
+        private readonly ITenantRepository _tenantRepository;
+        public NotificationController(INotificationRepository notificationRepository,ITenantRepository tenantRepository)
         {
             _notificationRepository = notificationRepository;
+            _tenantRepository = tenantRepository;
             _response = new APIResponse();
         }
 
         [HttpGet]
-        public async Task<ActionResult<APIResponse>> GetNotifications()
+        public async Task<ActionResult<APIResponse>> GetNotifications(string? search = null)
         {
             try
             {
@@ -36,9 +37,19 @@ namespace DevDash.Controllers
                     return Unauthorized(_response);
                 }
 
+              
+
+                // Get notifications
                 var notifications = await _notificationRepository.GetUserNotificationsAsync(int.Parse(userId));
-                _response.Result = notifications;
+
+                // Return both tenants and notifications
+                _response.Result = new
+                {
+                    Notifications = notifications,
+                    userId = int.Parse(userId)
+                };
                 _response.StatusCode = HttpStatusCode.OK;
+                _response.IsSuccess = true;
                 return Ok(_response);
             }
             catch (Exception ex)
@@ -46,9 +57,10 @@ namespace DevDash.Controllers
                 _response.IsSuccess = false;
                 _response.StatusCode = HttpStatusCode.InternalServerError;
                 _response.ErrorMessages = new List<string> { ex.Message };
-                return StatusCode(500, _response);
+                return StatusCode((int)HttpStatusCode.InternalServerError, _response);
             }
         }
+
 
         [HttpPost("{notificationId}/mark-as-read")]
         public async Task<ActionResult<APIResponse>> MarkAsRead(int notificationId)

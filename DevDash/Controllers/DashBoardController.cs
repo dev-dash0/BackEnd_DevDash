@@ -123,7 +123,7 @@ namespace DevDash.Controllers
                     return BadRequest("This User no found in this project");
 
                 }
-                _response.Result = await _DashBoardRepository.GetAnalysisProjectsSummaryAsync(Projectid, parsedUserId);
+                _response.Result = await _DashBoardRepository.GetAnalysisProjectsSummaryAsync(Projectid, parsedUserId, "Tenant,Creator,UserProjects.User");
                 _response.IsSuccess = true;
                 return _response;
             }

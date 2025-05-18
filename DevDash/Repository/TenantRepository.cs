@@ -21,7 +21,7 @@ namespace DevDash.Repository
             await _db.SaveChangesAsync();
 
             await _notificationRepository.SendNotificationAsync(ownerId,
-                $"You have created a new Tenant: {tenant.Name}");
+                $"You have created a new Tenant: {tenant.Name}",null);
 
             return tenant;
         }
@@ -32,7 +32,7 @@ namespace DevDash.Repository
             await _db.SaveChangesAsync();
 
             await _notificationRepository.SendNotificationAsync(userId,
-                $"Tenant '{tenant.Name}' has been updated successfully.");
+                $"Tenant '{tenant.Name}' has been updated successfully.", null);
 
             return tenant;
         }
@@ -74,7 +74,7 @@ namespace DevDash.Repository
             await _db.SaveChangesAsync();
 
             await _notificationRepository.SendNotificationAsync(userId,
-                $"Tenant '{tenant.Name}' has been deleted.");
+                $"Tenant '{tenant.Name}' has been deleted.", null);
         }
     }
 }

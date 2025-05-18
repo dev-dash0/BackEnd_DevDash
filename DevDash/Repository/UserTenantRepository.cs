@@ -30,7 +30,7 @@ namespace DevDash.Repository
                 ? $"You have created a new Tenant: {tenant.Name}"
                 : $"You have joined a new Tenant: {tenant.Name}";
 
-            await _notificationRepository.SendNotificationAsync(userId, message);
+            await _notificationRepository.SendNotificationAsync(userId, message, null);
         }
 
         public async Task LeaveAsync(UserTenant entity, int userId)
@@ -59,7 +59,7 @@ namespace DevDash.Repository
                 ? $"Tenant '{tenant.Name}' has been removed successfully."
                 : $"You have left the Tenant: {tenant.Name}";
 
-            await _notificationRepository.SendNotificationAsync(userId, message);
+            await _notificationRepository.SendNotificationAsync(userId, message, null);
         }
     }
 }

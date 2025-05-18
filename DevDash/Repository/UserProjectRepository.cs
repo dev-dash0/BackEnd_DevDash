@@ -23,19 +23,25 @@ namespace DevDash.Repository
             Project? project = await _db.Projects.FirstOrDefaultAsync(p => p.Id == entity.ProjectId);
             if (project == null) return;
 
+            Tenant? tenant = await _db.Tenants.FirstOrDefaultAsync(p => p.Id == project.TenantId);
+            if (project == null) return;
+
             await _db.UserProjects.AddAsync(entity);
             await _db.SaveChangesAsync();
 
             string message = userId == project.CreatorId
-                ? $"You have created a new Project: {project.Name}"
-                : $"You have joined a new Project: {project.Name}";
+                ? $"You have created a new Project: {project.Name} in Tenant {tenant.Name}"
+                : $"You have joined a new Project: {project.Name} in Tenant {tenant.Name}";
 
-            await _notificationRepository.SendNotificationAsync(userId, message);
+            await _notificationRepository.SendNotificationAsync(userId, message,null);
         }
 
         public async Task LeaveAsync(UserProject entity, int userId)
         {
             Project? project = await _db.Projects.FirstOrDefaultAsync(p => p.Id == entity.ProjectId);
+            if (project == null) return;
+
+            Tenant? tenant = await _db.Tenants.FirstOrDefaultAsync(p => p.Id == project.TenantId);
             if (project == null) return;
 
             var assignedIssues = await _db.IssueAssignedUsers
@@ -51,10 +57,10 @@ namespace DevDash.Repository
             await _db.SaveChangesAsync();
 
             string message = userId == project.CreatorId
-                ? $"Project: {project.Name} is Removed Successfully"
-                : $"You left the project: {project.Name}";
+                ? $"Project: {project.Name} in Tenant {tenant.Name} is Removed successfully"
+                : $"You left the project: {project.Name} in tenant {tenant.Name} successfully";
 
-            await _notificationRepository.SendNotificationAsync(userId, message);
+            await _notificationRepository.SendNotificationAsync(userId, message, null);
         }
     }
 }

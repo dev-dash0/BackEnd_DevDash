@@ -20,11 +20,17 @@ namespace DevDash.Repository
             Issue? issue = await _db.Issues.FirstOrDefaultAsync(i => i.Id == entity.IssueId);
             if (issue == null) return;
 
+            Project? project = await _db.Projects.FirstOrDefaultAsync(p => p.Id == issue.ProjectId);
+            if (project == null) return;
+
+            Tenant? tenant = await _db.Tenants.FirstOrDefaultAsync(p => p.Id == issue.TenantId);
+            if (project == null) return;
+
             await _db.IssueAssignedUsers.AddAsync(entity);
             await _db.SaveChangesAsync();
 
             await _notificationRepository.SendNotificationAsync(userId,
-                $"Issue: {issue.Title} is assigned to you");
+                $"Issue: {issue.Title} in tenant {tenant.Name} in project {project.Name} is assigned to you",issue.Id);
         }
 
         public async Task LeaveAsync(IssueAssignedUser entity, int userId)
@@ -36,7 +42,7 @@ namespace DevDash.Repository
             await _db.SaveChangesAsync();
 
             await _notificationRepository.SendNotificationAsync(userId,
-                $"You have left an Issue: {issue.Title}");
+                $"You have left an Issue: {issue.Title}",null);
         }
     }
 }

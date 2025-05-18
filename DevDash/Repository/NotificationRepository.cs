@@ -16,12 +16,13 @@ namespace DevDash.Repository
             _hubContext = hubContext;
         }
 
-        public async Task SendNotificationAsync(int userId, string message)
+        public async Task SendNotificationAsync(int userId, string message, int? issueId)
         {
             var notification = new Notification
             {
                 UserId = userId,
-                Message = message
+                Message = message,
+                IssueId = issueId
             };
 
             _context.Notifications.Add(notification);

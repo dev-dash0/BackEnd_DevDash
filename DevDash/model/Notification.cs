@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DevDash.model
@@ -19,7 +20,11 @@ namespace DevDash.model
         [Required(ErrorMessage = "CreatedAt is required.")]
         [DataType(DataType.DateTime)]
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-
         public bool IsRead { get; set; } = false;
+
+        public int? IssueId;
+        [ValidateNever]
+        [ForeignKey(nameof(IssueId))]
+        public Issue Issue { get; set; }
     }
 }

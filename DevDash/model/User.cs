@@ -16,6 +16,9 @@ namespace DevDash.model
         [StringLength(20, MinimumLength = 3)]
         public required string FirstName { get; set; }
 
+        
+        public int? personaltenantId { get; set; }
+
         [Required]
         [StringLength(20, MinimumLength = 3)]
         public required string LastName { get; set; }
@@ -72,5 +75,7 @@ namespace DevDash.model
 
         public ICollection<IssueAssignedUser>? IssueAssignedUsers { get; set; }
         public ICollection<Comment>? Comments { get; set; }
+        [ForeignKey(nameof(personaltenantId))]
+        public Tenant PersonalTenant { get; set; }
     }
 }

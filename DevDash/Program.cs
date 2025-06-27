@@ -135,6 +135,8 @@ namespace DevDash
 
             // ? Configure Swagger
             builder.Services.AddEndpointsApiExplorer();
+            builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
+            builder.Services.AddHttpClient();
             builder.Services.AddSwaggerGen(options =>
             {
                 options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme

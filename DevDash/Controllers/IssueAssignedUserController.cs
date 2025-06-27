@@ -68,7 +68,7 @@ namespace DevDash.Controllers
                     UserId = user.Id,
                     IssueId = issue.Id,
                 };
-
+                await _userRepository.SendEmail(user.Email,"You have an assigned Task", "You have an assigned Task");
                 await _issueAssignUserRepository.JoinAsync(issueAssignedUser,joinIssue.userId);
 
                 _response.IsSuccess = true;

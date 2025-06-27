@@ -18,6 +18,8 @@ using System.Net.Http;
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
 using Org.BouncyCastle.Crypto.Generators;
+using AutoMapper;
+using DevDash.DTO.Tenant;
 
 namespace DevDash.Controllers
 {
@@ -26,13 +28,16 @@ namespace DevDash.Controllers
     public class AccountController : ControllerBase
     {
         private readonly IUserRepository _userRepository;
+        private readonly ITenantRepository _tenantRepository;
+        private readonly IMapper _mapper;
         private readonly IConfiguration _config;
         private readonly AppDbContext _db;
 
-        public AccountController(IUserRepository userRepository, IConfiguration config, AppDbContext db)
+        public AccountController(IUserRepository userRepository,ITenantRepository tenantRepository,IMapper mapper, IConfiguration config, AppDbContext db)
         {
-
+            _mapper = mapper;
             _userRepository = userRepository;
+            _tenantRepository = tenantRepository;
             _config = config;
             _db = db;
         }
@@ -62,13 +67,22 @@ namespace DevDash.Controllers
             var existingUser = await _userRepository.GetAsync(u => u.Email == registerDTO.Email);
             if (existingUser != null)
                 return BadRequest(new { message = "Account is already registered" });
-
+           
             var user = await _userRepository.Register(registerDTO);
-
+            var tenant = new Tenant
+            {
+                Name = "My WorkSpace",
+                TenantCode = Guid.NewGuid().ToString().Substring(0, 8),
+                OwnerID = user.Id,
+            };
+            var tenantDto=_mapper.Map<TenantDTO>(tenant);
+            await _tenantRepository.CreateAsync(tenant);
+            await _tenantRepository.SaveAsync();
+            user.personaltenantId = tenant.Id;
             if (user == null)
                 return StatusCode(500, new { message = "User registration failed due to a server error" });
 
-            return Ok(new { message = "Registration successful", user });
+            return Ok(new { message = "Registration successful",User= user,Personal_Tenant=tenantDto});
         }
 
 

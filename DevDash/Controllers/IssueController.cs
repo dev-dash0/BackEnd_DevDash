@@ -426,7 +426,7 @@ namespace DevDash.Controllers
                 }
 
                 var userProject = await _dbUserProject.GetAsync(up => up.UserId == userId && up.ProjectId == issue.ProjectId);
-                if (userProject == null || (userProject.Role != "Admin" && userProject.Role != "Project Manager"))
+                if (userProject == null || (userProject.Role != "Admin" && userProject.Role != "Project Manager" && userProject.Role!= "Developer"))
                 {
                     _response.StatusCode = HttpStatusCode.Forbidden;
                     _response.ErrorMessages = new List<string> { "You do not have permission to update this issue" };

@@ -353,6 +353,45 @@ namespace DevDash.Repository
             response.Message = true;
             return _mapper.Map<StepResponseDTO>(response);
         }
+        public async Task<StepResponseDTO> SendEmail(string email, string subject, string content, string? heading = null)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null)
+            {
+                throw new Exception("User not found.");
+            }
+
+            string htmlTemplate = $@"
+        <div style='font-family:Arial,sans-serif; max-width:600px; margin:auto; padding:20px; border:1px solid #ddd; border-radius:8px;'>
+            <p style='font-size:16px;'>Hello {user.UserName},</p>
+            
+            {(string.IsNullOrEmpty(heading) ? "" : $"<h2 style='color:#333;'>{heading}</h2>")}
+
+            <div style='font-size:14px; margin-top:10px;'>
+                {content}
+            </div>
+
+            <p style='font-size:12px; color:#888; margin-top:20px;'>If you didn’t request this, you can safely ignore this email.</p>
+            <br/>
+            <p style='font-weight:bold;'>— DevDash Team</p>
+        </div>
+    ";
+
+            await _emailService.SendEmailAsync(new EmailBodyDTO
+            {
+                To = email,
+                Subject = subject,
+                Body = htmlTemplate
+            });
+
+            var response = new StepResponseDTO
+            {
+                Message = true
+            };
+
+            return response;
+        }
+
 
         public async Task<StepResponseDTO> VerifyToken(PasswordTokenDTO passwordTokenDTO)
         {

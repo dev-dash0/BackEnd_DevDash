@@ -246,6 +246,12 @@ public class AppDbContext : IdentityDbContext<User, IdentityRole<int>, int>
         .Property(p => p.CreatedAt)
         .HasDefaultValueSql("GETUTCDATE()");
 
+        modelBuilder.Entity<User>()
+        .HasOne(u => u.PersonalTenant)
+        .WithOne() 
+        .HasForeignKey<User>(u => u.personaltenantId)
+        .OnDelete(DeleteBehavior.Restrict);
+
         //modelBuilder.Entity<Integration>()
         //    .HasIndex(i => i.Name)
         //    .IsUnique(); // Ensure integration name is unique.

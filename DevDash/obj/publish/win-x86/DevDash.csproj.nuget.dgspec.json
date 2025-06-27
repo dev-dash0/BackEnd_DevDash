@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-ForgetPassword\\BackEnd_DevDash-ForgetPassword\\DevDash\\DevDash.csproj": {}
+    "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-UpdateNotification\\BackEnd_DevDash-UpdateNotification\\DevDash\\DevDash.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-ForgetPassword\\BackEnd_DevDash-ForgetPassword\\DevDash\\DevDash.csproj": {
+    "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-UpdateNotification\\BackEnd_DevDash-UpdateNotification\\DevDash\\DevDash.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-ForgetPassword\\BackEnd_DevDash-ForgetPassword\\DevDash\\DevDash.csproj",
+        "projectUniqueName": "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-UpdateNotification\\BackEnd_DevDash-UpdateNotification\\DevDash\\DevDash.csproj",
         "projectName": "DevDash",
-        "projectPath": "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-ForgetPassword\\BackEnd_DevDash-ForgetPassword\\DevDash\\DevDash.csproj",
+        "projectPath": "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-UpdateNotification\\BackEnd_DevDash-UpdateNotification\\DevDash\\DevDash.csproj",
         "packagesPath": "C:\\Users\\Nvidia\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-ForgetPassword\\BackEnd_DevDash-ForgetPassword\\DevDash\\obj\\publish\\win-x86\\",
+        "outputPath": "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-UpdateNotification\\BackEnd_DevDash-UpdateNotification\\DevDash\\obj\\publish\\win-x86\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Nvidia\\AppData\\Roaming\\NuGet\\NuGet.Config"

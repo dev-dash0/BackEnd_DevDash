@@ -157,7 +157,7 @@ namespace DevDash.Controllers
 
                 var project = await _dbProject.GetAsync(
                     filter: p => p.Id == projectId,
-                    includeProperties: "Creator,UserProjects,Tenant,Tenant.JoinedUsers"
+                    includeProperties: "Creator,UserProjects,Tenant,Tenant.JoinedUsers,Sprints"
                 );
 
                 if (project == null)

@@ -1,4 +1,5 @@
-﻿using DevDash.DTO.Tenant;
+﻿using DevDash.DTO.Sprint;
+using DevDash.DTO.Tenant;
 using DevDash.DTO.User;
 using DevDash.DTO.UserProject;
 using System.ComponentModel.DataAnnotations;
@@ -28,5 +29,7 @@ namespace DevDash.DTO.Project
         public TenantDTO Tenant { get; set; }
         public UserDTO Creator { get; set; }
         public ICollection<UserProjectDTO>? UserProjects { get; set; }
+        public ICollection<SprintDTO>? Sprints { get; set; }
+
     }
 }

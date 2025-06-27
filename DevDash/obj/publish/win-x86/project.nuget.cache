@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "xorx/+cmwYs=",
+  "dgSpecHash": "8lWhIGPDr6o=",
   "success": true,
-  "projectFilePath": "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-ForgetPassword\\BackEnd_DevDash-ForgetPassword\\DevDash\\DevDash.csproj",
+  "projectFilePath": "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-UpdateNotification\\BackEnd_DevDash-UpdateNotification\\DevDash\\DevDash.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Nvidia\\.nuget\\packages\\automapper\\12.0.0\\automapper.12.0.0.nupkg.sha512",
     "C:\\Users\\Nvidia\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\12.0.0\\automapper.extensions.microsoft.dependencyinjection.12.0.0.nupkg.sha512",

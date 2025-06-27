@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <parameters>
   <parameter name="IIS Web Application Name" description="" value="site18839" tags="IisApp">
-    <parameterEntry kind="ProviderPath" scope="IisApp" match="^C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-ForgetPassword\\BackEnd_DevDash-ForgetPassword\\DevDash\\obj\\Release\\net8\.0\\win-x86\\PubTmp\\Out\\$" />
+    <parameterEntry kind="ProviderPath" scope="IisApp" match="^C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-UpdateNotification\\BackEnd_DevDash-UpdateNotification\\DevDash\\obj\\Release\\net8\.0\\win-x86\\PubTmp\\Out\\$" />
   </parameter>
 </parameters>

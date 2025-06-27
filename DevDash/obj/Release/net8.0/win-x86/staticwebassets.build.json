@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "84ncaOnOXgfaMGNkFf605Bn0LgV9V9pEuUCG59ffikQ=",
+  "Hash": "zZ9yNPOM4Et3631tP1w3wFgV7DVnQmdYaBdI/8xcmUw=",
   "Source": "DevDash",
   "BasePath": "_content/DevDash",
   "Mode": "Default",
@@ -10,17 +10,17 @@
     {
       "Name": "DevDash\\wwwroot",
       "Source": "DevDash",
-      "ContentRoot": "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-ForgetPassword\\BackEnd_DevDash-ForgetPassword\\DevDash\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-UpdateNotification\\BackEnd_DevDash-UpdateNotification\\DevDash\\wwwroot\\",
       "BasePath": "_content/DevDash",
       "Pattern": "**"
     }
   ],
   "Assets": [
     {
-      "Identity": "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-ForgetPassword\\BackEnd_DevDash-ForgetPassword\\DevDash\\wwwroot\\15d37af2-2434-4fac-be25-db196d77c246.pdf",
+      "Identity": "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-UpdateNotification\\BackEnd_DevDash-UpdateNotification\\DevDash\\wwwroot\\15d37af2-2434-4fac-be25-db196d77c246.pdf",
       "SourceId": "DevDash",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-ForgetPassword\\BackEnd_DevDash-ForgetPassword\\DevDash\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-UpdateNotification\\BackEnd_DevDash-UpdateNotification\\DevDash\\wwwroot\\",
       "BasePath": "_content/DevDash",
       "RelativePath": "15d37af2-2434-4fac-be25-db196d77c246#[.{fingerprint}]?.pdf",
       "AssetKind": "All",
@@ -38,10 +38,10 @@
       "OriginalItemSpec": "wwwroot\\15d37af2-2434-4fac-be25-db196d77c246.pdf"
     },
     {
-      "Identity": "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-ForgetPassword\\BackEnd_DevDash-ForgetPassword\\DevDash\\wwwroot\\1b317b9d-699e-4ec3-8f73-9c63bba9e70d.pdf",
+      "Identity": "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-UpdateNotification\\BackEnd_DevDash-UpdateNotification\\DevDash\\wwwroot\\1b317b9d-699e-4ec3-8f73-9c63bba9e70d.pdf",
       "SourceId": "DevDash",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-ForgetPassword\\BackEnd_DevDash-ForgetPassword\\DevDash\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-UpdateNotification\\BackEnd_DevDash-UpdateNotification\\DevDash\\wwwroot\\",
       "BasePath": "_content/DevDash",
       "RelativePath": "1b317b9d-699e-4ec3-8f73-9c63bba9e70d#[.{fingerprint}]?.pdf",
       "AssetKind": "All",
@@ -59,10 +59,10 @@
       "OriginalItemSpec": "wwwroot\\1b317b9d-699e-4ec3-8f73-9c63bba9e70d.pdf"
     },
     {
-      "Identity": "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-ForgetPassword\\BackEnd_DevDash-ForgetPassword\\DevDash\\wwwroot\\3563d6d1-5da1-485d-b520-29b1e84b5229.pdf",
+      "Identity": "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-UpdateNotification\\BackEnd_DevDash-UpdateNotification\\DevDash\\wwwroot\\3563d6d1-5da1-485d-b520-29b1e84b5229.pdf",
       "SourceId": "DevDash",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-ForgetPassword\\BackEnd_DevDash-ForgetPassword\\DevDash\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-UpdateNotification\\BackEnd_DevDash-UpdateNotification\\DevDash\\wwwroot\\",
       "BasePath": "_content/DevDash",
       "RelativePath": "3563d6d1-5da1-485d-b520-29b1e84b5229#[.{fingerprint}]?.pdf",
       "AssetKind": "All",
@@ -80,10 +80,10 @@
       "OriginalItemSpec": "wwwroot\\3563d6d1-5da1-485d-b520-29b1e84b5229.pdf"
     },
     {
-      "Identity": "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-ForgetPassword\\BackEnd_DevDash-ForgetPassword\\DevDash\\wwwroot\\373fd7cb-483e-4f08-ac50-c8cce1fd3e72.pdf",
+      "Identity": "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-UpdateNotification\\BackEnd_DevDash-UpdateNotification\\DevDash\\wwwroot\\373fd7cb-483e-4f08-ac50-c8cce1fd3e72.pdf",
       "SourceId": "DevDash",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-ForgetPassword\\BackEnd_DevDash-ForgetPassword\\DevDash\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-UpdateNotification\\BackEnd_DevDash-UpdateNotification\\DevDash\\wwwroot\\",
       "BasePath": "_content/DevDash",
       "RelativePath": "373fd7cb-483e-4f08-ac50-c8cce1fd3e72#[.{fingerprint}]?.pdf",
       "AssetKind": "All",
@@ -101,10 +101,10 @@
       "OriginalItemSpec": "wwwroot\\373fd7cb-483e-4f08-ac50-c8cce1fd3e72.pdf"
     },
     {
-      "Identity": "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-ForgetPassword\\BackEnd_DevDash-ForgetPassword\\DevDash\\wwwroot\\6be5283f-f95b-4bfc-8ddd-dda827974256.docx",
+      "Identity": "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-UpdateNotification\\BackEnd_DevDash-UpdateNotification\\DevDash\\wwwroot\\6be5283f-f95b-4bfc-8ddd-dda827974256.docx",
       "SourceId": "DevDash",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-ForgetPassword\\BackEnd_DevDash-ForgetPassword\\DevDash\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-UpdateNotification\\BackEnd_DevDash-UpdateNotification\\DevDash\\wwwroot\\",
       "BasePath": "_content/DevDash",
       "RelativePath": "6be5283f-f95b-4bfc-8ddd-dda827974256#[.{fingerprint}]?.docx",
       "AssetKind": "All",
@@ -122,10 +122,10 @@
       "OriginalItemSpec": "wwwroot\\6be5283f-f95b-4bfc-8ddd-dda827974256.docx"
     },
     {
-      "Identity": "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-ForgetPassword\\BackEnd_DevDash-ForgetPassword\\DevDash\\wwwroot\\ea096699-42b3-462c-bd16-ef710077ec74.pdf",
+      "Identity": "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-UpdateNotification\\BackEnd_DevDash-UpdateNotification\\DevDash\\wwwroot\\ea096699-42b3-462c-bd16-ef710077ec74.pdf",
       "SourceId": "DevDash",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-ForgetPassword\\BackEnd_DevDash-ForgetPassword\\DevDash\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-UpdateNotification\\BackEnd_DevDash-UpdateNotification\\DevDash\\wwwroot\\",
       "BasePath": "_content/DevDash",
       "RelativePath": "ea096699-42b3-462c-bd16-ef710077ec74#[.{fingerprint}]?.pdf",
       "AssetKind": "All",
@@ -146,7 +146,7 @@
   "Endpoints": [
     {
       "Route": "15d37af2-2434-4fac-be25-db196d77c246.3ywskofz1t.pdf",
-      "AssetFile": "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-ForgetPassword\\BackEnd_DevDash-ForgetPassword\\DevDash\\wwwroot\\15d37af2-2434-4fac-be25-db196d77c246.pdf",
+      "AssetFile": "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-UpdateNotification\\BackEnd_DevDash-UpdateNotification\\DevDash\\wwwroot\\15d37af2-2434-4fac-be25-db196d77c246.pdf",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -167,7 +167,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 22 Apr 2025 12:46:59 GMT"
+          "Value": "Sun, 18 May 2025 00:30:45 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -191,7 +191,7 @@
     },
     {
       "Route": "15d37af2-2434-4fac-be25-db196d77c246.pdf",
-      "AssetFile": "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-ForgetPassword\\BackEnd_DevDash-ForgetPassword\\DevDash\\wwwroot\\15d37af2-2434-4fac-be25-db196d77c246.pdf",
+      "AssetFile": "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-UpdateNotification\\BackEnd_DevDash-UpdateNotification\\DevDash\\wwwroot\\15d37af2-2434-4fac-be25-db196d77c246.pdf",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -212,7 +212,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 22 Apr 2025 12:46:59 GMT"
+          "Value": "Sun, 18 May 2025 00:30:45 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -228,7 +228,7 @@
     },
     {
       "Route": "1b317b9d-699e-4ec3-8f73-9c63bba9e70d.pdf",
-      "AssetFile": "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-ForgetPassword\\BackEnd_DevDash-ForgetPassword\\DevDash\\wwwroot\\1b317b9d-699e-4ec3-8f73-9c63bba9e70d.pdf",
+      "AssetFile": "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-UpdateNotification\\BackEnd_DevDash-UpdateNotification\\DevDash\\wwwroot\\1b317b9d-699e-4ec3-8f73-9c63bba9e70d.pdf",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -249,7 +249,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 22 Apr 2025 12:46:59 GMT"
+          "Value": "Sun, 18 May 2025 00:30:45 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -265,7 +265,7 @@
     },
     {
       "Route": "1b317b9d-699e-4ec3-8f73-9c63bba9e70d.vt8w7c64el.pdf",
-      "AssetFile": "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-ForgetPassword\\BackEnd_DevDash-ForgetPassword\\DevDash\\wwwroot\\1b317b9d-699e-4ec3-8f73-9c63bba9e70d.pdf",
+      "AssetFile": "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-UpdateNotification\\BackEnd_DevDash-UpdateNotification\\DevDash\\wwwroot\\1b317b9d-699e-4ec3-8f73-9c63bba9e70d.pdf",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -286,7 +286,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 22 Apr 2025 12:46:59 GMT"
+          "Value": "Sun, 18 May 2025 00:30:45 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -310,7 +310,7 @@
     },
     {
       "Route": "3563d6d1-5da1-485d-b520-29b1e84b5229.pdf",
-      "AssetFile": "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-ForgetPassword\\BackEnd_DevDash-ForgetPassword\\DevDash\\wwwroot\\3563d6d1-5da1-485d-b520-29b1e84b5229.pdf",
+      "AssetFile": "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-UpdateNotification\\BackEnd_DevDash-UpdateNotification\\DevDash\\wwwroot\\3563d6d1-5da1-485d-b520-29b1e84b5229.pdf",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -331,7 +331,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 22 Apr 2025 12:46:59 GMT"
+          "Value": "Sun, 18 May 2025 00:30:45 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -347,7 +347,7 @@
     },
     {
       "Route": "3563d6d1-5da1-485d-b520-29b1e84b5229.vt8w7c64el.pdf",
-      "AssetFile": "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-ForgetPassword\\BackEnd_DevDash-ForgetPassword\\DevDash\\wwwroot\\3563d6d1-5da1-485d-b520-29b1e84b5229.pdf",
+      "AssetFile": "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-UpdateNotification\\BackEnd_DevDash-UpdateNotification\\DevDash\\wwwroot\\3563d6d1-5da1-485d-b520-29b1e84b5229.pdf",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -368,7 +368,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 22 Apr 2025 12:46:59 GMT"
+          "Value": "Sun, 18 May 2025 00:30:45 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -392,7 +392,7 @@
     },
     {
       "Route": "373fd7cb-483e-4f08-ac50-c8cce1fd3e72.pdf",
-      "AssetFile": "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-ForgetPassword\\BackEnd_DevDash-ForgetPassword\\DevDash\\wwwroot\\373fd7cb-483e-4f08-ac50-c8cce1fd3e72.pdf",
+      "AssetFile": "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-UpdateNotification\\BackEnd_DevDash-UpdateNotification\\DevDash\\wwwroot\\373fd7cb-483e-4f08-ac50-c8cce1fd3e72.pdf",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -413,7 +413,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 22 Apr 2025 12:46:59 GMT"
+          "Value": "Sun, 18 May 2025 00:30:45 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -429,7 +429,7 @@
     },
     {
       "Route": "373fd7cb-483e-4f08-ac50-c8cce1fd3e72.yahiinumhx.pdf",
-      "AssetFile": "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-ForgetPassword\\BackEnd_DevDash-ForgetPassword\\DevDash\\wwwroot\\373fd7cb-483e-4f08-ac50-c8cce1fd3e72.pdf",
+      "AssetFile": "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-UpdateNotification\\BackEnd_DevDash-UpdateNotification\\DevDash\\wwwroot\\373fd7cb-483e-4f08-ac50-c8cce1fd3e72.pdf",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -450,7 +450,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 22 Apr 2025 12:46:59 GMT"
+          "Value": "Sun, 18 May 2025 00:30:45 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -474,7 +474,7 @@
     },
     {
       "Route": "6be5283f-f95b-4bfc-8ddd-dda827974256.docx",
-      "AssetFile": "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-ForgetPassword\\BackEnd_DevDash-ForgetPassword\\DevDash\\wwwroot\\6be5283f-f95b-4bfc-8ddd-dda827974256.docx",
+      "AssetFile": "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-UpdateNotification\\BackEnd_DevDash-UpdateNotification\\DevDash\\wwwroot\\6be5283f-f95b-4bfc-8ddd-dda827974256.docx",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -495,7 +495,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 22 Apr 2025 12:46:59 GMT"
+          "Value": "Sun, 18 May 2025 00:30:45 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -511,7 +511,7 @@
     },
     {
       "Route": "6be5283f-f95b-4bfc-8ddd-dda827974256.l7c94i74dv.docx",
-      "AssetFile": "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-ForgetPassword\\BackEnd_DevDash-ForgetPassword\\DevDash\\wwwroot\\6be5283f-f95b-4bfc-8ddd-dda827974256.docx",
+      "AssetFile": "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-UpdateNotification\\BackEnd_DevDash-UpdateNotification\\DevDash\\wwwroot\\6be5283f-f95b-4bfc-8ddd-dda827974256.docx",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -532,7 +532,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 22 Apr 2025 12:46:59 GMT"
+          "Value": "Sun, 18 May 2025 00:30:45 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -556,7 +556,7 @@
     },
     {
       "Route": "ea096699-42b3-462c-bd16-ef710077ec74.pdf",
-      "AssetFile": "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-ForgetPassword\\BackEnd_DevDash-ForgetPassword\\DevDash\\wwwroot\\ea096699-42b3-462c-bd16-ef710077ec74.pdf",
+      "AssetFile": "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-UpdateNotification\\BackEnd_DevDash-UpdateNotification\\DevDash\\wwwroot\\ea096699-42b3-462c-bd16-ef710077ec74.pdf",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -577,7 +577,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 22 Apr 2025 12:46:59 GMT"
+          "Value": "Sun, 18 May 2025 00:30:45 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -593,7 +593,7 @@
     },
     {
       "Route": "ea096699-42b3-462c-bd16-ef710077ec74.yahiinumhx.pdf",
-      "AssetFile": "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-ForgetPassword\\BackEnd_DevDash-ForgetPassword\\DevDash\\wwwroot\\ea096699-42b3-462c-bd16-ef710077ec74.pdf",
+      "AssetFile": "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-UpdateNotification\\BackEnd_DevDash-UpdateNotification\\DevDash\\wwwroot\\ea096699-42b3-462c-bd16-ef710077ec74.pdf",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -614,7 +614,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 22 Apr 2025 12:46:59 GMT"
+          "Value": "Sun, 18 May 2025 00:30:45 GMT"
         },
         {
           "Name": "Cache-Control",

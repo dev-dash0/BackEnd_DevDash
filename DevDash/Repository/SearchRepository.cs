@@ -35,6 +35,7 @@ namespace DevDash.Repository
                 )
                 .Select(issue => new
                 {
+                    issue.Id,
                     issue.Title,
                     issue.Status,
                     issue.Priority,

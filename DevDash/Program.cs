@@ -1,13 +1,15 @@
-using DevDash.Middleware;
+﻿using DevDash.Middleware;
 using DevDash.model;
 using DevDash.Repository;
 using DevDash.Repository.IRepository;
+using DevDash.Services;
+using Hangfire;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.OpenApi.Models;
 using System.Text;
 
@@ -27,8 +29,8 @@ namespace DevDash
                     {
                         policy.AllowAnyOrigin()
                              .AllowAnyMethod()
-                              .AllowAnyHeader()
-                               .WithExposedHeaders("Location"); ;
+                             .AllowAnyHeader()
+                             .WithExposedHeaders("Location");
                     });
             });
 
@@ -65,75 +67,73 @@ namespace DevDash
             builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
             builder.Services.AddScoped<IPasswordRecoveryRepository, PasswordRecoveryRepository>();
 
-            // ? Register AutoMapper
+         
             builder.Services.AddAutoMapper(typeof(MappingConfig));
 
-            // ? Configure Identity
+          
             builder.Services.AddIdentity<User, IdentityRole<int>>()
                 .AddEntityFrameworkStores<AppDbContext>()
                 .AddDefaultTokenProviders();
 
-
-            // ? Configure JWT Authentication
+          
             builder.Services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             })
-  .AddJwtBearer(options =>
-  {
-      options.RequireHttpsMetadata = false;
-      options.SaveToken = true;
-      options.TokenValidationParameters = new TokenValidationParameters
-      {
-          ValidateIssuer = true,
-          ValidateAudience = true,
-          ValidateLifetime = true,
-          ValidateIssuerSigningKey = true,
-          ValidIssuer = builder.Configuration["JWT:ValidIssuer"],
-          ValidAudience = builder.Configuration["JWT:ValidAudience"],
-          IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Secret"]))
-      };
-      options.Events = new JwtBearerEvents
-      {
-          OnMessageReceived = context =>
-          {
-              var accessToken = context.Request.Query["access_token"];
-              var path = context.HttpContext.Request.Path;
+            .AddJwtBearer(options =>
+            {
+                options.RequireHttpsMetadata = false;
+                options.SaveToken = true;
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = builder.Configuration["JWT:ValidIssuer"],
+                    ValidAudience = builder.Configuration["JWT:ValidAudience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Secret"]))
+                };
+                options.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = context =>
+                    {
+                        var accessToken = context.Request.Query["access_token"];
+                        var path = context.HttpContext.Request.Path;
 
-              if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/notificationHub"))
-              {
-                  context.Token = accessToken;
-              }
+                        if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/notificationHub"))
+                        {
+                            context.Token = accessToken;
+                        }
 
-              return Task.CompletedTask;
-          },
-          OnAuthenticationFailed = context =>
-          {
-              Console.WriteLine($"Authentication failed: {context.Exception.Message}");
-              return Task.CompletedTask;
-          }
-      };
-  })
-  .AddGoogle(googleOptions =>
-  {
-      IConfiguration GoogleAuthSection = builder.Configuration.GetSection("Authentication:Google");
-      googleOptions.ClientId = GoogleAuthSection["ClientId"];
-      googleOptions.ClientSecret = GoogleAuthSection["ClientSecret"];
-  });
+                        return Task.CompletedTask;
+                    },
+                    OnAuthenticationFailed = context =>
+                    {
+                        Console.WriteLine($"Authentication failed: {context.Exception.Message}");
+                        return Task.CompletedTask;
+                    }
+                };
+            })
+            .AddGoogle(googleOptions =>
+            {
+                IConfiguration GoogleAuthSection = builder.Configuration.GetSection("Authentication:Google");
+                googleOptions.ClientId = GoogleAuthSection["ClientId"];
+                googleOptions.ClientSecret = GoogleAuthSection["ClientSecret"];
+            });
 
-
-            // ? Enable Memory Caching & Token Blacklist Service
+          
             builder.Services.AddMemoryCache();
             builder.Services.AddSingleton<TokenBlacklistService>();
 
-            // ? Enable SignalR
+           
             builder.Services.AddSignalR(options =>
             {
                 options.EnableDetailedErrors = true;
             });
 
-            // ? Configure Swagger
+          
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
             builder.Services.AddHttpClient();
@@ -142,7 +142,7 @@ namespace DevDash
                 options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     Description =
-                        "JWT Authorization header using the Bearer scheme. \r\n\r\n " +
+                        "JWT Authorization header using the Bearer scheme.\r\n\r\n" +
                         "Enter 'Bearer' [space] and then your token in the text input below.\r\n\r\n" +
                         "Example: \"Bearer 12345abcdef\"",
                     Name = "Authorization",
@@ -151,26 +151,43 @@ namespace DevDash
                 });
                 options.AddSecurityRequirement(new OpenApiSecurityRequirement()
                 {
+                    {
+                        new OpenApiSecurityScheme
                         {
-                            new OpenApiSecurityScheme
+                            Reference = new OpenApiReference
                             {
-                                Reference = new OpenApiReference
-                                {
-                                    Type = ReferenceType.SecurityScheme,
-                                    Id = "Bearer"
-                                },
-                                Scheme = "oauth2",
-                                Name = "Bearer",
-                                In = ParameterLocation.Header
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
                             },
-                            new List<string>()
-                        }
+                            Scheme = "oauth2",
+                            Name = "Bearer",
+                            In = ParameterLocation.Header
+                        },
+                        new List<string>()
+                    }
                 });
             });
 
+         
+            builder.Services.AddHangfire(config =>
+                config.UseSqlServerStorage(builder.Configuration.GetConnectionString("cs")));
+            builder.Services.AddHangfireServer();
+            builder.Services.AddScoped<IssueStateUpdater>();
+
             var app = builder.Build();
 
-            // ? Middleware for handling invalid models manually in .NET 8
+          
+            using (var scope = app.Services.CreateScope())
+            {
+                var recurringJobs = scope.ServiceProvider.GetRequiredService<IRecurringJobManager>();
+                recurringJobs.AddOrUpdate<IssueStateUpdater>(
+                    "cancel-overdue-issues",
+                    updater => updater.UpdateIssueStateAsync(),
+                    "0 16 * * *" 
+                );
+            }
+
+          
             app.Use(async (context, next) =>
             {
                 await next();
@@ -183,7 +200,7 @@ namespace DevDash
                 }
             });
 
-            // ? Configure Middleware
+          
             if (app.Environment.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -194,34 +211,30 @@ namespace DevDash
             {
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
-
-                // ? Enable Swagger in production securely
                 app.UseSwagger();
                 app.UseSwaggerUI(options =>
                 {
                     options.SwaggerEndpoint("/swagger/v1/swagger.json", "DevDash API v1");
-                    options.RoutePrefix = string.Empty; // Make Swagger available at the root URL
+                    options.RoutePrefix = string.Empty;
                 });
             }
-
-         
 
             app.UseWebSockets();
             app.UseStaticFiles();
             app.UseRouting();
-            //app.UseHttpsRedirection();
+
             app.UseCors("AllowAll");
 
-            // ? Ensure token processing is done first
             app.UseMiddleware<TokenBlacklistMiddleware>();
 
             app.UseAuthentication();
             app.UseAuthorization();
 
-            // ? Enable SignalR notifications
-            app.MapHub<NotificationHub>("/notificationHub");
+            app.UseHangfireDashboard(); 
 
+            app.MapHub<NotificationHub>("/notificationHub");
             app.MapControllers();
+
             app.Run();
         }
     }

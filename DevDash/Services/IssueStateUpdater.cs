@@ -16,11 +16,11 @@ namespace DevDash.Services
             var today = DateTime.Today;
 
             var issues = await _context.Issues
-                .Where(i => i.Deadline.HasValue && i.Deadline < today && i.Status != "Cancelled")
+                .Where(i => i.Deadline.HasValue && i.Deadline < today && i.Status != "Canceled")
                 .ToListAsync();
             foreach (var issue in issues)
             {
-                issue.Status = "Cancelled";
+                issue.Status = "Canceled";
                 _context.Issues.Update(issue);
                 
             }

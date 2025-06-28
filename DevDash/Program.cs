@@ -183,11 +183,37 @@ namespace DevDash
                 recurringJobs.AddOrUpdate<IssueStateUpdater>(
                     "cancel-overdue-issues",
                     updater => updater.UpdateIssueStateAsync(),
-                    "0 16 * * *" 
+                    "*/1 * * * *",
+                    TimeZoneInfo.Local
                 );
             }
 
-          
+            using (var scope = app.Services.CreateScope())
+            {
+                var recurringJobs = scope.ServiceProvider.GetRequiredService<IRecurringJobManager>();
+                recurringJobs.AddOrUpdate<SprintStateUpdater>(
+                    "cancel-overdue-Sprints",
+                    updater => updater.UpdateSprintStateAsync(),
+                    "*/1 * * * *",
+                    TimeZoneInfo.Local
+                );
+            }
+
+            using (var scope = app.Services.CreateScope())
+            {
+                var recurringJobs = scope.ServiceProvider.GetRequiredService<IRecurringJobManager>();
+                recurringJobs.AddOrUpdate<ProjectStateUpdater>(
+                    "cancel-overdue-Projects",
+                    updater => updater.UpdateProjectStateAsync(),
+                    "*/1 * * * *",
+                    TimeZoneInfo.Local
+                );
+            }
+
+
+
+
+
             app.Use(async (context, next) =>
             {
                 await next();

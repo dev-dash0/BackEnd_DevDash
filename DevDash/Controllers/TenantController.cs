@@ -122,6 +122,7 @@ namespace DevDash.Controllers
                     u => u.Id == tenantId,
                     includeProperties: "JoinedUsers,Owner"
                 );
+               
 
                 if (tenant == null)
                 {
@@ -130,8 +131,11 @@ namespace DevDash.Controllers
                     _response.ErrorMessages = new List<string> { "Tenant not found" };
                     return NotFound(_response);
                 }
+             
+              
 
                 var tenantDto = _mapper.Map<TenantDTO>(tenant);
+                tenantDto.Role = userTenant?.Role;
                 _response.Result = tenantDto;
                 _response.StatusCode = HttpStatusCode.OK;
                 _response.IsSuccess = true;

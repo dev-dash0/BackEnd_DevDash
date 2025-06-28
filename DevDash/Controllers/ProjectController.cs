@@ -154,7 +154,7 @@ namespace DevDash.Controllers
                     _response.ErrorMessages = new List<string> { "You do not have permission to view this project." };
                     return Unauthorized(_response);
                 }
-
+                
                 var project = await _dbProject.GetAsync(
                     filter: p => p.Id == projectId,
                     includeProperties: "Creator,UserProjects,Tenant,Tenant.JoinedUsers,Sprints"
@@ -167,10 +167,10 @@ namespace DevDash.Controllers
                     _response.ErrorMessages = new List<string> { "Project not found." };
                     return NotFound(_response);
                 }
-
+                var usertenant = await _dbUserTenant.GetAsync(ut => ut.UserId == userId && ut.TenantId == userProject.Project.TenantId);
                 var projectDto = _mapper.Map<ProjectDTO>(project);
-              
-
+                projectDto.Tenant.Role = usertenant?.Role ;
+                projectDto.Role = userProject?.Role;
                 _response.Result = projectDto;
                 _response.IsSuccess = true;
                 _response.StatusCode = HttpStatusCode.OK;

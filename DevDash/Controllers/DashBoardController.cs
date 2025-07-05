@@ -202,6 +202,7 @@ namespace DevDash.Controllers
                 //    return BadRequest("This user is not assigned to this tenant.");
                 //}
                 var issues = await _DashBoardRepository.GetIssuesDashboard(parsedUserId);
+                
                 _response.Result = issues;
                 _response.IsSuccess = true;
                 return Ok(_response);

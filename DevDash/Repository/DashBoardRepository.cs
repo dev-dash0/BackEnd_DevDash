@@ -129,6 +129,11 @@ namespace DevDash.Repository
               Status = issue.Status,
               Priority = issue.Priority,
               ProjectId = issue.ProjectId,
+              Deadline = issue.Deadline,
+              TenantName = _context.Tenants
+                  .Where(t => t.Id == issue.TenantId)
+                  .Select(t => t.Name)
+                  .FirstOrDefault() ?? "Unknown",
               ProjectName = _context.Projects
                   .Where(p => p.Id == issue.ProjectId)
                   .Select(p => p.Name)

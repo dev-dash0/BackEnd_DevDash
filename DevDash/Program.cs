@@ -176,7 +176,7 @@ namespace DevDash
 
             var app = builder.Build();
 
-          
+
             using (var scope = app.Services.CreateScope())
             {
                 var recurringJobs = scope.ServiceProvider.GetRequiredService<IRecurringJobManager>();

@@ -10,5 +10,9 @@ namespace DevDash.Repository.IRepository
 
         Task LeaveAsync(UserProject entity, int userId);
 
+        Task InviteByEmailAsync(string email, int projectId, string role);
+
+        Task AcceptInvitationAsync(string email, int userId);
+
     }
 }

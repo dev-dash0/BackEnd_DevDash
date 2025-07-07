@@ -1,15 +1,9 @@
 ﻿using AutoMapper;
-using Azure;
-using DevDash.DTO;
-using DevDash.DTO.Tenant;
 using DevDash.DTO.UserProject;
-using DevDash.DTO.UserTenant;
 using DevDash.model;
 using DevDash.Repository.IRepository;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System.Net;
 using System.Security.Claims;
 
@@ -20,135 +14,179 @@ namespace DevDash.Controllers
     [Authorize]
     public class UserProjectController : ControllerBase
     {
-        private ITenantRepository _tenant;
-        private IProjectRepository _project;
-        private IUserRepository _user;
-        private IUserProjectRepository _userProject;
-        private IUserTenantRepository _userTenant;
+        private readonly IUserProjectRepository _userProjectRepository;
+        private readonly ITenantRepository _tenantRepository;
+        private readonly IProjectRepository _projectRepository;
+        private readonly IUserRepository _userRepository;
+        private readonly IUserTenantRepository _userTenantRepository;
         private readonly IMapper _mapper;
-        private APIResponse _response;
+        private readonly APIResponse _response = new();
 
-        public UserProjectController(IUserProjectRepository userProject, ITenantRepository tenant,
-            IUserRepository user, IMapper mapper, IProjectRepository project, IUserTenantRepository userTenant)
+        public UserProjectController(
+            IUserProjectRepository userProjectRepository,
+            ITenantRepository tenantRepository,
+            IUserRepository userRepository,
+            IMapper mapper,
+            IProjectRepository projectRepository,
+            IUserTenantRepository userTenantRepository)
         {
-            this._response = new APIResponse();
-            _tenant = tenant;
-            _project = project;
+            _userProjectRepository = userProjectRepository;
+            _tenantRepository = tenantRepository;
+            _userRepository = userRepository;
             _mapper = mapper;
-            _user = user;
-            _userProject = userProject;
-            _userTenant = userTenant;
+            _projectRepository = projectRepository;
+            _userTenantRepository = userTenantRepository;
         }
 
-        [HttpPost]
-        public async Task<ActionResult<APIResponse>> JoinProject([FromQuery] string projectCode)
+        [HttpPost("join")]
+        public async Task<ActionResult<APIResponse>> JoinProject([FromBody] JoinProjectDTO dto)
         {
             try
             {
-                var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-                if (string.IsNullOrEmpty(userId))
-                    return Unauthorized(new { message = "Invalid token" });
+                var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+                var user = await _userRepository.GetAsync(u => u.Id == userId);
+                if (user == null)
+                {
+                    _response.IsSuccess = false;
+                    _response.ErrorMessages.Add("User not found.");
+                    return Unauthorized(_response);
+                }
 
-                var user = await _user.GetAsync(u => u.Id == int.Parse(userId));
-
-
-                var project = await _project.GetAsync(p => p.ProjectCode == projectCode);
+                var project = await _projectRepository.GetAsync(p => p.ProjectCode == dto.ProjectCode);
                 if (project == null)
                 {
-                    ModelState.AddModelError("ErrorMessages", "Tenant Code is Invalid!");
-                    return BadRequest(ModelState);
+                    _response.IsSuccess = false;
+                    _response.ErrorMessages.Add("Invalid project code.");
+                    return BadRequest(_response);
                 }
 
-                var tenant = await _tenant.GetAsync(t => t.Id == project.TenantId);
-
-                //check if this user found on this tenant 
-
-                var userTenant = await _userTenant.GetAsync(ut => ut.UserId == user.Id && ut.TenantId == tenant.Id);
-                if (userTenant == null)
+                var tenant = await _tenantRepository.GetAsync(t => t.Id == project.TenantId);
+                if (tenant == null)
                 {
-                    ModelState.AddModelError("ErrorMessages", $"User Should Join Tenant First before Join Project");
-                    return BadRequest(ModelState);
+                    _response.IsSuccess = false;
+                    _response.ErrorMessages.Add("Tenant associated with this project does not exist.");
+                    return BadRequest(_response);
                 }
 
-
-                var existingUserProject = await _userProject
-                    .GetAsync(ut => ut.UserId == user.Id && ut.ProjectId == project.Id);
-
-                if (existingUserProject != null)
+                var isUserInTenant = await _userTenantRepository.GetAsync(ut => ut.UserId == user.Id && ut.TenantId == tenant.Id);
+                if (isUserInTenant == null)
                 {
-                    ModelState.AddModelError("ErrorMessages", "User is already a member in this Project!");
-                    return BadRequest(ModelState);
+                    _response.IsSuccess = false;
+                    _response.ErrorMessages.Add("You must join the tenant before joining the project.");
+                    return BadRequest(_response);
                 }
 
-                UserProjectDTO userProjectDTO = new()
+                var isUserInProject = await _userProjectRepository.GetAsync(up => up.UserId == user.Id && up.ProjectId == project.Id);
+                if (isUserInProject != null)
+                {
+                    _response.IsSuccess = false;
+                    _response.ErrorMessages.Add("You are already a member of this project.");
+                    return BadRequest(_response);
+                }
+
+                var userProject = new UserProject
                 {
                     UserId = user.Id,
                     ProjectId = project.Id,
                     Role = "Developer",
                     JoinedDate = DateTime.Now,
+                    User = user,
+                    Project = project
                 };
 
-                UserProject userProject = _mapper.Map<UserProject>(userProjectDTO);
-                await _userProject.JoinAsync(userProject,int.Parse(userId));
-
-                _response.Result = userProjectDTO;
+                await _userProjectRepository.JoinAsync(userProject, user.Id);
+                _response.Result = _mapper.Map<UserProjectDTO>(userProject);
                 _response.StatusCode = HttpStatusCode.Created;
-                return _response;
+                return Ok(_response);
             }
             catch (Exception ex)
             {
                 _response.IsSuccess = false;
-                _response.ErrorMessages = new List<string> { ex.ToString() };
+                _response.ErrorMessages.Add(ex.Message);
+                return StatusCode(500, _response);
             }
-            return _response;
         }
 
-        [HttpDelete("{projectId:int}", Name = "LeaveProject")]
-        public async Task<ActionResult<APIResponse>> LeaveProject([FromRoute] int projectId )
+        [HttpPost("invite")]
+        public async Task<ActionResult<APIResponse>> InviteUserToProject([FromBody] InviteToProjectDto dto)
         {
             try
             {
-                var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-                if (string.IsNullOrEmpty(userId))
-                {
-                    return Unauthorized(new { message = "Invalid token" });
-                }
+                await _userProjectRepository.InviteByEmailAsync(dto.Email, dto.ProjectId, dto.Role);
 
-                var user = await _user.GetAsync(u => u.Id == int.Parse(userId));
-                if (user == null)
-                {
-                    ModelState.AddModelError("ErrorMessages", "User ID is Invalid!");
-                    return BadRequest(ModelState);
-                }
-
-                var project = await _project.GetAsync(p => p.Id == projectId);
-                if (project == null)
-                {
-                    ModelState.AddModelError("ErrorMessages", "project ID  is Invalid!");
-                    return BadRequest(ModelState);
-                }
-
-                var existingUserProject = await _userProject
-                    .GetAsync(ut => ut.UserId == user.Id && ut.ProjectId == project.Id);
-
-                if (existingUserProject == null)
-                {
-                    ModelState.AddModelError("ErrorMessages", $"User already not found in this Project!");
-                    return BadRequest(ModelState);
-                }
-                
-                await _userProject.LeaveAsync(existingUserProject,int.Parse(userId));
-                _response.StatusCode = HttpStatusCode.NoContent;
-                return _response;
+                _response.Result = $"Invitation sent to {dto.Email}";
+                _response.StatusCode = HttpStatusCode.OK;
+                return Ok(_response);
             }
             catch (Exception ex)
             {
                 _response.IsSuccess = false;
-                _response.ErrorMessages = new List<string> { ex.ToString() };
+                _response.ErrorMessages.Add(ex.Message);
+                return BadRequest(_response);
             }
-            return _response;
         }
 
+        [HttpPost("accept")]
+        public async Task<ActionResult<APIResponse>> AcceptProjectInvitation()
+        {
+            try
+            {
+                var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+                var user = await _userRepository.GetAsync(u => u.Id == userId);
+                if (user == null)
+                {
+                    _response.IsSuccess = false;
+                    _response.ErrorMessages.Add("User not found.");
+                    return Unauthorized(_response);
+                }
 
+                await _userProjectRepository.AcceptInvitationAsync(user.Email, userId);
+
+                _response.Result = "Project invitation accepted successfully.";
+                _response.StatusCode = HttpStatusCode.OK;
+                return Ok(_response);
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.ErrorMessages.Add(ex.Message);
+                return BadRequest(_response);
+            }
+        }
+
+        [HttpDelete("{projectId:int}")]
+        public async Task<ActionResult<APIResponse>> LeaveProject(int projectId)
+        {
+            try
+            {
+                var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+                var user = await _userRepository.GetAsync(u => u.Id == userId);
+                if (user == null)
+                {
+                    _response.IsSuccess = false;
+                    _response.ErrorMessages.Add("User not found.");
+                    return Unauthorized(_response);
+                }
+
+                var userProject = await _userProjectRepository.GetAsync(up => up.UserId == user.Id && up.ProjectId == projectId);
+                if (userProject == null)
+                {
+                    _response.IsSuccess = false;
+                    _response.ErrorMessages.Add("You are not a member of this project.");
+                    return BadRequest(_response);
+                }
+
+                await _userProjectRepository.LeaveAsync(userProject, user.Id);
+                _response.Result = "Left the project successfully.";
+                _response.StatusCode = HttpStatusCode.NoContent;
+                return Ok(_response);
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.ErrorMessages.Add(ex.Message);
+                return StatusCode(500, _response);
+            }
+        }
     }
 }

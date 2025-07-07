@@ -1,13 +1,9 @@
 ﻿using AutoMapper;
-using Azure;
-using DevDash.DTO.Tenant;
 using DevDash.DTO.UserTenant;
 using DevDash.model;
 using DevDash.Repository.IRepository;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System.Net;
 using System.Security.Claims;
 
@@ -18,122 +14,156 @@ namespace DevDash.Controllers
     [Authorize]
     public class UserTenantController : ControllerBase
     {
-        private IUserTenantRepository _userTenantRepository;
-        private ITenantRepository _tenantRepository;
-        private IUserRepository _userRepository;
+        private readonly IUserTenantRepository _userTenantRepository;
+        private readonly ITenantRepository _tenantRepository;
+        private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
-        private APIResponse _response;
+        private readonly APIResponse _response = new();
 
         public UserTenantController(ITenantRepository tenantRepository, IUserRepository userRepository,
-             IMapper mapper, IUserTenantRepository userTenantRepository)
+            IMapper mapper, IUserTenantRepository userTenantRepository)
         {
             _tenantRepository = tenantRepository;
             _userRepository = userRepository;
             _mapper = mapper;
-            this._response = new APIResponse();
             _userTenantRepository = userTenantRepository;
         }
 
-        [HttpPost]
-        public async Task<ActionResult<APIResponse>> JoinTenant([FromQuery]string tenantCode)
+        [HttpPost("join")]
+        public async Task<ActionResult<APIResponse>> JoinTenant([FromBody] JoinTenantDTO dto)
         {
             try
             {
-                var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 var user = await _userRepository.GetAsync(u => u.Id == int.Parse(userId));
                 if (user == null)
                 {
-                    ModelState.AddModelError("ErrorMessages", "User ID is Invalid!");
-                    return BadRequest(ModelState);
+                    _response.IsSuccess = false;
+                    _response.ErrorMessages.Add("User not found.");
+                    return Unauthorized(_response);
                 }
 
-                var tenant = await _tenantRepository.GetAsync(t => t.TenantCode == tenantCode);
+                var tenant = await _tenantRepository.GetAsync(t => t.TenantCode == dto.TenantCode);
                 if (tenant == null)
                 {
-                    ModelState.AddModelError("ErrorMessages", "Tenant Code is Invalid!");
-                    return BadRequest(ModelState);
+                    _response.IsSuccess = false;
+                    _response.ErrorMessages.Add("Invalid tenant code.");
+                    return BadRequest(_response);
                 }
 
-                var existingUserTenant = await _userTenantRepository
-                    .GetAsync(ut => ut.UserId == user.Id && ut.TenantId == tenant.Id);
-
-                if (existingUserTenant != null)
+                var alreadyJoined = await _userTenantRepository.GetAsync(ut => ut.UserId == user.Id && ut.TenantId == tenant.Id);
+                if (alreadyJoined != null)
                 {
-                    ModelState.AddModelError("ErrorMessages", "User is already a member of this Tenant!");
-                    return BadRequest(ModelState);
+                    _response.IsSuccess = false;
+                    _response.ErrorMessages.Add("User already joined this tenant.");
+                    return BadRequest(_response);
                 }
 
-                UserTenantDTO userTenantDTO = new()
+                var userTenant = new UserTenant
                 {
                     UserId = user.Id,
                     TenantId = tenant.Id,
                     Role = "Developer",
                     JoinedDate = DateTime.Now,
+                    User = user,
+                    Tenant = tenant
                 };
-                UserTenant userTenant = _mapper.Map<UserTenant>(userTenantDTO);
-                await _userTenantRepository.JoinAsync(userTenant,int.Parse(userId));
 
-                _response.Result = userTenantDTO;
+                await _userTenantRepository.JoinAsync(userTenant, user.Id);
+
+                _response.Result = _mapper.Map<UserTenantDTO>(userTenant);
                 _response.StatusCode = HttpStatusCode.Created;
-                return _response;
-            }
-            catch (Exception ex)
-            {
-                _response.IsSuccess = false;
-                _response.ErrorMessages = new List<string> { ex.ToString() };
-            }
-            return _response;
-        }
-
-        [HttpDelete("{tenantId:int}", Name = "LeaveTenant")]
-        public async Task<ActionResult<APIResponse>> LeaveTenant([FromRoute] int tenantId)
-        {
-            try
-            {
-                var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-
-                var user = await _userRepository.GetAsync(u => u.Id == int.Parse(userId));
-                if (user == null)
-                {
-                    ModelState.AddModelError("ErrorMessages", "User ID is Invalid!");
-                    return BadRequest(ModelState);
-                }
-
-                var tenant = await _tenantRepository.GetAsync(t => t.Id == tenantId);
-                if (tenant == null)
-                {
-                    ModelState.AddModelError("ErrorMessages", "Tenant Code is Invalid!");
-                    return BadRequest(ModelState);
-                }
-
-                var existingUserTenant = await _userTenantRepository
-                    .GetAsync(ut => ut.UserId == user.Id && ut.TenantId == tenant.Id);
-
-                if (existingUserTenant == null)
-                {
-                    ModelState.AddModelError("ErrorMessages", "User is already out of this Tenant!");
-                    return BadRequest(ModelState);
-                }
-
-                
-                await _userTenantRepository.LeaveAsync(existingUserTenant,int.Parse(userId));
-
-
-                _response.StatusCode = HttpStatusCode.NoContent;
-                _response.IsSuccess = true;
                 return Ok(_response);
             }
             catch (Exception ex)
             {
                 _response.IsSuccess = false;
-                _response.ErrorMessages = new List<string> { ex.ToString() };
+                _response.ErrorMessages.Add(ex.Message);
+                return StatusCode(500, _response);
             }
-            return _response;
         }
 
+        [HttpPost("invite")]
+        public async Task<ActionResult<APIResponse>> InviteUserToTenant([FromBody] InviteToTenantDto dto)
+        {
+            try
+            {
+                await _userTenantRepository.InviteByEmailAsync(dto.Email, dto.TenantId, dto.Role);
 
+                _response.Result = $"Invitation sent to {dto.Email}";
+                _response.StatusCode = HttpStatusCode.OK;
+                return Ok(_response);
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.ErrorMessages.Add(ex.Message);
+                return BadRequest(_response);
+            }
+        }
 
+        [HttpPost("accept")]
+        public async Task<ActionResult<APIResponse>> AcceptTenantInvitation()
+        {
+            try
+            {
+                var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+                var user = await _userRepository.GetAsync(u => u.Id == userId);
+                if (user == null)
+                {
+                    _response.IsSuccess = false;
+                    _response.ErrorMessages.Add("User not found.");
+                    return Unauthorized(_response);
+                }
 
+                await _userTenantRepository.AcceptInvitationAsync(user.Email, userId);
+
+                _response.Result = "Invitation accepted successfully.";
+                _response.StatusCode = HttpStatusCode.OK;
+                return Ok(_response);
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.ErrorMessages.Add(ex.Message);
+                return BadRequest(_response);
+            }
+        }
+
+        [HttpDelete("{tenantId:int}")]
+        public async Task<ActionResult<APIResponse>> LeaveTenant(int tenantId)
+        {
+            try
+            {
+                var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+                var user = await _userRepository.GetAsync(u => u.Id == userId);
+                if (user == null)
+                {
+                    _response.IsSuccess = false;
+                    _response.ErrorMessages.Add("User not found.");
+                    return Unauthorized(_response);
+                }
+
+                var userTenant = await _userTenantRepository.GetAsync(ut => ut.UserId == user.Id && ut.TenantId == tenantId);
+                if (userTenant == null)
+                {
+                    _response.IsSuccess = false;
+                    _response.ErrorMessages.Add("User is not part of this tenant.");
+                    return BadRequest(_response);
+                }
+
+                await _userTenantRepository.LeaveAsync(userTenant, user.Id);
+
+                _response.Result = "Left the tenant successfully.";
+                _response.StatusCode = HttpStatusCode.NoContent;
+                return Ok(_response);
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.ErrorMessages.Add(ex.Message);
+                return StatusCode(500, _response);
+            }
+        }
     }
 }

@@ -2,7 +2,6 @@
 {
     public class JoinTenantDTO
     {
-        public int UserId { get; set; }
-        public string TeanantCode { get; set; }
+        public string TenantCode { get; set; }
     }
 }

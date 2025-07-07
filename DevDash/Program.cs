@@ -12,6 +12,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
+using DevDash.Helpers;
+using DevDash.Services.IServices;
 
 namespace DevDash
 {
@@ -67,7 +69,8 @@ namespace DevDash
             builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
             builder.Services.AddScoped<IPasswordRecoveryRepository, PasswordRecoveryRepository>();
 
-         
+            builder.Services.AddScoped<IEmailService, EmailService>();
+
             builder.Services.AddAutoMapper(typeof(MappingConfig));
 
           
@@ -136,6 +139,8 @@ namespace DevDash
           
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
+            builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
+
             builder.Services.AddHttpClient();
             builder.Services.AddSwaggerGen(options =>
             {

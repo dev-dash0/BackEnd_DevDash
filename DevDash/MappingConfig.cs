@@ -68,8 +68,6 @@ namespace DevDash
             CreateMap<Project, ProjectDashBoardDTO>().ReverseMap();
             CreateMap<Issue, IssueDashBoardDTO>().ReverseMap();
 
-
-
         }
     }
 }

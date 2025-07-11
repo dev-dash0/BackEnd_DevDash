@@ -35,7 +35,7 @@ namespace DevDash.Repository
                     TotalProjects = 0,
                     CompletedProjects = 0,
                     ProjectsInProgress = 0,
-                    ProjectsOverdue = 0
+                    ProjectsPostponed = 0
                 };
             }
 
@@ -59,7 +59,7 @@ namespace DevDash.Repository
 
             var completedProjects = filteredProjects.Count(p => p.Status == "Completed");
             var projectsInProgress = filteredProjects.Count(p => p.Status == "Working on");
-            var projectsOverdue = filteredProjects.Count(p => p.Status == "Postponed");
+            var projectsPostponed = filteredProjects.Count(p => p.Status == "Postponed");
             var projectsWorkingon = filteredProjects.Count(p => p.Status == "Working on");
             var projectsCanceled = filteredProjects.Count(p => p.Status == "Canceled");
             var projectsPlanning = filteredProjects.Count(p => p.Status == "Planning");
@@ -70,7 +70,7 @@ namespace DevDash.Repository
 
 
             var totalProjects = completedProjects + projectsInProgress + 
-                projectsOverdue+projectsCanceled+projectsPlanning
+                projectsPostponed+projectsCanceled+projectsPlanning
                 + projectsWorkingon
                 ;
 
@@ -79,7 +79,12 @@ namespace DevDash.Repository
                 TotalProjects = totalProjects,
                 CompletedProjects = completedProjects,
                 ProjectsInProgress = projectsInProgress,
-                ProjectsOverdue = projectsOverdue+projectsCanceled
+                ProjectWorkingon = projectsWorkingon,
+                ProjectPlanning = projectsPlanning,
+                ProjectsPostponed = projectsPostponed,
+             
+                ProjectsCanceled = projectsCanceled,
+
             };
         }
 

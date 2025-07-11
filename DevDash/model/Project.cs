@@ -28,7 +28,7 @@ namespace DevDash.model
         [Required]
         [RegularExpression("Planning|Working on|Completed|Canceled|Postponed")]
         public string Status { get; set; } = string.Empty;
-
+       
         [Required]
         [RegularExpression("Low|Medium|High|Critical", ErrorMessage = "Invalid priority.")]
         public string Priority { get; set; } = string.Empty;

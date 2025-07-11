@@ -9,7 +9,12 @@ namespace DevDash.DTO.DashBoard
         //public int? TotalIssues { get; set; }
         public int? CompletedProjects { get; set; }
         public int? ProjectsInProgress { get; set; }
-        public int? ProjectsOverdue { get; set; }
+        public int? ProjectsPostponed { get; set; }
+        public int? ProjectsCanceled { get; set; }
+        public int? ProjectWorkingon  { get; set; }
+        public int? ProjectPlanning { get; set; }
+
+
         //public UserDTO Owner { get; set; }
         //[ValidateNever]
         //public ICollection<UserDTO>? JoinedUsers { get; set; }

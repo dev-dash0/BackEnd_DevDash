@@ -24,6 +24,10 @@ namespace DevDash.Repository
             var commentsToRemove = await _db.Comments.Where(u => u.IssueId == issue.Id).ToListAsync();
             _db.Comments.RemoveRange(commentsToRemove);
 
+            var notificationsToRemove = await _db.Notifications
+           .Where(n => n.IssueId == issue.Id)
+    .          ToListAsync();
+            _db.Notifications.RemoveRange(notificationsToRemove);
             var userAssignedIssuesToRemove = await _db.IssueAssignedUsers.Where(u => u.IssueId == issue.Id).ToListAsync();
             _db.IssueAssignedUsers.RemoveRange(userAssignedIssuesToRemove);
 

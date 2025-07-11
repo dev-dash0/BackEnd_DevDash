@@ -16,7 +16,7 @@ namespace DevDash.Services
             var today = DateTime.Today;
 
             var issues = await _context.Issues
-                .Where(i => i.Deadline.HasValue && i.Deadline < today && i.Status != "Canceled")
+                .Where(i => i.Deadline.HasValue && i.Deadline < today && i.Status != "Canceled" && i.Status!= "Reviewing")
                 .ToListAsync();
             foreach (var issue in issues)
             {
@@ -28,5 +28,26 @@ namespace DevDash.Services
 
 
         }
+
+        public async Task UpdateIssueAsync()
+        {
+
+
+            var today = DateTime.Today;
+
+            var issues = await _context.Issues
+                .Where(i => i.Deadline.HasValue && i.DeliveredDate < today && i.Status != "Reviewing")
+                .ToListAsync();
+            foreach (var issue in issues)
+            {
+                issue.Status = "Reviewing";
+                _context.Issues.Update(issue);
+
+            }
+            await _context.SaveChangesAsync();
+
+
+        }
     }
+
 }

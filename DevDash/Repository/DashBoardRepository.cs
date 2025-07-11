@@ -60,18 +60,26 @@ namespace DevDash.Repository
             var completedProjects = filteredProjects.Count(p => p.Status == "Completed");
             var projectsInProgress = filteredProjects.Count(p => p.Status == "Working on");
             var projectsOverdue = filteredProjects.Count(p => p.Status == "Postponed");
+            var projectsWorkingon = filteredProjects.Count(p => p.Status == "Working on");
+            var projectsCanceled = filteredProjects.Count(p => p.Status == "Canceled");
+            var projectsPlanning = filteredProjects.Count(p => p.Status == "Planning");
+            
 
 
 
 
-            var totalProjects = completedProjects + projectsInProgress + projectsOverdue;
+
+            var totalProjects = completedProjects + projectsInProgress + 
+                projectsOverdue+projectsCanceled+projectsPlanning
+                + projectsWorkingon
+                ;
 
             return new DashBoardTenantsDTO
             {
                 TotalProjects = totalProjects,
                 CompletedProjects = completedProjects,
                 ProjectsInProgress = projectsInProgress,
-                ProjectsOverdue = projectsOverdue
+                ProjectsOverdue = projectsOverdue+projectsCanceled
             };
         }
 

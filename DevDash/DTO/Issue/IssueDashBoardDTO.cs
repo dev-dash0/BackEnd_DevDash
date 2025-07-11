@@ -10,8 +10,6 @@ namespace DevDash.DTO.Issue
         [Required]
         [MaxLength(255)]
         public required string Title { get; set; }
-
-
         public int ProjectId { get; set; }
         public string? Description { get; set; }
         public required string Status { get; set; }

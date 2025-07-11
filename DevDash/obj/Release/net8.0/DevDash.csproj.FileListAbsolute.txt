@@ -1214,7 +1214,6 @@ C:\Users\Nvidia\Downloads\BackEnd_DevDash-UpdateNotification\BackEnd_DevDash-Upd
 C:\Users\Nvidia\Downloads\BackEnd_DevDash-UpdateNotification\BackEnd_DevDash-UpdateNotification\DevDash\bin\Release\net8.0\Microsoft.JSInterop.dll
 C:\Users\Nvidia\Downloads\BackEnd_DevDash-UpdateNotification\BackEnd_DevDash-UpdateNotification\DevDash\bin\Release\net8.0\Microsoft.OpenApi.dll
 C:\Users\Nvidia\Downloads\BackEnd_DevDash-UpdateNotification\BackEnd_DevDash-UpdateNotification\DevDash\bin\Release\net8.0\Microsoft.SqlServer.Server.dll
-C:\Users\Nvidia\Downloads\BackEnd_DevDash-UpdateNotification\BackEnd_DevDash-UpdateNotification\DevDash\bin\Release\net8.0\Microsoft.Win32.SystemEvents.dll
 C:\Users\Nvidia\Downloads\BackEnd_DevDash-UpdateNotification\BackEnd_DevDash-UpdateNotification\DevDash\bin\Release\net8.0\MimeKit.dll
 C:\Users\Nvidia\Downloads\BackEnd_DevDash-UpdateNotification\BackEnd_DevDash-UpdateNotification\DevDash\bin\Release\net8.0\Mono.TextTemplating.dll
 C:\Users\Nvidia\Downloads\BackEnd_DevDash-UpdateNotification\BackEnd_DevDash-UpdateNotification\DevDash\bin\Release\net8.0\NetcodeHub.Packages.Extensions.LocalStorage.dll
@@ -1232,7 +1231,6 @@ C:\Users\Nvidia\Downloads\BackEnd_DevDash-UpdateNotification\BackEnd_DevDash-Upd
 C:\Users\Nvidia\Downloads\BackEnd_DevDash-UpdateNotification\BackEnd_DevDash-UpdateNotification\DevDash\bin\Release\net8.0\System.Composition.TypedParts.dll
 C:\Users\Nvidia\Downloads\BackEnd_DevDash-UpdateNotification\BackEnd_DevDash-UpdateNotification\DevDash\bin\Release\net8.0\System.Configuration.ConfigurationManager.dll
 C:\Users\Nvidia\Downloads\BackEnd_DevDash-UpdateNotification\BackEnd_DevDash-UpdateNotification\DevDash\bin\Release\net8.0\System.Diagnostics.DiagnosticSource.dll
-C:\Users\Nvidia\Downloads\BackEnd_DevDash-UpdateNotification\BackEnd_DevDash-UpdateNotification\DevDash\bin\Release\net8.0\System.Drawing.Common.dll
 C:\Users\Nvidia\Downloads\BackEnd_DevDash-UpdateNotification\BackEnd_DevDash-UpdateNotification\DevDash\bin\Release\net8.0\System.Formats.Asn1.dll
 C:\Users\Nvidia\Downloads\BackEnd_DevDash-UpdateNotification\BackEnd_DevDash-UpdateNotification\DevDash\bin\Release\net8.0\System.IdentityModel.Tokens.Jwt.dll
 C:\Users\Nvidia\Downloads\BackEnd_DevDash-UpdateNotification\BackEnd_DevDash-UpdateNotification\DevDash\bin\Release\net8.0\System.IO.Pipelines.dll
@@ -1241,10 +1239,8 @@ C:\Users\Nvidia\Downloads\BackEnd_DevDash-UpdateNotification\BackEnd_DevDash-Upd
 C:\Users\Nvidia\Downloads\BackEnd_DevDash-UpdateNotification\BackEnd_DevDash-UpdateNotification\DevDash\bin\Release\net8.0\System.Runtime.Caching.dll
 C:\Users\Nvidia\Downloads\BackEnd_DevDash-UpdateNotification\BackEnd_DevDash-UpdateNotification\DevDash\bin\Release\net8.0\System.Security.Cryptography.Pkcs.dll
 C:\Users\Nvidia\Downloads\BackEnd_DevDash-UpdateNotification\BackEnd_DevDash-UpdateNotification\DevDash\bin\Release\net8.0\System.Security.Cryptography.ProtectedData.dll
-C:\Users\Nvidia\Downloads\BackEnd_DevDash-UpdateNotification\BackEnd_DevDash-UpdateNotification\DevDash\bin\Release\net8.0\System.Security.Permissions.dll
 C:\Users\Nvidia\Downloads\BackEnd_DevDash-UpdateNotification\BackEnd_DevDash-UpdateNotification\DevDash\bin\Release\net8.0\System.Text.Encodings.Web.dll
 C:\Users\Nvidia\Downloads\BackEnd_DevDash-UpdateNotification\BackEnd_DevDash-UpdateNotification\DevDash\bin\Release\net8.0\System.Text.Json.dll
-C:\Users\Nvidia\Downloads\BackEnd_DevDash-UpdateNotification\BackEnd_DevDash-UpdateNotification\DevDash\bin\Release\net8.0\System.Windows.Extensions.dll
 C:\Users\Nvidia\Downloads\BackEnd_DevDash-UpdateNotification\BackEnd_DevDash-UpdateNotification\DevDash\bin\Release\net8.0\cs\Microsoft.CodeAnalysis.resources.dll
 C:\Users\Nvidia\Downloads\BackEnd_DevDash-UpdateNotification\BackEnd_DevDash-UpdateNotification\DevDash\bin\Release\net8.0\de\Microsoft.CodeAnalysis.resources.dll
 C:\Users\Nvidia\Downloads\BackEnd_DevDash-UpdateNotification\BackEnd_DevDash-UpdateNotification\DevDash\bin\Release\net8.0\es\Microsoft.CodeAnalysis.resources.dll
@@ -1316,14 +1312,9 @@ C:\Users\Nvidia\Downloads\BackEnd_DevDash-UpdateNotification\BackEnd_DevDash-Upd
 C:\Users\Nvidia\Downloads\BackEnd_DevDash-UpdateNotification\BackEnd_DevDash-UpdateNotification\DevDash\bin\Release\net8.0\runtimes\win-arm64\native\Microsoft.Data.SqlClient.SNI.dll
 C:\Users\Nvidia\Downloads\BackEnd_DevDash-UpdateNotification\BackEnd_DevDash-UpdateNotification\DevDash\bin\Release\net8.0\runtimes\win-x64\native\Microsoft.Data.SqlClient.SNI.dll
 C:\Users\Nvidia\Downloads\BackEnd_DevDash-UpdateNotification\BackEnd_DevDash-UpdateNotification\DevDash\bin\Release\net8.0\runtimes\win-x86\native\Microsoft.Data.SqlClient.SNI.dll
-C:\Users\Nvidia\Downloads\BackEnd_DevDash-UpdateNotification\BackEnd_DevDash-UpdateNotification\DevDash\bin\Release\net8.0\runtimes\win\lib\net6.0\Microsoft.Win32.SystemEvents.dll
-C:\Users\Nvidia\Downloads\BackEnd_DevDash-UpdateNotification\BackEnd_DevDash-UpdateNotification\DevDash\bin\Release\net8.0\runtimes\unix\lib\net6.0\System.Drawing.Common.dll
-C:\Users\Nvidia\Downloads\BackEnd_DevDash-UpdateNotification\BackEnd_DevDash-UpdateNotification\DevDash\bin\Release\net8.0\runtimes\win\lib\net6.0\System.Drawing.Common.dll
 C:\Users\Nvidia\Downloads\BackEnd_DevDash-UpdateNotification\BackEnd_DevDash-UpdateNotification\DevDash\bin\Release\net8.0\runtimes\win\lib\net6.0\System.Runtime.Caching.dll
 C:\Users\Nvidia\Downloads\BackEnd_DevDash-UpdateNotification\BackEnd_DevDash-UpdateNotification\DevDash\bin\Release\net8.0\runtimes\win\lib\net8.0\System.Security.Cryptography.Pkcs.dll
-C:\Users\Nvidia\Downloads\BackEnd_DevDash-UpdateNotification\BackEnd_DevDash-UpdateNotification\DevDash\bin\Release\net8.0\runtimes\win\lib\net6.0\System.Security.Cryptography.ProtectedData.dll
 C:\Users\Nvidia\Downloads\BackEnd_DevDash-UpdateNotification\BackEnd_DevDash-UpdateNotification\DevDash\bin\Release\net8.0\runtimes\browser\lib\net8.0\System.Text.Encodings.Web.dll
-C:\Users\Nvidia\Downloads\BackEnd_DevDash-UpdateNotification\BackEnd_DevDash-UpdateNotification\DevDash\bin\Release\net8.0\runtimes\win\lib\net6.0\System.Windows.Extensions.dll
 C:\Users\Nvidia\Downloads\BackEnd_DevDash-UpdateNotification\BackEnd_DevDash-UpdateNotification\DevDash\obj\Release\net8.0\DevDash.csproj.AssemblyReference.cache
 C:\Users\Nvidia\Downloads\BackEnd_DevDash-UpdateNotification\BackEnd_DevDash-UpdateNotification\DevDash\obj\Release\net8.0\DevDash.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\Nvidia\Downloads\BackEnd_DevDash-UpdateNotification\BackEnd_DevDash-UpdateNotification\DevDash\obj\Release\net8.0\DevDash.AssemblyInfoInputs.cache
@@ -1367,3 +1358,4 @@ C:\Users\Nvidia\Downloads\BackEnd_DevDash-UpdateNotification\BackEnd_DevDash-Upd
 C:\Users\Nvidia\Downloads\BackEnd_DevDash-UpdateNotification\BackEnd_DevDash-UpdateNotification\DevDash\bin\Release\net8.0\tr-TR\Hangfire.Core.resources.dll
 C:\Users\Nvidia\Downloads\BackEnd_DevDash-UpdateNotification\BackEnd_DevDash-UpdateNotification\DevDash\bin\Release\net8.0\zh-TW\Hangfire.Core.resources.dll
 C:\Users\Nvidia\Downloads\BackEnd_DevDash-UpdateNotification\BackEnd_DevDash-UpdateNotification\DevDash\bin\Release\net8.0\zh\Hangfire.Core.resources.dll
+C:\Users\Nvidia\Downloads\BackEnd_DevDash-UpdateNotification\BackEnd_DevDash-UpdateNotification\DevDash\bin\Release\net8.0\Stripe.net.dll

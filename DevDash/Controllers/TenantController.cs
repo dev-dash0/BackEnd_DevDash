@@ -158,6 +158,7 @@ namespace DevDash.Controllers
         {
             try
             {
+                
 
                 if (createDTO == null)
                 {
@@ -165,7 +166,21 @@ namespace DevDash.Controllers
                 }
                 var OwnerID = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
 
+                var temp = await _dbUserTenant.GetAllAsync(ut => ut.UserId == int.Parse(OwnerID));
                 var user = await _dbUser.GetAsync(u => u.Id == int.Parse(OwnerID));
+                var tempCount = temp.Count();
+                if(tempCount >= 3 && user.statepricing=="normal") 
+                    { 
+                     return BadRequest(new { message = "You have reached the maximum number of tenants allowed for your account. " +
+                         "Please upgrade to create more tenants." });
+
+                }
+
+                //var owertenant= await _dbUserTenant.Get(ut => ut.UserId == int.Parse(OwnerID) && ut.Role == "Admin");
+                // var owertenantcount = owertenant.Count();
+
+
+        
                 if (user == null)
                 {
                     ModelState.AddModelError("ErrorMessages", "User ID is Invalid!");

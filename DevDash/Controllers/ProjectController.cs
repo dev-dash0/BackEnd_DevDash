@@ -195,6 +195,9 @@ namespace DevDash.Controllers
         {
             try
             {
+
+
+
                 if (createDTO == null)
                 {
                     return BadRequest(createDTO);
@@ -206,22 +209,27 @@ namespace DevDash.Controllers
                     return Unauthorized(new { message = "Invalid token" });
                 }
 
-                var user = await _dbUser.GetAsync(u => u.Id == int.Parse(userId));
-                if (user == null)
-                {
-                    ModelState.AddModelError("ErrorMessages", "User ID is Invalid!");
-                    return BadRequest(ModelState);
-                }
+               
 
                 var tenant = await _dbTenant.GetAsync(u => u.Id == tenantId);
+                var projects = await _dbProject.GetAllAsync(u => u.TenantId == tenantId);
+                var projectscount=projects.Count();
                 if (tenant == null) 
                 {
                     ModelState.AddModelError("ErrorMessages", "Tenant is invalid");
                     return BadRequest(ModelState);
                 }
 
+                var user = await _dbUser.GetAsync(u => u.Id == int.Parse(userId));
+                var userproject = await _dbUserProject.GetAllAsync();
+                var userprojectcount = userproject.Count();
                 var userTenant = await _dbUserTenant.GetAsync(ut=>ut.UserId == user.Id 
                 && ut.TenantId == tenant.Id);
+                if (user == null)
+                {
+                    ModelState.AddModelError("ErrorMessages", "User ID is Invalid!");
+                    return BadRequest(ModelState);
+                }
                 if (userTenant == null)
                 {
                     ModelState.AddModelError("ErrorMessages", "User Not Found On this Tenant");
@@ -230,6 +238,14 @@ namespace DevDash.Controllers
                 if(userTenant.Role !="Admin")
                 {
                     return Unauthorized();
+                }
+                if(projectscount>=4 && user.statepricing=="normal")
+                {
+                    return BadRequest(new
+                    {
+                        message = "You have reached the maximum number of projects allowed for your account. " +
+                       "Please upgrade to create more projects."
+                    });
                 }
 
                 ProjectDTO projectDTO = _mapper.Map<ProjectDTO>(createDTO);

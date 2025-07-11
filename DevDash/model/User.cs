@@ -41,6 +41,11 @@ namespace DevDash.model
         [RegularExpression(@"^[0-9\+]{10,15}$")]
         public override string? PhoneNumber { get; set; }
 
+
+        [RegularExpression(@"^(normal|premium)$", ErrorMessage = "State pricing must be either 'normal' or 'Premium'.")]
+        public string? statepricing { get; set; } = "normal";
+
+
         public DateTime JoinedDate { get; set; } = DateTime.UtcNow; // Set default value
 
 

@@ -1,6 +1,7 @@
 ﻿using DevDash.model;
 using DevDash.Repository.IRepository;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace DevDash.Repository
 {
@@ -16,6 +17,22 @@ namespace DevDash.Repository
             _db = db;
             _notificationRepository = notificationRepository;
             _userProjectRepository = userProjectRepository;
+        }
+
+        public Task CreateAsync(UserTenant entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<List<UserTenant>> GetAllAsync(Expression<Func<UserTenant, bool>>? filter = null, string? includeProperties = null, int pageSize = 0, int pageNumber = 1)
+        {
+            var usertenant=await _db.UserTenants.Include(ut => ut.Tenant).Include(ut => ut.User).ToListAsync();
+            return usertenant;
+        }
+
+        public Task<UserTenant> GetAsync(Expression<Func<UserTenant, bool>>? filter = null, bool tracked = true, string? includeProperties = null)
+        {
+            throw new NotImplementedException();
         }
 
         public async Task JoinAsync(UserTenant entity, int userId)

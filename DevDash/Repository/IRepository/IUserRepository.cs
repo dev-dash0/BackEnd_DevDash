@@ -10,7 +10,7 @@ namespace DevDash.Repository.IRepository
     {
         bool IsUniqueEmail(string email);
         Task<TokenDTO> Login(LoginDTO loginDTO);
-        Task<UserDTO?> Register(RegisterDTO registerDTO);
+        Task<User?> Register(RegisterDTO registerDTO);
         Task<StepResponseDTO> SendEmail(string email, string subject, string content, string? heading = null);
         Task<TokenDTO> RefreshAccessToken(TokenDTO tokenDTO);
         Task RevokeRefreshToken(TokenDTO tokenDTO);

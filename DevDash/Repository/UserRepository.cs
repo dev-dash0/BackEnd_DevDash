@@ -68,7 +68,7 @@ namespace DevDash.Repository
             return new TokenDTO { AccessToken = accessToken, RefreshToken = refreshToken };
         }
 
-        public async Task<UserDTO> Register(RegisterDTO registerDTO)
+        public async Task<User> Register(RegisterDTO registerDTO)
         {
 
             User user = new()
@@ -86,7 +86,7 @@ namespace DevDash.Repository
             if (result.Succeeded)
             {
                 var userToReturn = await _db.Users.FirstOrDefaultAsync(u => u.Email == registerDTO.Email);
-                return _mapper.Map<UserDTO>(userToReturn);
+                return userToReturn;
             }
             else
             {

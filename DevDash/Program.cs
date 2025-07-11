@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
+using Stripe;
 
 namespace DevDash
 {
@@ -126,8 +127,9 @@ namespace DevDash
           
             builder.Services.AddMemoryCache();
             builder.Services.AddSingleton<TokenBlacklistService>();
+            StripeConfiguration.ApiKey = builder.Configuration["Stripe:SecretKey"];
 
-           
+
             builder.Services.AddSignalR(options =>
             {
                 options.EnableDetailedErrors = true;
@@ -179,12 +181,12 @@ namespace DevDash
 
             using (var scope = app.Services.CreateScope())
             {
-                var recurringJobs = scope.ServiceProvider.GetRequiredService<IRecurringJobManager>();
+               var recurringJobs = scope.ServiceProvider.GetRequiredService<IRecurringJobManager>();
                 recurringJobs.AddOrUpdate<IssueStateUpdater>(
                     "cancel-overdue-issues",
                     updater => updater.UpdateIssueStateAsync(),
-                    "*/1 * * * *",
-                    TimeZoneInfo.Local
+                   "*/1 * * * *",
+                  TimeZoneInfo.Local
                 );
             }
 

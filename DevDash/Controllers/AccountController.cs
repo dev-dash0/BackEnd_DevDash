@@ -69,19 +69,20 @@ namespace DevDash.Controllers
                 return BadRequest(new { message = "Account is already registered" });
            
             var user = await _userRepository.Register(registerDTO);
+           
+            if (user == null)
+                return StatusCode(500, new { message = "User registration failed due to a server error" });
             var tenant = new Tenant
             {
                 Name = "My WorkSpace",
                 TenantCode = Guid.NewGuid().ToString().Substring(0, 8),
                 OwnerID = user.Id,
             };
-            var tenantDto=_mapper.Map<TenantDTO>(tenant);
+            var tenantDto = _mapper.Map<TenantDTO>(tenant);
             await _tenantRepository.CreateAsync(tenant);
             await _tenantRepository.SaveAsync();
             user.personaltenantId = tenant.Id;
-            if (user == null)
-                return StatusCode(500, new { message = "User registration failed due to a server error" });
-
+            var userDto = _mapper.Map<UserDTO>(user);
             return Ok(new { message = "Registration successful",User= user,Personal_Tenant=tenantDto});
         }
 

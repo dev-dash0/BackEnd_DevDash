@@ -12,6 +12,7 @@ namespace DevDash.DTO.UserTenant
         public required string Role { get; set; }
 
         public DateTime JoinedDate { get; set; } = DateTime.Now;
+        public bool AcceptedInvitation { get; set; }
 
     }
 }

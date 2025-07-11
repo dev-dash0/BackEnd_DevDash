@@ -5,6 +5,7 @@ using DevDash.DTO.Tenant;
 using DevDash.DTO.UserProject;
 using DevDash.DTO.UserTenant;
 using DevDash.model;
+using DevDash.Repository;
 using DevDash.Repository.IRepository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -39,6 +40,72 @@ namespace DevDash.Controllers
             _userProject = userProject;
             _userTenant = userTenant;
         }
+
+
+
+
+
+
+
+
+
+
+        [HttpPost("invite")]
+        public async Task<IActionResult> InviteUserToProject([FromBody] InviteToProjectDto dto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            int inviterUserId = int.Parse(userIdClaim);
+            try
+            {
+                var result = await _userProject.InviteByEmailAsync(inviterUserId, dto.Email, dto.ProjectId, dto.Role);
+
+                return Ok(new
+                {
+                    success = true,
+                    message = result
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    success = false,
+                    message = $"Failed to send invitation: {ex.Message}"
+                });
+            }
+        }
+
+        [AllowAnonymous]
+        [HttpGet("accept")]
+        public async Task<IActionResult> AcceptProjectInvitation([FromQuery] string email, [FromQuery] int projectId)
+        {
+            if (string.IsNullOrWhiteSpace(email) || projectId <= 0)
+                return BadRequest(new { success = false, message = "Invalid invitation parameters." });
+
+            try
+            {
+                var result = await _userProject.AcceptInvitationAsync(email, projectId);
+
+                return Ok(new
+                {
+                    success = true,
+                    message = result
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    success = false,
+                    message = $"Failed to accept invitation: {ex.Message}"
+                });
+            }
+        }
+
+
 
         [HttpPost]
         public async Task<ActionResult<APIResponse>> JoinProject([FromQuery] string projectCode)
@@ -149,6 +216,25 @@ namespace DevDash.Controllers
             return _response;
         }
 
+        [HttpPatch("update-role")]
+        public async Task<IActionResult> UpdateProjectUserRole([FromQuery] int projectId, [FromBody] UpdateUserRoleDto dto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (!int.TryParse(userIdClaim, out int inviterUserId))
+                return BadRequest(new { success = false, message = "Invalid user identity." });
+
+            try
+            {
+                var result = await _userProject.UpdateUserRoleAsync(inviterUserId, projectId, dto);
+                return Ok(new { success = true, message = result });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { success = false, message = ex.Message });
+            }
+        }
     }
 }

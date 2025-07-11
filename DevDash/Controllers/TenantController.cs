@@ -1,4 +1,4 @@
-using AutoMapper;
+﻿using AutoMapper;
 using DevDash.DTO.Tenant;
 using DevDash.DTO.UserTenant;
 using DevDash.Migrations;
@@ -50,15 +50,19 @@ namespace DevDash.Controllers
                     return Unauthorized();
 
                 var tenants = await _dbTenant.GetAllAsync(
-                    filter: t =>
-                        (t.UserTenants.Any(ut => ut.UserId == userId)) &&
-                        (string.IsNullOrEmpty(search) ||
-                         t.Name.ToLower().Contains(search.ToLower()) ||
-                         t.Keywords.ToLower().Contains(search.ToLower())),
-                    includeProperties: "Owner,UserTenants",
-                    pageSize: pageSize,
-                    pageNumber: pageNumber
-                );
+     filter: t =>
+         t.UserTenants.Any(ut =>
+             ut.UserId == userId && ut.AcceptedInvitation == true) &&
+         (
+             string.IsNullOrEmpty(search) ||
+             t.Name.ToLower().Contains(search.ToLower()) ||
+             t.Keywords.ToLower().Contains(search.ToLower())
+         ),
+     includeProperties: "Owner,UserTenants",
+     pageSize: pageSize,
+     pageNumber: pageNumber
+ );
+
 
                 var tenantDTOs = _mapper.Map<List<TenantDTO>>(tenants);
 
@@ -109,7 +113,7 @@ namespace DevDash.Controllers
                     return Unauthorized(_response);
                 }
 
-                var userTenant = await _dbUserTenant.GetAsync(ut => ut.UserId == userId && ut.TenantId == tenantId);
+                var userTenant = await _dbUserTenant.GetAsync(ut => ut.UserId == userId && ut.TenantId == tenantId && ut.AcceptedInvitation == true);
                 if (userTenant == null)
                 {
                     _response.IsSuccess = false;
@@ -197,6 +201,7 @@ namespace DevDash.Controllers
                     TenantId = tenant.Id,
                     Role = "Admin",
                     JoinedDate = DateTime.Now,
+                    AcceptedInvitation = true
                 };
                 UserTenant userTenant = _mapper.Map<UserTenant>(userTenantDTO);
                 await _dbUserTenant.JoinAsync(userTenant,int.Parse(OwnerID));

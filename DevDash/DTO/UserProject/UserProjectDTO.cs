@@ -11,7 +11,8 @@ namespace DevDash.DTO.UserProject
         [RegularExpression("^(Admin|Developer|Project Manager)$", ErrorMessage = "Invalid role")]
         public required string Role { get; set; }
 
-        public DateTime JoinedDate { get; set; } 
+        public DateTime JoinedDate { get; set; }
+        public bool AcceptedInvitation { get; set; }
 
     }
 }

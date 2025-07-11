@@ -33,6 +33,84 @@ namespace DevDash.Controllers
             this._response = new APIResponse();
             _userTenantRepository = userTenantRepository;
         }
+        [HttpPost("invite")]
+        public async Task<IActionResult> InviteUserToTenant([FromBody] InviteToTenantDto dto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            int inviterUserId = int.Parse(userIdClaim);
+            try
+            {
+                var result = await _userTenantRepository.InviteByEmailAsync(inviterUserId, dto.Email, dto.TenantId, dto.Role);
+
+                return Ok(new
+                {
+                    success = true,
+                    message = result
+                });
+            }
+            catch (Exception ex)
+            {
+                // Optional: log exception here
+                return BadRequest(new
+                {
+                    success = false,
+                    message = $"Failed to send invitation: {ex.Message}"
+                });
+            }
+        }
+
+
+        [AllowAnonymous]
+        [HttpGet("accept")]
+        public async Task<IActionResult> AcceptTenantInvitation([FromQuery] string email, [FromQuery] int tenantId)
+        {
+            if (string.IsNullOrWhiteSpace(email) || tenantId <= 0)
+                return BadRequest(new { success = false, message = "Invalid invitation parameters." });
+
+            try
+            {
+                var result = await _userTenantRepository.AcceptInvitationAsync(email, tenantId);
+
+                return Ok(new
+                {
+                    success = true,
+                    message = result
+                });
+            }
+            catch (Exception ex)
+            {
+                // Optional: log exception here
+                return BadRequest(new
+                {
+                    success = false,
+                    message = $"Failed to accept invitation: {ex.Message}"
+                });
+            }
+        }
+
+        [HttpPatch("update-role")]
+        public async Task<IActionResult> UpdateTenantUserRole([FromQuery] int tenantId, [FromBody] UpdateUserRoleDto dto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (!int.TryParse(userIdClaim, out int inviterUserId))
+                return BadRequest(new { success = false, message = "Invalid user identity." });
+
+            try
+            {
+                var result = await _userTenantRepository.UpdateUserRoleAsync(inviterUserId, tenantId, dto);
+                return Ok(new { success = true, message = result });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { success = false, message = ex.Message });
+            }
+        }
 
         [HttpPost]
         public async Task<ActionResult<APIResponse>> JoinTenant([FromQuery]string tenantCode)

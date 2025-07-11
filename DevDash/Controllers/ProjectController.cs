@@ -67,18 +67,16 @@ namespace DevDash.Controllers
                     return Unauthorized(_response);
                 }
 
-                var projects = await _dbProject.GetAllAsync(
-                    filter: p =>
-                        p.TenantId == tenantId &&
-                        (p.CreatorId == userId || p.UserProjects.Any(up => up.UserId == userId)) &&
-                        (string.IsNullOrEmpty(search) ||
-                         p.Name.ToLower().Contains(search.ToLower()) ||
-                         p.Priority.ToLower().Contains(search.ToLower())),
-                    includeProperties: "Creator,UserProjects,Tenant,Tenant.JoinedUsers",
-                    pageSize: pageSize,
-                    pageNumber: pageNumber
-                   
-                );
+                            var projects = await _dbProject.GetAllAsync(
+                                 filter: p =>
+                                      p.TenantId == tenantId &&
+                                      p.UserProjects.Any(up =>
+                                          up.UserId == userId &&
+                                          up.AcceptedInvitation),
+                                  includeProperties: "Creator,UserProjects,Tenant,Tenant.JoinedUsers",
+                                  pageSize: pageSize,
+                                  pageNumber: pageNumber
+                              );
 
                 var projectDtos = _mapper.Map<List<ProjectDTO>>(projects);
                 foreach (var projectDto in projectDtos)
@@ -146,7 +144,7 @@ namespace DevDash.Controllers
                     return Unauthorized(_response);
                 }
 
-                var userProject = await _dbUserProject.GetAsync(up => up.UserId == userId && up.ProjectId == projectId);
+                var userProject = await _dbUserProject.GetAsync(up => up.UserId == userId && up.ProjectId == projectId && up.AcceptedInvitation == true);
                 if (userProject == null)
                 {
                     _response.IsSuccess = false;
@@ -254,13 +252,14 @@ namespace DevDash.Controllers
 
                 Project project = _mapper.Map<Project>(projectDTO);
                 await _dbProject.CreateAsync(project);
-                
+
                 UserProjectDTO userProjectDTO = new()
                 {
                     UserId = user.Id,
                     ProjectId = project.Id,
                     Role = "Admin",
                     JoinedDate = DateTime.Now,
+                    AcceptedInvitation = true
                 };
 
                 UserProject userProject = _mapper.Map<UserProject>(userProjectDTO);

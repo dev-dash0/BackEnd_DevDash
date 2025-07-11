@@ -16,15 +16,15 @@ namespace DevDash.model
         [RegularExpression("^(Admin|Developer|Project Manager)$", ErrorMessage = "Invalid role")]
         public required string Role { get; set; }
 
-        //[Required]
-        //public bool AcceptedInvitation { get; set; } = false;
+     
+        public bool AcceptedInvitation { get; set; } = false;
 
         [DataType(DataType.Date)]
         public DateTime JoinedDate { get; set; } = DateTime.Now;
 
         // Navigation Properties
-        public required User User { get; set; }
-        public required Tenant Tenant { get; set; }
+        public  User User { get; set; }
+        public  Tenant Tenant { get; set; }
     }
 
 }

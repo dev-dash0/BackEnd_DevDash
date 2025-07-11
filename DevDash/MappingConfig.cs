@@ -50,9 +50,7 @@ namespace DevDash
             CreateMap<CommentDTO, CommentUpdateDTO>().ReverseMap();
 
 
-            CreateMap<UserTenantDTO, UserTenant>().ReverseMap();
-
-            CreateMap<UserProjectDTO,UserProject>().ReverseMap();
+        
 
 
             CreateMap<IssueAssignedUser, IssueAssignedUserDTO>().ReverseMap();
@@ -67,6 +65,14 @@ namespace DevDash
             //dashboard
             CreateMap<Project, ProjectDashBoardDTO>().ReverseMap();
             CreateMap<Issue, IssueDashBoardDTO>().ReverseMap();
+
+            CreateMap<UserTenant, UserTenantDTO>().ReverseMap();
+            CreateMap<InviteToTenantDto, UserTenant>();
+            CreateMap<JoinTenantDTO, UserTenant>();
+
+            CreateMap<UserProject, UserProjectDTO>().ReverseMap();
+            CreateMap<InviteToProjectDto, UserProject>();
+            CreateMap<JoinProjectDTO, UserProject>();
 
 
 

@@ -50,8 +50,10 @@ namespace DevDash.Controllers
                     return Unauthorized();
 
                 var tenants = await _dbTenant.GetAllAsync(
-                    filter: t =>
-                        (t.UserTenants.Any(ut => ut.UserId == userId)) &&
+                filter: t =>
+                        t.UserTenants.Any(ut =>
+                            ut.UserId == userId &&
+                            ut.AcceptedInvitation == true) &&
                         (string.IsNullOrEmpty(search) ||
                          t.Name.ToLower().Contains(search.ToLower()) ||
                          t.Keywords.ToLower().Contains(search.ToLower())),
@@ -109,7 +111,7 @@ namespace DevDash.Controllers
                     return Unauthorized(_response);
                 }
 
-                var userTenant = await _dbUserTenant.GetAsync(ut => ut.UserId == userId && ut.TenantId == tenantId);
+                var userTenant = await _dbUserTenant.GetAsync(ut => ut.UserId == userId && ut.TenantId == tenantId && ut.AcceptedInvitation == true);
                 if (userTenant == null)
                 {
                     _response.IsSuccess = false;
@@ -182,6 +184,7 @@ namespace DevDash.Controllers
                     TenantId = tenant.Id,
                     Role = "Admin",
                     JoinedDate = DateTime.Now,
+                    AcceptedInvitation = true
                 };
                 UserTenant userTenant = _mapper.Map<UserTenant>(userTenantDTO);
                 await _dbUserTenant.JoinAsync(userTenant,int.Parse(OwnerID));

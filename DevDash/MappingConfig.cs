@@ -50,9 +50,14 @@ namespace DevDash
             CreateMap<CommentDTO, CommentUpdateDTO>().ReverseMap();
 
 
-            CreateMap<UserTenantDTO, UserTenant>().ReverseMap();
+            CreateMap<UserTenant, UserTenantDTO>().ReverseMap();
+            CreateMap<InviteToTenantDto, UserTenant>();
+            CreateMap<JoinTenantDTO, UserTenant>();
 
-            CreateMap<UserProjectDTO,UserProject>().ReverseMap();
+            CreateMap<UserProject, UserProjectDTO>().ReverseMap();
+            CreateMap<InviteToProjectDto, UserProject>();
+            CreateMap<JoinProjectDTO, UserProject>();
+
 
 
             CreateMap<IssueAssignedUser, IssueAssignedUserDTO>().ReverseMap();

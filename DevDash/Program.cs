@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
+using DevDash.Services.IServices;
 
 namespace DevDash
 {
@@ -67,7 +68,10 @@ namespace DevDash
             builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
             builder.Services.AddScoped<IPasswordRecoveryRepository, PasswordRecoveryRepository>();
 
-         
+            // Register Services
+            builder.Services.Configure<EmailSetting>(builder.Configuration.GetSection("EmailSettings"));
+            builder.Services.AddScoped<IEmailService, EmailService>();
+
             builder.Services.AddAutoMapper(typeof(MappingConfig));
 
           

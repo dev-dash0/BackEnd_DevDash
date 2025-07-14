@@ -34,7 +34,7 @@ namespace DevDash.Controllers
         public IActionResult CreateCheckoutSession()
         {
             
-        var domain = "https://localhost:3000"; // edit frontend domain as needed
+        var domain = "http://localhost:4200/MyDashboard"; // edit frontend domain as needed
             var options = new SessionCreateOptions
             {
                 PaymentMethodTypes = new List<string> { "card" },

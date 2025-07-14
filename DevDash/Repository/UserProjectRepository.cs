@@ -23,6 +23,7 @@ namespace DevDash.Repository
 
             _notificationRepository = notificationRepository;
             _issueAssignUserRepository = issueAssignUserRepository;
+            emailService = _emailService;
         }
 
         public Task CreateAsync(UserProject entity)
@@ -30,10 +31,37 @@ namespace DevDash.Repository
             throw new NotImplementedException();
         }
 
-        public async Task<List<UserProject>> GetAllAsync(Expression<Func<UserProject, bool>>? filter = null, string? includeProperties = null, int pageSize = 0, int pageNumber = 1)
+        public async Task<List<UserProject>> GetAllAsync(
+    Expression<Func<UserProject, bool>>? filter = null,
+    string? includeProperties = null,
+    int pageSize = 0,
+    int pageNumber = 1)
         {
-            var userproject =await _db.UserProjects.ToListAsync();
-            return userproject;
+            IQueryable<UserProject> query = _db.UserProjects;
+
+            // Apply filter
+            if (filter != null)
+            {
+                query = query.Where(filter);
+            }
+
+            // Apply include properties
+            if (!string.IsNullOrWhiteSpace(includeProperties))
+            {
+                foreach (var includeProp in includeProperties
+                             .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
+                {
+                    query = query.Include(includeProp);
+                }
+            }
+
+            // Apply pagination
+            if (pageSize > 0)
+            {
+                query = query.Skip((pageNumber - 1) * pageSize).Take(pageSize);
+            }
+
+            return await query.ToListAsync();
         }
 
         public Task<UserProject> GetAsync(Expression<Func<UserProject, bool>>? filter = null, bool tracked = true, string? includeProperties = null)

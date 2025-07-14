@@ -30,11 +30,32 @@ namespace DevDash.Repository
             throw new NotImplementedException();
         }
 
-        public async Task<List<UserTenant>> GetAllAsync(Expression<Func<UserTenant, bool>>? filter = null, string? includeProperties = null, int pageSize = 0, int pageNumber = 1)
+        public async Task<List<UserTenant>> GetAllAsync(
+      Expression<Func<UserTenant, bool>>? filter = null,
+      string? includeProperties = null,
+      int pageSize = 0,
+      int pageNumber = 1)
         {
-            var usertenant=await _db.UserTenants.Include(ut => ut.Tenant).Include(ut => ut.User).ToListAsync();
-            return usertenant;
+            IQueryable<UserTenant> query = _db.UserTenants;
+
+            // Apply filter
+            if (filter != null)
+            {
+                query = query.Where(filter);
+            }
+
+            // Include related entities
+            query = query.Include(ut => ut.Tenant).Include(ut => ut.User);
+
+            // Apply paging
+            if (pageSize > 0)
+            {
+                query = query.Skip((pageNumber - 1) * pageSize).Take(pageSize);
+            }
+
+            return await query.ToListAsync();
         }
+
 
         public Task<UserTenant> GetAsync(Expression<Func<UserTenant, bool>>? filter = null, bool tracked = true, string? includeProperties = null)
         {

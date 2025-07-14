@@ -8,6 +8,8 @@ using DevDash.DTO.UserTenant;
 using DevDash.model;
 using DevDash.Repository;
 using DevDash.Repository.IRepository;
+using DevDash.Services;
+using DevDash.Services.IServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
@@ -27,10 +29,12 @@ namespace DevDash.Controllers
         private readonly IUserRepository _dbUser;
         private readonly IUserProjectRepository _dbUserProject;
         private readonly IUserTenantRepository _dbUserTenant;
+        private readonly IEmailService emailService;
+        
         private readonly IMapper _mapper;
         private APIResponse _response;
 
-        public ProjectController(IProjectRepository dbProject, ITenantRepository dbTenant,
+        public ProjectController(IProjectRepository dbProject, ITenantRepository dbTenant,IEmailService _emailService,
             IUserRepository dbUser, IMapper mapper, IUserTenantRepository dbUserTenant, IUserProjectRepository dbUserProject)
         {
             _dbUserProject = dbUserProject;
@@ -38,6 +42,7 @@ namespace DevDash.Controllers
             _dbTenant = dbTenant;
             _dbProject = dbProject;
             _dbUser = dbUser;
+            _emailService = emailService;
             _mapper = mapper;
             this._response = new APIResponse();
         }

@@ -23,6 +23,7 @@ namespace DevDash.Repository
 
             _notificationRepository = notificationRepository;
             _issueAssignUserRepository = issueAssignUserRepository;
+            _emailService = emailService;
         }
 
         public Task CreateAsync(UserProject entity)
@@ -87,15 +88,23 @@ namespace DevDash.Repository
         }
         public async Task<string> InviteByEmailAsync(int inviterUserId, string email, int projectId, string role)
         {
-            // Step 1: Load project and tenant
+            // Step 1: Load project (بدون include)
             var project = await _db.Projects
-                .Include(p => p.Tenant)
                 .FirstOrDefaultAsync(p => p.Id == projectId);
 
             if (project == null)
                 throw new Exception("Project not found.");
 
             var tenantId = project.TenantId;
+
+            // ✅ Load tenant name directly from DB
+            var tenantName = await _db.Tenants
+                .Where(t => t.Id == tenantId)
+                .Select(t => t.Name)
+                .FirstOrDefaultAsync();
+
+            if (tenantName == null)
+                tenantName = "[Unknown Tenant]";
 
             // Step 2: Check if inviter has permission (Admin on tenant or Project Manager on project)
             var isTenantAdmin = await _db.UserTenants.AnyAsync(ut =>
@@ -126,7 +135,7 @@ namespace DevDash.Repository
             {
                 if (!existingRecord.AcceptedInvitation)
                 {
-                    await SendProjectInvitationEmailAsync(user, project);
+                    await SendProjectInvitationEmailAsync(user.UserName, user.Email, project.Name, tenantName, project.Id);
                     return $"Invitation re-sent to {user.UserName}.";
                 }
 
@@ -146,31 +155,34 @@ namespace DevDash.Repository
             await _db.UserProjects.AddAsync(invitation);
             await _db.SaveChangesAsync();
 
-            await SendProjectInvitationEmailAsync(user, project);
+            await SendProjectInvitationEmailAsync(user.UserName, user.Email, project.Name, tenantName, project.Id);
             return $"Invitation sent to {user.UserName}.";
         }
-        private async Task SendProjectInvitationEmailAsync(User user, Project project)
+
+
+        private async Task SendProjectInvitationEmailAsync(string userName, string userEmail, string projectName, string tenantName, int projectId)
         {
             var baseUrl = "http://devdash.runasp.net/api/UserProject/accept";
-            var invitationLink = $"{baseUrl}?email={Uri.EscapeDataString(user.Email)}&projectId={project.Id}";
+            var invitationLink = $"{baseUrl}?email={Uri.EscapeDataString(userEmail)}&projectId={projectId}";
 
-            var subject = $"Invitation to join project '{project.Name}' in tenant '{project.Tenant.Name}'";
+            var subject = $"Invitation to join project '{projectName}' in tenant '{tenantName}'";
             var body = $@"
-        <p>Hello {user.UserName},</p>
-        <p>You have been invited to join the project <strong>{project.Name}</strong> under the tenant <strong>{project.Tenant.Name}</strong>.</p>
-        <p>Click <a href=""{invitationLink}"">here</a> to accept the invitation.</p>
-        <br/>
-        <p>If you did not expect this invitation, please ignore it.</p>";
+<p>Hello {userName},</p>
+<p>You have been invited to join the project <strong>{projectName}</strong> under the tenant <strong>{tenantName}</strong>.</p>
+<p>Click <a href=""{invitationLink}"">here</a> to accept the invitation.</p>
+<br/>
+<p>If you did not expect this invitation, please ignore it.</p>";
 
             var emailDto = new EmailDto
             {
-                To = user.Email,
+                To = userEmail,
                 Subject = subject,
                 Body = body
             };
 
             await _emailService.SendAsync(emailDto);
         }
+
         public async Task<string> AcceptInvitationAsync(string email, int projectId)
         {
             var user = await _db.Users.FirstOrDefaultAsync(u => u.Email == email);

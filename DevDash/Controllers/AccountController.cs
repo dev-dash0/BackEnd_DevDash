@@ -20,6 +20,7 @@ using System.Net.Http.Headers;
 using Org.BouncyCastle.Crypto.Generators;
 using AutoMapper;
 using DevDash.DTO.Tenant;
+using DevDash.Attributes;
 
 namespace DevDash.Controllers
 {
@@ -132,6 +133,8 @@ namespace DevDash.Controllers
 
         [HttpGet("Profile")]
         [Authorize]
+        [Cache(2000)]
+
         public async Task<IActionResult> GetUserProfile()
         {
             var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;

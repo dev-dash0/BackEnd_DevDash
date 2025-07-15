@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using DevDash.Attributes;
 using DevDash.DTO.Issue;
 using DevDash.model;
 using DevDash.Repository.IRepository;
@@ -36,6 +37,7 @@ namespace DevDash.Controllers
         }
 
         [HttpGet("backlog")]
+        [Cache(2000)]
         public async Task<ActionResult<APIResponse>> GetBacklogIssues([FromQuery] int projectId, [FromQuery] string? search, int pageSize = 0, int pageNumber = 1)
         {
             try
@@ -88,6 +90,7 @@ namespace DevDash.Controllers
             return _response;
         }
         [HttpGet("sprint")]
+        [Cache(2000)]
         public async Task<ActionResult<APIResponse>> GetSprintIssues([FromQuery] int sprintId, [FromQuery] string? search, int pageSize = 0, int pageNumber = 1)
         {
             try
@@ -129,6 +132,8 @@ namespace DevDash.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [Cache(2000)]
+
         public async Task<ActionResult<APIResponse>> GetIssue(int id)
         {
             try
@@ -346,9 +351,6 @@ namespace DevDash.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, _response);
             }
         }
-
-
-
 
 
         [HttpDelete("{id:int}", Name = "DeleteIssue")]

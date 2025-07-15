@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using DevDash.Attributes;
 using DevDash.DTO.Tenant;
 using DevDash.DTO.UserTenant;
 using DevDash.Migrations;
@@ -38,6 +39,7 @@ namespace DevDash.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [Cache(2000)]
         public async Task<ActionResult<APIResponse>> GetTenants([FromQuery] string? search, int pageSize = 0, int pageNumber = 1)
         {
             try
@@ -92,6 +94,8 @@ namespace DevDash.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [Cache(2000)]
+
         public async Task<ActionResult<APIResponse>> GetTenant([FromRoute] int tenantId)
         {
             try

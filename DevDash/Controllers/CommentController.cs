@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using DevDash.Attributes;
 using DevDash.DTO.Comment;
 using DevDash.DTO.Sprint;
 using DevDash.Migrations;
@@ -38,6 +39,8 @@ namespace DevDash.Controllers
         }
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [Cache(2000)]
+
         public async Task<ActionResult<APIResponse>> GetComments([FromQuery] int IssueId,[FromQuery] string? search, int pageSize = 0, int pageNumber = 1)
         {
             try
@@ -68,6 +71,8 @@ namespace DevDash.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [Cache(2000)]
+
         public async Task<ActionResult<APIResponse>> GetComment(int id)
         {
             try

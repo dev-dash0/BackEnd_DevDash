@@ -1,4 +1,5 @@
-﻿using DevDash.model;
+﻿using DevDash.Attributes;
+using DevDash.model;
 using DevDash.Repository.IRepository;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -16,6 +17,8 @@ namespace DevDash.Controllers
         }
 
         [HttpGet("global")]
+        [Cache(2000)]
+
         public async Task<ActionResult<APIResponse>> GlobalSearch([FromQuery] string query)
         {
             try

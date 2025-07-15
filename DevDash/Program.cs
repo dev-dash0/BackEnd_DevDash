@@ -14,6 +14,8 @@ using Microsoft.OpenApi.Models;
 using System.Text;
 using Stripe;
 using DevDash.Services.IServices;
+using StackExchange.Redis;
+using DevDash.Services.IService;
 
 namespace DevDash
 {
@@ -68,6 +70,22 @@ namespace DevDash
             builder.Services.AddScoped<ISearchRepository, SearchRepository>();
             builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
             builder.Services.AddScoped<IPasswordRecoveryRepository, PasswordRecoveryRepository>();
+
+            builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
+            {
+                var configuration = sp.GetRequiredService<IConfiguration>();
+                var redisConnectionString = configuration.GetConnectionString("Redis");
+
+                if (string.IsNullOrEmpty(redisConnectionString))
+                {
+                    throw new InvalidOperationException("Redis connection string is missing in configuration.");
+                }
+
+                return ConnectionMultiplexer.Connect(redisConnectionString);
+            });
+
+            builder.Services.AddScoped<ICacheRepository, CacheRepositroy>();
+            builder.Services.AddScoped<ICacheService, CacheService>();
 
             builder.Services.Configure<EmailSetting>(builder.Configuration.GetSection("EmailSettings"));
             builder.Services.AddScoped<IEmailService, EmailService>();

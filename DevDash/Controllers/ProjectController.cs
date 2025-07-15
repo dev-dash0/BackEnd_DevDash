@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Azure;
+using DevDash.Attributes;
 using DevDash.DTO.Project;
 using DevDash.DTO.Tenant;
 using DevDash.DTO.User;
@@ -51,6 +52,8 @@ namespace DevDash.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [Cache(2000)]
+
         public async Task<ActionResult<APIResponse>> GetProjects([FromQuery] int tenantId, [FromQuery] string? search, int pageSize = 0, int pageNumber = 1)
         {
             try
@@ -128,6 +131,8 @@ namespace DevDash.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [Cache(2000)]
+
         public async Task<ActionResult<APIResponse>> GetProject([FromRoute] int projectId)
         {
             try

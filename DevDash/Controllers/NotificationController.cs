@@ -1,4 +1,5 @@
-﻿using DevDash.model;
+﻿using DevDash.Attributes;
+using DevDash.model;
 using DevDash.Repository.IRepository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -24,6 +25,8 @@ namespace DevDash.Controllers
         }
 
         [HttpGet]
+        [Cache(2000)]
+
         public async Task<ActionResult<APIResponse>> GetNotifications(string? search = null)
         {
             try

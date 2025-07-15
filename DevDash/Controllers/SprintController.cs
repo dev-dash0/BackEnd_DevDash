@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using DevDash.Attributes;
 using DevDash.DTO.Sprint;
 using DevDash.Migrations;
 using DevDash.model;
@@ -37,6 +38,8 @@ namespace DevDash.Controllers
 
         [HttpGet( Name = "GetSprints")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [Cache(2000)]
+
         public async Task<ActionResult<APIResponse>> GetSprints([FromQuery] int projectid, [FromQuery] string? search, int pageSize = 0, int pageNumber = 1)
         {
             try
@@ -81,6 +84,8 @@ namespace DevDash.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [Cache(2000)]
+
         public async Task<ActionResult<APIResponse>> GetSprint([FromRoute] int sprintId)
         {
             try

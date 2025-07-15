@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using DevDash.Attributes;
 using DevDash.DTO.Account;
 using DevDash.DTO.Issue;
 using DevDash.DTO.Project;
@@ -58,6 +59,7 @@ namespace DevDash.Controllers
         [Authorize]
         [HttpGet("Tenants")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [Cache(2000)]
         public async Task<ActionResult<APIResponse>> GetTenantAnalysis([FromQuery] int Tenantid)
         {
             try
@@ -96,9 +98,11 @@ namespace DevDash.Controllers
             return _response;
         }
 
+
         [Authorize]
         [HttpGet("Projects")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [Cache(2000)]
         public async Task<ActionResult<APIResponse>> GetProjectAnalysis([FromQuery] int Projectid)
         {
             try
@@ -137,23 +141,8 @@ namespace DevDash.Controllers
         }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         [Authorize]
-
+        [Cache(2000)]
         [HttpGet("allproject")]
         public async Task<ActionResult<APIResponse>> GetprojectDashboard()
         {
@@ -185,6 +174,7 @@ namespace DevDash.Controllers
         }
 
         [Authorize]
+        [Cache(2000)]
         [HttpGet("allissue")]
         public async Task<ActionResult<APIResponse>> GetissueDashboard()
         {
@@ -219,7 +209,7 @@ namespace DevDash.Controllers
 
         [Authorize]
         [HttpGet("Calender")]
-        
+        [Cache(2000)]
         public async Task<ActionResult<APIResponse>> GetCalendar()
         {
            
@@ -257,7 +247,7 @@ namespace DevDash.Controllers
 
         [Authorize]
         [HttpGet("Pinneditems")]
-
+        [Cache(2000)]
         public async Task<ActionResult<APIResponse>> GetPinnedItems()
         {
             try

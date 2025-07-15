@@ -23,11 +23,8 @@ namespace DevDash.Repository
 
             _notificationRepository = notificationRepository;
             _issueAssignUserRepository = issueAssignUserRepository;
-<<<<<<< HEAD
             emailService = _emailService;
-=======
-            _emailService = emailService;
->>>>>>> 11fe23dec2ed6bb406219fe78ffb1ac21d720958
+
         }
 
         public Task CreateAsync(UserProject entity)

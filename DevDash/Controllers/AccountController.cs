@@ -83,7 +83,8 @@ namespace DevDash.Controllers
             await _tenantRepository.SaveAsync();
             user.personaltenantId = tenant.Id;
             var userDto = _mapper.Map<UserDTO>(user);
-            return Ok(new { message = "Registration successful",User= user,Personal_Tenant=tenantDto});
+            userDto.personaltenantId = tenant.Id;
+            return Ok(new { message = "Registration successful",User= userDto,Personal_Tenant=tenantDto});
         }
 
 

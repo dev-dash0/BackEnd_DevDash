@@ -6,6 +6,8 @@ namespace DevDash.DTO.Comment
 {
     public class CommentDTO
     {
+        public int Id { get; set; }
+
         [Required]
         [ForeignKey("IssueId")]
         public int IssueId { get; set; }

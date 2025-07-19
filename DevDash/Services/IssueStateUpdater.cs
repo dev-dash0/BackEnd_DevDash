@@ -16,7 +16,7 @@ namespace DevDash.Services
             var today = DateTime.Today;
 
             var issues = await _context.Issues
-                .Where(i => i.Deadline.HasValue && i.Deadline < today && i.Status != "Canceled" && i.Status!= "Reviewing")
+                .Where(i => i.Deadline.HasValue && i.Deadline < today && i.Status != "Canceled" && i.Status!= "Reviewing" && i.Status != "Completed")
                 .ToListAsync();
             foreach (var issue in issues)
             {

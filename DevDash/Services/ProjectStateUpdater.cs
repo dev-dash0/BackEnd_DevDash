@@ -12,7 +12,7 @@ namespace DevDash.Services
         {
             var today = DateOnly.FromDateTime(DateTime.Today);
             var projects = await _context.Projects
-                .Where(s => s.EndDate.HasValue && s.EndDate.Value < today && s.Status != "Canceled")
+                .Where(s => s.EndDate.HasValue && s.EndDate.Value < today && s.Status != "Canceled" && s.Status != "Completed")
                 .ToListAsync();
             foreach (var project in projects)
             {

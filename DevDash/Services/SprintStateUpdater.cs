@@ -13,7 +13,7 @@ namespace DevDash.Services
             var today = DateOnly.FromDateTime(DateTime.Today); 
                                                               
             var sprints = await _context.Sprints
-                .Where(s => s.EndDate.HasValue && s.EndDate.Value < today && s.Status != "Canceled")
+                .Where(s => s.EndDate.HasValue && s.EndDate.Value < today && s.Status != "Canceled" && s.Status != "Completed")
                 .ToListAsync();
             foreach (var sprint in sprints)
             {

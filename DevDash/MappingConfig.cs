@@ -2,6 +2,7 @@
 using DevDash.DTO;
 using DevDash.DTO.Account;
 using DevDash.DTO.Comment;
+using DevDash.DTO.Integrations.Github;
 using DevDash.DTO.Issue;
 using DevDash.DTO.IssueAssignedUser;
 using DevDash.DTO.Project;
@@ -75,7 +76,8 @@ namespace DevDash
             CreateMap<JoinProjectDTO, UserProject>();
 
 
-
+            // integrations
+            CreateMap<GitHubRepository, GitHubRepoDTO>();
         }
     }
 }

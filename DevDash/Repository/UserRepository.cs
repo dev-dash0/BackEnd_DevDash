@@ -404,7 +404,9 @@ namespace DevDash.Repository
 
         public async Task<StepResponseDTO> VerifyToken(PasswordTokenDTO passwordTokenDTO)
         {
-            var step = await _db.PasswordReset.FirstOrDefaultAsync(x => x.Step == 1);
+            var step = await _db.PasswordReset.Where(x => x.Step == 1 && x.Token == passwordTokenDTO.Token)
+                        .OrderByDescending(x => x.CreatedAt)
+                        .FirstOrDefaultAsync();
 
             if (step == null)
             {

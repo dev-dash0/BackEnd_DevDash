@@ -1,25 +1,31 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-secondversion\\BackEnd_DevDash-secondversion\\DevDash\\DevDash.csproj": {}
+    "F:\\graduation project\\backend final\\BackEnd_DevDash\\DevDash\\DevDash.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-secondversion\\BackEnd_DevDash-secondversion\\DevDash\\DevDash.csproj": {
+    "F:\\graduation project\\backend final\\BackEnd_DevDash\\DevDash\\DevDash.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-secondversion\\BackEnd_DevDash-secondversion\\DevDash\\DevDash.csproj",
+        "projectUniqueName": "F:\\graduation project\\backend final\\BackEnd_DevDash\\DevDash\\DevDash.csproj",
         "projectName": "DevDash",
-        "projectPath": "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-secondversion\\BackEnd_DevDash-secondversion\\DevDash\\DevDash.csproj",
-        "packagesPath": "C:\\Users\\Nvidia\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Nvidia\\Downloads\\BackEnd_DevDash-secondversion\\BackEnd_DevDash-secondversion\\DevDash\\obj\\",
+        "projectPath": "F:\\graduation project\\backend final\\BackEnd_DevDash\\DevDash\\DevDash.csproj",
+        "packagesPath": "C:\\Users\\Shahd Mostafa.DESKTOP-FIK5SPH\\.nuget\\packages\\",
+        "outputPath": "F:\\graduation project\\backend final\\BackEnd_DevDash\\DevDash\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\Nvidia\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\Shahd Mostafa.DESKTOP-FIK5SPH\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -36,9 +42,9 @@
         "restoreAuditProperties": {
           "enableAudit": "true",
           "auditLevel": "low",
-          "auditMode": "all"
+          "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "9.0.100"
+        "SdkAnalysisLevel": "9.0.200"
       },
       "frameworks": {
         "net8.0": {
@@ -154,7 +160,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.100/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.201/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

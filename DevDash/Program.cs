@@ -14,6 +14,8 @@ using Microsoft.OpenApi.Models;
 using System.Text;
 using Stripe;
 using DevDash.Services.IServices;
+using DevDash.Services.IService;
+using Microsoft.AspNetCore.Authentication;
 
 namespace DevDash
 {
@@ -68,9 +70,14 @@ namespace DevDash
             builder.Services.AddScoped<ISearchRepository, SearchRepository>();
             builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
             builder.Services.AddScoped<IPasswordRecoveryRepository, PasswordRecoveryRepository>();
+            builder.Services.AddScoped<IGitHubIntegrationRepository, GitHubIntegrationRepository>();
+            builder.Services.AddScoped<IGitHubRepoRepository, GitHubRepoRepository>();
+
 
             builder.Services.Configure<EmailSetting>(builder.Configuration.GetSection("EmailSettings"));
             builder.Services.AddScoped<IEmailService, EmailService>();
+            builder.Services.AddScoped<IGitHubService, GitHubService>();
+            builder.Services.AddScoped<IJitsiService, JitsiService>();
 
             builder.Services.AddAutoMapper(typeof(MappingConfig));
 
@@ -125,7 +132,39 @@ namespace DevDash
                 IConfiguration GoogleAuthSection = builder.Configuration.GetSection("Authentication:Google");
                 googleOptions.ClientId = GoogleAuthSection["ClientId"];
                 googleOptions.ClientSecret = GoogleAuthSection["ClientSecret"];
-            });
+            })
+             .AddOAuth("GitHub", options =>
+             {
+                 var githubAuthSection = builder.Configuration.GetSection("Authentication:GitHub");
+                 options.ClientId = githubAuthSection["ClientId"];
+                 options.ClientSecret = githubAuthSection["ClientSecret"];
+                 options.CallbackPath = new PathString("/signin-github");
+                 options.AuthorizationEndpoint = "https://github.com/login/oauth/authorize";
+                 options.TokenEndpoint = "https://github.com/login/oauth/access_token";
+                 options.UserInformationEndpoint = "https://api.github.com/user";
+
+                 options.Scope.Add("read:user");
+                 options.Scope.Add("repo");
+
+                 options.SaveTokens = true;
+
+                 options.ClaimActions.MapJsonKey("urn:github:login", "login");
+                 options.ClaimActions.MapJsonKey("urn:github:name", "name");
+                 options.ClaimActions.MapJsonKey("urn:github:url", "html_url");
+
+                 options.Events.OnCreatingTicket = async context =>
+                 {
+                     var request = new HttpRequestMessage(HttpMethod.Get, context.Options.UserInformationEndpoint);
+                     request.Headers.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+                     request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", context.AccessToken);
+
+                     var response = await context.Backchannel.SendAsync(request);
+                     response.EnsureSuccessStatusCode();
+
+                     var user = System.Text.Json.JsonDocument.Parse(await response.Content.ReadAsStringAsync());
+                     context.RunClaimActions(user.RootElement);
+                 };
+             }); ;
 
           
             builder.Services.AddMemoryCache();
@@ -182,6 +221,50 @@ namespace DevDash
             var app = builder.Build();
 
 
+            //using (var scope = app.Services.CreateScope())
+            //{
+            //    var recurringJobs = scope.ServiceProvider.GetRequiredService<IRecurringJobManager>();
+            //    recurringJobs.AddOrUpdate<IssueStateUpdater>(
+            //        "cancel-overdue-issues",
+            //         updater => updater.UpdateIssueAsync(),
+            //        "*/1 * * * *",
+            //       TimeZoneInfo.Local
+            //     );
+            //}
+            //using (var scope = app.Services.CreateScope())
+            //{
+            //    var recurringJobs = scope.ServiceProvider.GetRequiredService<IRecurringJobManager>();
+            //    recurringJobs.AddOrUpdate<IssueStateUpdater>(
+            //        "cancel-overdue-issues",
+            //        updater => updater.UpdateIssueStateAsync(),
+            //       "*/1 * * * *",
+            //      TimeZoneInfo.Local
+            //    );
+            //}
+
+            //using (var scope = app.Services.CreateScope())
+            //{
+            //    var recurringJobs = scope.ServiceProvider.GetRequiredService<IRecurringJobManager>();
+            //    recurringJobs.AddOrUpdate<SprintStateUpdater>(
+            //        "cancel-overdue-Sprints",
+            //        updater => updater.UpdateSprintStateAsync(),
+            //        "*/1 * * * *",
+            //        TimeZoneInfo.Local
+            //    );
+            //}
+
+            //using (var scope = app.Services.CreateScope())
+            //{
+            //    var recurringJobs = scope.ServiceProvider.GetRequiredService<IRecurringJobManager>();
+            //    recurringJobs.AddOrUpdate<ProjectStateUpdater>(
+            //        "cancel-overdue-Projects",
+            //        updater => updater.UpdateProjectStateAsync(),
+            //        "*/1 * * * *",
+            //        TimeZoneInfo.Local
+            //    );
+            //}
+
+
             using (var scope = app.Services.CreateScope())
             {
                 var recurringJobs = scope.ServiceProvider.GetRequiredService<IRecurringJobManager>();
@@ -191,41 +274,30 @@ namespace DevDash
                     "*/1 * * * *",
                    TimeZoneInfo.Local
                  );
-            }
-            using (var scope = app.Services.CreateScope())
-            {
-                var recurringJobs = scope.ServiceProvider.GetRequiredService<IRecurringJobManager>();
-                recurringJobs.AddOrUpdate<IssueStateUpdater>(
+
+
+                 recurringJobs.AddOrUpdate<IssueStateUpdater>(
                     "cancel-overdue-issues",
                     updater => updater.UpdateIssueStateAsync(),
                    "*/1 * * * *",
                   TimeZoneInfo.Local
                 );
-            }
 
-            using (var scope = app.Services.CreateScope())
-            {
-                var recurringJobs = scope.ServiceProvider.GetRequiredService<IRecurringJobManager>();
-                recurringJobs.AddOrUpdate<SprintStateUpdater>(
+                                recurringJobs.AddOrUpdate<SprintStateUpdater>(
                     "cancel-overdue-Sprints",
                     updater => updater.UpdateSprintStateAsync(),
                     "*/1 * * * *",
                     TimeZoneInfo.Local
                 );
-            }
 
-            using (var scope = app.Services.CreateScope())
-            {
-                var recurringJobs = scope.ServiceProvider.GetRequiredService<IRecurringJobManager>();
-                recurringJobs.AddOrUpdate<ProjectStateUpdater>(
+
+                                recurringJobs.AddOrUpdate<ProjectStateUpdater>(
                     "cancel-overdue-Projects",
                     updater => updater.UpdateProjectStateAsync(),
                     "*/1 * * * *",
                     TimeZoneInfo.Local
                 );
             }
-
-
 
 
 

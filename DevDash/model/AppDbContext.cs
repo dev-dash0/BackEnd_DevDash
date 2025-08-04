@@ -30,6 +30,9 @@ public class AppDbContext : IdentityDbContext<User, IdentityRole<int>, int>
     //public DbSet<Notification> Notifications { get; set; }
     //public DbSet<Integration> Integrations { get; set; }
 
+    public DbSet<GitHubIntegration> GitHubIntegration { get; set; }
+    public DbSet<GitHubRepository> GitHubRepositories { get; set; }
+
     // Constructor with DbContextOptions
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
     {
